@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'project',
     'bootstrap_themes',
     'rest_framework',
+    'base',
     'etl',
     'web',
 ]
