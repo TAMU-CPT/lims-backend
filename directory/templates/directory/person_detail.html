@@ -2,6 +2,14 @@
 {% load cpt %}
 {% load gravatar %}
 
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'directory:index' %}">Directory</a></li>
+    <li><a href="{% url 'directory:person-list' %}">People</a></li>
+    <li class="active">{{ object.name }}</li>
+</ul>
+{% endblock %}
+
 {% block body %}
     <h1>{{ object.name }}</h1>
     <div class="row">

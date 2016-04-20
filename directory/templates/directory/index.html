@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li class="active">Directory</li>
+</ul>
+{% endblock %}
+
 {% block body %}
     <h1><a href="{% url 'directory:person-list' %}">People</a></h1>
     <h1><a href="{% url 'directory:org-list' %}">Organisation</a></h1>

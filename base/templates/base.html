@@ -30,8 +30,14 @@
       </div>
     </div>
     <div class="container">
+        <div class="row">
+            {% block crumbs %}
+            {% endblock %}
+        </div>
+        <div class="row">
         {% block body %}
         {% endblock %}
+        </div>
     </div>
         {% block scripts %}
         {% endblock %}

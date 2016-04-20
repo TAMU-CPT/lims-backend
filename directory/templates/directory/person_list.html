@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load cpt %}
 
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'directory:index' %}">Directory</a></li>
+    <li class="active">People</li>
+</ul>
+{% endblock %}
+
 {% block body %}
     <h2>People</h2>
     <table class="table table-striped">
