@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load cpt_hashids %}
+
+{% block body %}
+    <h2>People</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Associations</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for person in object_list %}
+            <tr>
+                <td>{{ person.id | cptids_encode:"person" }}</td>
+                <td><a href="{% url 'directory:person-detail' person.id %}">{{ person.name }}</a></td>
+                <td><a href="mailto:{{ person.primary_email }}">{{ person.primary_email }}</a></td>
+                <td>
+                    <ul>
+                        {% for tag in person.tags.all %}
+                            <li>{{ tag }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -20,11 +20,20 @@ EXP_RESULT_TYPES = (
 class ContainerType(models.Model):
     name = models.CharField(max_length=32)
 
+    def __str__(self):
+        return self.name
+
 class TubeType(models.Model):
     name = models.CharField(max_length=32)
 
+    def __str__(self):
+        return self.name
+
 class SampleType(models.Model):
     name = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name
 
 class StorageLocation(models.Model):
     # HAS_CPT_HASHID
@@ -35,11 +44,17 @@ class StorageLocation(models.Model):
     # Type of container
     container_type = models.ForeignKey(ContainerType)
 
+    def __str__(self):
+        return '{} in {}'.format(self.name, self.location)
+
 class Box(models.Model):
     # HAS_CPT_HASHID
     # Human readable name that gets written on it
     name = models.CharField(max_length=64)
     location = models.ForeignKey(StorageLocation)
+
+    def __str__(self):
+        return '{} in {}'.format(self.name, self.location)
 
 class Tube(models.Model):
     # HAS_CPT_HASHID
@@ -59,6 +74,9 @@ class Bacteria(models.Model):
     species = models.CharField(max_length=64)
     strain = models.CharField(max_length=64)
 
+    def __str__(self):
+        return '{}. {} spp {}'.format(self.genus[0], self.species, self.strain)
+
 class Lysate(models.Model):
     # HAS_CPT_HASHID
     env_sample = models.ForeignKey(EnvironmentalSample)
@@ -74,6 +92,9 @@ class Experiment(models.Model):
     short_name = models.CharField(max_length=32)
     full_name = models.TextField()
     methods = models.TextField()
+
+    def __str__(self):
+        return self.short_name
 
 class ExperimentalResult(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -92,10 +113,16 @@ class PhageDNAPrep(models.Model):
     # Nanodrop, pico green, other?
     experiments = models.ManyToManyField(ExperimentalResult)
 
+    def __str__(self):
+        return '{}b {}'.format(self.pfge_expected_size, self.morphology)
+
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pool = models.CharField(max_length=16)
     dna_preps = models.ManyToManyField(PhageDNAPrep)
+
+    def __str__(self):
+        return 'Pool {}'.format(self.pool)
 
 class SequencingRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -107,6 +134,9 @@ class SequencingRun(models.Model):
     methods = models.ForeignKey(Experiment)
     bioanalyzer_qc = models.TextField()
     run_prep_spreadsheet = models.URLField()
+
+    def __str__(self):
+        return '{} on {}'.format(self.name, self.date)
 
 class Assembly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

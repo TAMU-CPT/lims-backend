@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'directory',
     'project',
+    'bootstrap_themes',
+    'rest_framework',
+    'etl',
     'web',
 ]
 
