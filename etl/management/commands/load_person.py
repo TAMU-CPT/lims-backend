@@ -45,6 +45,7 @@ class Command(BaseCommand):
                 phone_number=md['phone'],
                 orcid=md['orcid'],
                 netid=md['netid'],
+                original_id=md['ID']
             )
             p = p[0]
 

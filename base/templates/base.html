@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        {% bootstrap_styles theme='cosmo' type='min.css' %}
+        {% bootstrap_styles theme='lumen' type='min.css' %}
         {% bootstrap_script use_min=True %}
     </head>
     <body>
@@ -41,5 +41,6 @@
     </div>
         {% block scripts %}
         {% endblock %}
+        {% bootstrap_script use_min=True %}
     </body>
 </html>

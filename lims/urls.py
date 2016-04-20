@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^lims/', include('web.urls', namespace='lims')),
     url(r'^project/', include('project.urls', namespace='project')),
     url(r'^directory/', include('directory.urls', namespace='directory')),
+    url(r'^', include('base.urls', namespace='base')),
 ]

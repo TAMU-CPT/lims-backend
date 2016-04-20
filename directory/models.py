@@ -29,6 +29,7 @@ class Person(models.Model):
     tags = models.ManyToManyField(PersonTag)
     orcid = models.CharField(max_length=32)
     orgs = models.ManyToManyField(Organisation)
+    original_id = models.CharField(max_length=4)
 
     def __str__(self):
         return self.name
