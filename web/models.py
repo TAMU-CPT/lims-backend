@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import uuid
 from django.db import models
 from directory.models import Person, Organisation
 
@@ -14,7 +15,7 @@ EXP_RESULT_TYPES = (
     (1, 'Integer'),
     (2, 'FloatArray'),
     (3, 'ImageURL')
-),
+)
 
 class ContainerType(models.Model):
     name = models.CharField(max_length=32)
