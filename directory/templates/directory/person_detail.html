@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cpt_hashids %}
+{% load cpt %}
 {% load gravatar %}
 
 {% block body %}
@@ -20,7 +20,7 @@
                 <tr>
                     <td>CPT Person ID Barcode</td>
                     <td>
-                        <div><img src="https://cpt.tamu.edu/barcodes/i/code128/CPT_{{ object.id | cptids_encode:'person' }}.png" height="20px" width="100%"/></div>
+                        <div><img src="{{ object.id | cptids_encode:'person' | barcode:'code128' }}" height="20px" width="100%"/></div>
                     </td>
                 </tr>
                 {% if object.nickname %}
