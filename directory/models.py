@@ -10,11 +10,11 @@ class PersonTag(models.Model):
 
 class Organisation(models.Model):
     name = models.TextField()
-    emails = models.TextField()
-    phone_number = models.CharField(max_length=16)
-    fax_number = models.CharField(max_length=16)
-    street_address = models.TextField()
-    website = models.URLField()
+    emails = models.TextField(blank=True)
+    phone_number = models.CharField(max_length=16,blank=True)
+    fax_number = models.CharField(max_length=16,blank=True)
+    street_address = models.TextField(blank=True)
+    website = models.URLField(blank=True)
 
     def __str__(self):
         return self.name
@@ -22,14 +22,14 @@ class Organisation(models.Model):
 class Person(models.Model):
     name = models.TextField()
     initials = models.TextField()
-    nickname = models.TextField()
-    netid = models.CharField(max_length=32)
-    emails = models.TextField()
-    phone_number = models.CharField(max_length=16)
-    tags = models.ManyToManyField(PersonTag)
-    orcid = models.CharField(max_length=32)
-    orgs = models.ManyToManyField(Organisation)
-    original_id = models.CharField(max_length=4)
+    nickname = models.TextField(blank=True)
+    netid = models.CharField(max_length=32, blank=True)
+    emails = models.TextField(blank=True)
+    phone_number = models.CharField(max_length=16, blank=True)
+    tags = models.ManyToManyField(PersonTag, blank=True)
+    orcid = models.CharField(max_length=32, blank=True)
+    orgs = models.ManyToManyField(Organisation, blank=True)
+    original_id = models.CharField(max_length=4, blank=True)
 
     def __str__(self):
         return self.name
