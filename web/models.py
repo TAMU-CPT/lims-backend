@@ -56,6 +56,9 @@ class Box(models.Model):
     def __str__(self):
         return '{} in {}'.format(self.name, self.location)
 
+    class Meta:
+        verbose_name_plural = "boxes"
+
 class Tube(models.Model):
     # HAS_CPT_HASHID
     tube_type = models.ForeignKey(TubeType)
@@ -76,6 +79,9 @@ class Bacteria(models.Model):
 
     def __str__(self):
         return '{}. {} spp {}'.format(self.genus[0], self.species, self.strain)
+
+    class Meta:
+        verbose_name_plural = "bacteria"
 
 class Lysate(models.Model):
     # HAS_CPT_HASHID
@@ -144,3 +150,6 @@ class Assembly(models.Model):
     sequencing_run = models.ForeignKey(SequencingRunPool)
     galaxy_dataset = models.URLField()
     notes = models.TextField()
+
+    class Meta:
+        verbose_name_plural = "assemblies"

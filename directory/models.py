@@ -40,3 +40,6 @@ class Person(models.Model):
 
     def primary_email(self):
         return self.emails.split('\n')[0]
+
+    class Meta:
+        verbose_name_plural = "people"
