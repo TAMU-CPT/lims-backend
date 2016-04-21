@@ -26,11 +26,13 @@
                 <td><a href="{% url 'directory:person-detail' person.id %}">{{ person.name }}</a></td>
                 <td><a href="mailto:{{ person.primary_email }}">{{ person.primary_email }}</a></td>
                 <td>
+                    {% if person.tags.count > 0 %}
                     <ul>
                         {% for tag in person.tags.all %}
                             <li>{{ tag }}</li>
                         {% endfor %}
                     </ul>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

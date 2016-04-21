@@ -19,6 +19,14 @@ class Organisation(models.Model):
     def __str__(self):
         return self.name
 
+    def email_iter(self):
+        for email in self.emails.split('\n'):
+            yield email
+
+    def primary_email(self):
+        return self.emails.split('\n')[0]
+
+
 class Person(models.Model):
     name = models.TextField()
     initials = models.TextField()

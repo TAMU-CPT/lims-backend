@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load cpt %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'directory:index' %}">Directory</a></li>
+    <li class="active">Organisation</li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h2>Organisations</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for org in object_list %}
+            <tr>
+                <td><a href="{% url 'directory:org-detail' org.id %}">{{ org.name }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
