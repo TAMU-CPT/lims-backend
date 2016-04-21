@@ -4,7 +4,7 @@
 <html>
     <head>
         {% bootstrap_styles theme='lumen' type='min.css' %}
-        {% bootstrap_script use_min=True %}
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
         {% fontawesome_stylesheet %}
     </head>
     <body>
@@ -17,7 +17,7 @@
 
           <ul class="nav navbar-nav navbar-right">
             {%if request.user.is_authenticated %}
-                {% if request.user.is_admin %}
+                {% if request.user.is_superuser %}
                 <li>
                     <a href="/admin">Admin</a>
                 </li>

@@ -10,24 +10,33 @@
     <div class="col-md-8">
         <div class="row">
             {% for app in apps %}
-            <div class="col-md-4">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                             {% if app.icon %}
-                                 {{ app.icon.as_html  }}
-                             {% endif %}
-                             {{ app.name }}
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        {{ app.description }}
-                        <div style="text-align:right">
-                            <a href="{{ app.url }}" class="btn btn-primary">{{ app.name }}</a>
+                {% if not app.hidden or request.user.is_superuser %}
+                <div class="col-md-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                 {% if app.icon %}
+                                     {{ app.icon.as_html  }}
+                                 {% endif %}
+                                 {{ app.name }}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            {% if not app.enabled %}
+                            <div class="alert alert-info">
+                                This app is not currently available.
+                            </div>
+                            <br/>
+                            {% endif %}
+
+                            {{ app.description }}
+                            <div style="text-align:right">
+                                <a href="{{ app.url }}" class="btn btn-primary {% if not app.enabled %}disabled{% endif %}">{{ app.name }}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
