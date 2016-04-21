@@ -1,9 +1,11 @@
 {% load bootstrap_themes %}
+{% load fontawesome %}
 
 <html>
     <head>
         {% bootstrap_styles theme='lumen' type='min.css' %}
         {% bootstrap_script use_min=True %}
+        {% fontawesome_stylesheet %}
     </head>
     <body>
  <div class="navbar navbar-default">
@@ -12,18 +14,22 @@
           <a href="/" class="navbar-brand">LIMS</a>
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="/directory/">Directory</a>
-            </li>
-          </ul>
 
           <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a>
-             Login
-             </a>
-             </li>
+            {%if request.user.is_authenticated %}
+                {% if request.user.is_admin %}
+                <li>
+                    <a href="/admin">Admin</a>
+                </li>
+                {% endif %}
+                <li>
+                    <a>
+                            {{ request.user }}
+                    </a>
+                 </li>
+            {% else %}
+                <li><a>Login</a></li>
+            {% endif %}
           </ul>
 
         </div>

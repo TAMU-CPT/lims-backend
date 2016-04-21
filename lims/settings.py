@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap_themes',
     'rest_framework',
     'base',
+    'fontawesome',
     'etl',
     'web',
 ]
