@@ -28,7 +28,7 @@
                 <tr>
                     <td>CPT Person ID Barcode</td>
                     <td>
-                        <div><img src="{{ object.id | cptids_encode:'person' | barcode:'code128' }}" height="20px" width="100%"/></div>
+                        <div>{{ object.id | cptids_encode:'person' | ibarcode:'20x200' }}</div>
                     </td>
                 </tr>
                 {% if object.nickname %}

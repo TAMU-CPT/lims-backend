@@ -19,7 +19,7 @@
                 <div>In <a href="{% url 'lims:storage-location-detail' object.location.id %}">{{ object.location }}</a></div>
             </div>
             <div class="col-md-6">
-                <img src="{{ object.id | cptids_encode:'box' | barcode:'code128'  }}" height="40px" width="400px" style="margin-top:3em"/>
+                {{ object.id | cptids_encode:'box' | ibarcode:'400x40' }}
             </div>
     </div>
 
@@ -51,7 +51,7 @@
                 <tr id="{{ tube.id | cptids_encode:'envsample' }}">
                     <td style="text-align:center">
                         <div>{{ tube.id | cptids_encode:'envsample' }}</div>
-                        <div><img src="{{ tube.id  | barcode:'code128' }}" height="20px" width="100px" /></div>
+                        <div>{{ tube.id  | ibarcode:'160x20' }}</div>
                     </td>
                     <td>{{ tube.sample_type }}</td>
                     <td>{{ tube.collection }}</td>
@@ -83,11 +83,11 @@
                 <tr id="{{ tube.id | cptids_encode:'lysate' }}">
                     <td style="text-align:center">
                         <div>{{ tube.id | cptids_encode:'lysate' }}</div>
-                        <div><img src="{{ tube.id  | cptids_encode:'lysate' | barcode:'code128' }}" height="20px" width="100px" /></div>
+                        <div>{{ tube.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
                     </td>
                     <td style="text-align:center">
                         <div><a href="{% url 'lims:box-detail' tube.env_sample.box.id %}">{{ tube.env_sample.id | cptids_encode:'envsample' }}</a></div>
-                        <div><img src="{{ tube.env_sample.id | cptids_encode:'envsample' | barcode:'code128' }}" height="20px" width="100px" /></div>
+                        <div>{{ tube.env_sample.id | cptids_encode:'envsample' | ibarcode:'160x20' }}</div>
                     </td>
                     <td>
                         <ul>
@@ -134,7 +134,7 @@
                 <tr id="{{ tube.id | cptids_encode:'dnaprep' }}">
                     <td style="text-align:center">
                         <div>{{ tube.id | cptids_encode:'dnaprep' }}</div>
-                        <div><img src="{{ tube.id  | cptids_encode:'dnaprep' | barcode:'code128' }}" height="20px" width="100px" /></div>
+                        <div>{{ tube.id  | cptids_encode:'dnaprep' | ibarcode:'160x20' }}</div>
                     </td>
                     <td style="text-align:center">
                         <div>
@@ -143,7 +143,7 @@
                             </a>
                         </div>
                         <div>
-                            <img src="{{ tube.id  | cptids_encode:'lysate' | barcode:'code128' }}" height="20px" width="100px" /></div>
+                            {{ tube.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
                         </div>
                     </td>
                     <td>{{ tube.get_morphology_display }}</td>
