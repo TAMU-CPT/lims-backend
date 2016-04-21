@@ -50,7 +50,11 @@ class Command(BaseCommand):
             p = p[0]
 
             pts = []
-            for t in md['tags'].split(';'):
+
+            for t in md['tags'].strip().split(';'):
+                if len(t.strip()) == 0:
+                    continue
+
                 pt = self.personTagMemo(t.strip())
                 pts.append(pt)
 
