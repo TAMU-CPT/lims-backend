@@ -5,7 +5,6 @@ from web.models import TubeType
 from web.models import SampleType
 from web.models import StorageLocation
 from web.models import Box
-from web.models import Tube
 from web.models import EnvironmentalSample
 from web.models import Bacteria
 from web.models import Lysate
@@ -21,7 +20,6 @@ admin.site.register(TubeType)
 admin.site.register(SampleType)
 admin.site.register(StorageLocation)
 admin.site.register(Box)
-admin.site.register(Tube)
 admin.site.register(EnvironmentalSample)
 admin.site.register(Bacteria)
 admin.site.register(Lysate)

@@ -59,18 +59,16 @@ class Box(models.Model):
     class Meta:
         verbose_name_plural = "boxes"
 
-class Tube(models.Model):
-    # HAS_CPT_HASHID
-    tube_type = models.ForeignKey(TubeType)
-    box = models.ForeignKey(Box)
-
 class EnvironmentalSample(models.Model):
     # HAS_CPT_HASHID
     collection = models.DateTimeField()
     # location = models.
     # TODO: location
     sample_type = models.ForeignKey(SampleType)
-    storage = models.ForeignKey(Tube)
+
+    # Tube Storage
+    tube_type = models.ForeignKey(TubeType)
+    box = models.ForeignKey(Box)
 
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
@@ -87,11 +85,14 @@ class Lysate(models.Model):
     # HAS_CPT_HASHID
     env_sample = models.ForeignKey(EnvironmentalSample)
     host_lims = models.ManyToManyField(Bacteria)
-    storage = models.ForeignKey(Tube)
     oldid = models.CharField(max_length=64)
     isolation = models.DateTimeField()
     owner = models.ForeignKey(Person)
     source = models.ForeignKey(Organisation)
+
+    # Tube Storage
+    tube_type = models.ForeignKey(TubeType)
+    box = models.ForeignKey(Box)
 
 class Experiment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -115,9 +116,12 @@ class PhageDNAPrep(models.Model):
     # gel_image = models.URLField()
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
     pfge_expected_size = models.FloatField()
-    storage = models.ForeignKey(Tube)
     # Nanodrop, pico green, other?
     experiments = models.ManyToManyField(ExperimentalResult)
+
+    # Tube Storage
+    tube_type = models.ForeignKey(TubeType)
+    box = models.ForeignKey(Box)
 
     def __str__(self):
         return '{}b {}'.format(self.pfge_expected_size, self.morphology)

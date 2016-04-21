@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load cpt %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'lims:index' %}">LIMS</a></li>
+    <li class="active">Storage Locations</li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h2>Storage Locations</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for obj in object_list %}
+            <tr>
+                <td><a href="{% url 'lims:storage-location-detail' obj.id %}">{{ obj.name }}</a></td>
+                <td>{{ obj.location }}</td>
+                <td>{{ obj.container_type }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

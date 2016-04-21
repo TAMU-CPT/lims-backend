@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load cpt %}
+{% load fontawesome %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'lims:index' %}">LIMS</a></li>
+    <li><a href="{% url 'lims:storage-location-list' %}">Storage Locations</a></li>
+    <li><a href="{% url 'lims:storage-location-detail' object.location.id %}">{{ object.location.name }}</a></li>
+    <li class="active">{{ object.name }}</li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ object.name }}</h1>
+    <div>In <a href="{% url 'lims:storage-location-detail' object.location.id %}">{{ object.location }}</a></div>
+    <img src="{{ object.id | cptids_encode:'box' | barcode:'code128'  }}" height="20px" width="200px"/>
+
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Tube ID
+                    </th>
+                    <th>
+                        Tube Type
+                    </th>
+                    <th>
+                        Barcode
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tube in object.tube_set.all%}
+                <tr>
+                    <td>{{ tube.id }}</td>
+                    <td>{{ tube.tube_type }}</td>
+                    <td><img src="{{ tube.id  | barcode:'code128'  }}" height="20px" width="200px" /></td>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
