@@ -70,10 +70,13 @@ class EnvironmentalSample(models.Model):
     tube_type = models.ForeignKey(TubeType)
     box = models.ForeignKey(Box)
 
+    def __str__(self):
+        return '{} sample from {}'.format(self.sample_type, self.collection)
+
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
-    species = models.CharField(max_length=64)
-    strain = models.CharField(max_length=64)
+    species = models.CharField(max_length=64, blank=True)
+    strain = models.CharField(max_length=64, blank=True)
 
     def __str__(self):
         return '{}. {} spp {}'.format(self.genus[0], self.species, self.strain)
@@ -84,15 +87,18 @@ class Bacteria(models.Model):
 class Lysate(models.Model):
     # HAS_CPT_HASHID
     env_sample = models.ForeignKey(EnvironmentalSample)
-    host_lims = models.ManyToManyField(Bacteria)
-    oldid = models.CharField(max_length=64)
-    isolation = models.DateTimeField()
-    owner = models.ForeignKey(Person)
-    source = models.ForeignKey(Organisation)
+    host_lims = models.ManyToManyField(Bacteria, blank=True)
+    oldid = models.CharField(max_length=64, blank=True)
+    isolation = models.DateTimeField(blank=True)
+    owner = models.ForeignKey(Person, blank=True, null=True)
+    source = models.ForeignKey(Organisation, blank=True, null=True)
 
     # Tube Storage
     tube_type = models.ForeignKey(TubeType)
     box = models.ForeignKey(Box)
+
+    def __str__(self):
+        return 'Lysate from {}'.format(self.env_sample)
 
 class Experiment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -107,24 +113,32 @@ class ExperimentalResult(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     experiment = models.ForeignKey(Experiment)
     result = models.TextField()
-    result_type = models.IntegerField(choices=EXP_RESULT_TYPES)
+    date = models.DateTimeField()
+    # result_type = models.IntegerField(choices=EXP_RESULT_TYPES)
+
+    def __str__(self):
+        return '{} - {}'.format(
+                self.experiment.short_name,
+                self.result)
 
 class PhageDNAPrep(models.Model):
     # HAS_CPT_HASHID
     # These will point to OMERO eventually...
     # tem_image = models.URLField()
     # gel_image = models.URLField()
+    lysate = models.ForeignKey(Lysate)
+
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
-    pfge_expected_size = models.FloatField()
+    pfge_expected_size = models.FloatField(blank=True)
     # Nanodrop, pico green, other?
-    experiments = models.ManyToManyField(ExperimentalResult)
+    experiments = models.ManyToManyField(ExperimentalResult, blank=True)
 
     # Tube Storage
     tube_type = models.ForeignKey(TubeType)
     box = models.ForeignKey(Box)
 
     def __str__(self):
-        return '{}b {}'.format(self.pfge_expected_size, self.morphology)
+        return '{} kb {}'.format(int(self.pfge_expected_size / 1000), self.get_morphology_display())
 
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

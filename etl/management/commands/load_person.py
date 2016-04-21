@@ -39,13 +39,13 @@ class Command(BaseCommand):
             md = {k: v.strip() for (k, v) in zip(cols, rowData)}
 
             p = Person.objects.get_or_create(
-                name=md['fullname'],
-                initials='',
-                emails=md['email'],
-                phone_number=md['phone'],
-                orcid=md['orcid'],
-                netid=md['netid'],
-                original_id=md['ID']
+                name=md['fullname'].strip(),
+                initials=md['initials'].strip(),
+                emails=md['email'].strip(),
+                phone_number=md['phone'].strip(),
+                orcid=md['orcid'].strip(),
+                netid=md['netid'].strip(),
+                original_id=md['ID'].strip()
             )
             p = p[0]
 
