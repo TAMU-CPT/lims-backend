@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^project/', include('project.urls', namespace='project')),
     url(r'^directory/', include('directory.urls', namespace='directory')),
     url(r'^search/', include('search.urls', namespace='search')),
+    url(r'^account/', include('account.urls')),
     url(r'^', include('base.urls', namespace='base')),
 ]

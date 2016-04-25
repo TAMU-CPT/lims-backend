@@ -23,12 +23,16 @@
                 </li>
                 {% endif %}
                 <li>
-                    <a>
-                            {{ request.user }}
+                    <a href="{% url 'account_settings' %}">
+                        {{ request.user }}
                     </a>
                  </li>
             {% else %}
-                <li><a>Login</a></li>
+                <li>
+                    <a href="{% url 'account_login' %}">
+                        Login
+                    </a>
+                </li>
             {% endif %}
           </ul>
 
