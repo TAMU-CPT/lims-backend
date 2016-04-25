@@ -3,7 +3,9 @@ from django.template.defaultfilters import stringfilter
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
+from base.templatetags.gravatar import gravatarUrl
 
+import directory.models
 import hashlib
 import cptids
 register = template.Library()
@@ -32,6 +34,51 @@ def ibarcode(url, value='20x200', autoescape=True):
     )
     return mark_safe(result)
 
+
+def _baseCard(image, title, data):
+    return """
+    <div class="panel panel-default">
+        <div class="panel-heading">{title}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <img src="{image}" />
+                </div>
+                <div class="col-sm-9">
+                    {data}
+                </div>
+            </div>
+        </div>
+    </div>
+    """.format(image=image, title=title, data=data)
+
+def org2url(org):
+    return reverse('directory:org-detail', args=[org.id])
+
+def person2url(person):
+    return reverse('directory:person-detail', args=[person.id])
+
+def hrefize(url, text):
+    return '<a href="{url}">{text}</a>'.format(url=url, text=text)
+
+@register.filter
+def card(value):
+    if isinstance(value, directory.models.Person):
+        orgs = ""
+        if value.orgs.count() > 0:
+            orgs = "Member of " + ', '.join(hrefize(org2url(x), x.name) for x in value.orgs.all())
+
+        tags = ''.join([persontag(x) for x in value.tags.all()])
+
+        return mark_safe(
+            _baseCard(
+                gravatarUrl(value.primary_email(), size=200),
+                value.name,
+                orgs + "<hr />" + tags,
+            ),
+        )
+    else:
+        return None
 
 @register.filter
 def cptids_encode(value, arg):

@@ -1,9 +1,9 @@
 from django.conf.urls import url
 from django.conf import settings
-from views import Index
+import search.views
 
 # from web import views
 
 urlpatterns = [
-    url(r'^$', Index.as_view(), name='index'),
+    url(r'^$', 'search.views.Index', name='index'),
 ]
