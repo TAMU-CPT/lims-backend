@@ -4,12 +4,12 @@
 {% block crumbs %}
 <ul class="breadcrumb">
     <li><a href="{% url 'directory:index' %}">Directory</a></li>
-    <li class="active">People</li>
+    <li class="active">{{ object.name }}</li>
 </ul>
 {% endblock %}
 
 {% block body %}
-    <h2>People</h2>
+    <h2>People tagged {{ object.name }}</h2>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -20,15 +20,17 @@
             </tr>
         </thead>
         <tbody>
-        {% for person in object_list %}
+        {% for person in object.person_set.all %}
             <tr>
                 <td>{{ person.id | cptids_encode:"person" }}</td>
                 <td><a href="{% url 'directory:person-detail' person.id %}">{{ person.name }}</a></td>
                 <td><a href="mailto:{{ person.primary_email }}">{{ person.primary_email }}</a></td>
                 <td>
-                    {% for tag in person.tags.all %}
-                    {{ tag | persontag }}
-                    {% endfor %}
+                    {% if person.tags.count > 0 %}
+                        {% for tag in person.tags.all %}
+                            {{ tag | persontag }}
+                        {% endfor %}
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

@@ -51,7 +51,7 @@
                     <td>Categories</td>
                     <td>
                         {% for tag in person.tags.all %}
-                        {{ tag }}<br />
+                        {{ tag | persontag }}
                         {% endfor %}
                     </td>
                 </tr>

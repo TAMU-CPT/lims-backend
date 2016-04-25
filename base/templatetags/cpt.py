@@ -2,6 +2,7 @@ from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
+from django.core.urlresolvers import reverse
 
 import hashlib
 import cptids
@@ -35,3 +36,16 @@ def ibarcode(url, value='20x200', autoescape=True):
 @register.filter
 def cptids_encode(value, arg):
     return cptids.encode(arg, value)
+
+@register.filter
+def persontag(value):
+    result = """
+<a href="{url}" class="noUnderline">
+    <span class="label label-{tag.type}">{tag.name}</span>
+</a>
+&nbsp;
+    """.format(
+        url=reverse('directory:tag-detail', args=[value.id]),
+        tag=value
+    )
+    return mark_safe(result)

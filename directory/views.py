@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
-from directory.models import Organisation, Person
+from directory.models import Organisation, Person, PersonTag
 
 class PersonList(ListView):
     model = Person
@@ -16,3 +16,6 @@ class OrganisationDetail(DetailView):
 
 class Index(TemplateView):
     template_name = "directory/index.html"
+
+class TagDetail(DetailView):
+    model = PersonTag

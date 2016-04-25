@@ -2,8 +2,15 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+PERSONTAG_TYPES = (
+    ('default', 'Default'),
+    ('primary', 'PI'),
+    ('info', 'BICH464')
+)
+
 class PersonTag(models.Model):
     name = models.CharField(max_length=32)
+    type = models.CharField(max_length=12, choices=PERSONTAG_TYPES, default='default')
 
     def __str__(self):
         return self.name
