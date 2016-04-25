@@ -743,6 +743,8 @@ class SettingsView(LoginRequiredMixin, FormView):
             fields["timezone"] = form.cleaned_data["timezone"]
         if "language" in form.cleaned_data:
             fields["language"] = form.cleaned_data["language"]
+        if "theme" in form.cleaned_data:
+            fields["theme"] = form.cleaned_data["theme"]
         if fields:
             account = self.request.user.account
             for k, v in fields.items():

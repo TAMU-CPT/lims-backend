@@ -201,6 +201,14 @@ class SettingsForm(forms.Form):
         choices=[("", "---------")] + settings.ACCOUNT_TIMEZONES,
         required=False
     )
+
+    from bootstrap_themes import list_themes
+    theme = forms.ChoiceField(
+        label=_("Theme"),
+        choices=list_themes(),
+        required=False,
+    )
+
     if settings.USE_I18N:
         language = forms.ChoiceField(
             label=_("Language"),

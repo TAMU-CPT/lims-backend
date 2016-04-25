@@ -3,7 +3,12 @@
 
 <html>
     <head>
-        {% bootstrap_styles theme='lumen' type='min.css' %}
+        {% if request.user.is_authenticated %}
+            {% bootstrap_styles theme=request.user.account.theme type='min.css' %}
+        {% else %}
+            {% bootstrap_styles theme='lumen' type='min.css' %}
+        {% endif %}
+
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
         {% fontawesome_stylesheet %}
     </head>
@@ -40,6 +45,19 @@
       </div>
     </div>
     <div class="container">
+        {% if messages %}
+            <div class="row">
+            {% for message in messages %}
+                <div class="bs-component">
+                    <div class="alert alert-dismissible alert-{{ message.tags }}j>
+                        <button type="button" class="close" data-dismiss="{{ message.tags }}">×</button>
+                        <p>{{ message }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+
         <div class="row">
             {% block crumbs %}
             {% endblock %}

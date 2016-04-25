@@ -29,6 +29,9 @@ from account.hooks import hookset
 from account.managers import EmailAddressManager, EmailConfirmationManager
 from account.signals import signup_code_sent, signup_code_used
 
+from bootstrap_themes import list_themes
+
+
 
 @python_2_unicode_compatible
 class Account(models.Model):
@@ -41,6 +44,7 @@ class Account(models.Model):
         choices=settings.ACCOUNT_LANGUAGES,
         default=settings.LANGUAGE_CODE
     )
+    theme = models.CharField(max_length=255, default='default', choices=list_themes())
 
     @classmethod
     def for_request(cls, request):
