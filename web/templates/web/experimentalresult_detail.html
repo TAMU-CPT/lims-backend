@@ -7,28 +7,34 @@
 <ul class="breadcrumb">
     <li><a href="{% url 'lims:index' %}">LIMS</a></li>
     <li><a href="{% url 'lims:experiment-list' %}">Experiments</a></li>
-    <li class="active">{{ object.short_name }}</li>
+    <li class="active">{{ object.id }}</li>
 </ul>
 {% endblock %}
 
 {% block body %}
-<h1>{{ object.experiment.short_name }} run by {{ object.run_by }}</h1>
+<h1>{{ object.experiment.short_name }} run by {{ object.run_by.name }}</h1>
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Result</th>
-        </tr>
-    </thead>
     <tbody>
-        {% for experiment in object.experimentalresult_set.all %}
         <tr>
-            <td><a href="{% url 'lims:experiment-result-detail' experiment.id %}">{{ experiment.id }}</a></td>
-            <td>{{ experiment.date }}</td>
-            <td>{{ experiment.result }}</td>
+            <td>ID</td>
+            <td>{{ object.id }}</td>
         </tr>
-        {% endfor %}
+        <tr>
+            <td>Date</td>
+            <td>{{ object.date }}</td>
+        </tr>
+        <tr>
+            <td>Run By</td>
+            <td><a href="{% url 'directory:person-detail' object.run_by.id %}">{{ object.run_by.name }}</a></td>
+        </tr>
+        <tr>
+            <td>Experiment</td>
+            <td><a href="{% url 'lims:experiment-detail' object.experiment.id %}">{{ object.experiment }}</a></td>
+        </tr>
+        <tr>
+            <td>Result</td>
+            <td>{{ object.result }}</td>
+        </tr>
     </tbody>
 </table>
 {% endblock %}

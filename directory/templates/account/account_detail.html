@@ -48,7 +48,7 @@
                 <tr>
                     <td>Categories</td>
                     <td>
-                        {% for tag in person.tags.all %}
+                        {% for tag in object.tags.all %}
                         {{ tag | persontag }}
                         {% endfor %}
                     </td>
@@ -57,14 +57,14 @@
                 <tr>
                     <td>ORCID</td>
                     <td>
-                        <a target="_blank" href="https://orcid.org/{{ person.orcid }}">{{ person.orcid }}</a>
+                        <a target="_blank" href="https://orcid.org/{{ object.orcid }}">{{ object.orcid }}</a>
                     </td>
                 </tr>
 
                 <tr>
                     <td>Legacy ID</td>
                     <td>
-                        {{ person.original_id }}
+                        {{ object.original_id }}
                     </td>
                 </tr>
 

@@ -166,7 +166,7 @@
                         <ul>
                             {% for experiment in tube.phagednaprep.experiments.all %}
                             <li>
-                                <a href="{% url 'lims:experiment-detail' experiment.id %}">
+                                <a href="{% url 'lims:experiment-result-detail' experiment.id %}">
                                 {{ experiment }}
                                 </a>
                             </li>
