@@ -86,13 +86,22 @@ def cptids_encode(value, arg):
 
 @register.filter
 def persontag(value):
+    tag_type = 'default'
+    if value.name.startswith('BICH464'):
+        tag_type = 'info'
+    elif value.name == 'PI':
+        tag_type = 'primary'
+    elif value.name == 'Staff':
+        tag_type = 'success'
+
     result = """
 <a href="{url}" class="noUnderline">
-    <span class="label label-{tag.type}">{tag.name}</span>
+    <span class="label label-{tag_type}">{tag.name}</span>
 </a>
 &nbsp;
     """.format(
         url=reverse('directory:tag-detail', args=[value.id]),
+        tag_type=tag_type,
         tag=value
     )
     return mark_safe(result)

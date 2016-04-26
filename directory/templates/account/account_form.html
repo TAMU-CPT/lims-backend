@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load cpt %}
+{% load bootstrap3 %}
+{% load gravatar %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'directory:index' %}">Directory</a></li>
+    <li><a href="{% url 'directory:person-list' %}">People</a></li>
+    <li class="active">Create</li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h1>Add a Person</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                <div class="form-group">
+                    <label class="control-label" for="id_email">
+                        Email
+                    </label>
+                    <input class="form-control" id="id_email" maxlength="32" name="email" placeholder="Emails" title="Primary email address" type="text">
+                    <span class="help-block">
+                        Primary email address
+                    </span>
+                </div>
+                <button type="submit" class="btn btn-default btn-primary" style="width:100%">Submit</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+$( "#id_tags"  ).select2( {
+    theme: "bootstrap",
+    placeholder: "Select some tags",
+    allowClear: true,
+    tags: true,
+    tokenSeparators: [',', ' ']
+});
+$( "#id_orgs"  ).select2( {
+    theme: "bootstrap",
+    placeholder: "Select an Organisation",
+    allowClear: true,
+});
+</script>
+{% endblock %}

@@ -8,12 +8,26 @@ PERSONTAG_TYPES = (
     ('info', 'BICH464')
 )
 
-class PersonTag(models.Model):
-    name = models.CharField(max_length=32)
-    type = models.CharField(max_length=12, choices=PERSONTAG_TYPES, default='default')
 
-    def __str__(self):
-        return self.name
+import tagulous.models
+
+class PersonTag(tagulous.models.TagTreeModel):
+    class TagMeta:
+        initial = [
+            'BICH464/2012',
+            'BICH464/2013',
+            'BICH464/2014',
+            'BICH464/2015',
+            'BICH464/2016',
+            'CPT/PI',
+            'CPT/Gill',
+            'CPT/Young',
+            'CPT/Gonzalez',
+            'Staff',
+        ]
+        space_delimiter = True
+        autocomplete_view = 'person_tags_autocomplete'
+
 
 class Organisation(models.Model):
     name = models.TextField()

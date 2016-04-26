@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^directory/', include('directory.urls', namespace='directory')),
     url(r'^search/', include('search.urls', namespace='search')),
     url(r'^account/', include('account.urls')),
-    url(r"^announcements/", include("pinax.announcements.urls", namespace="pinax_announcements")),
+    url(r'^announcements/', include('pinax.announcements.urls', namespace='pinax_announcements')),
     url(r'^', include('base.urls', namespace='base')),
 ]

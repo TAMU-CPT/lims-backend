@@ -21,4 +21,6 @@ def Index(request):
         for term in re.split('\s+', query.strip()):
             data.append(guessAtMeaning(term))
 
+        return render(request, 'search/results.html', {'results': data})
+
     return render(request, 'search/index.html', {'results': data})

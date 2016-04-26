@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'tagulous',
     'markdown_deux',
     'bootstrap_themes',
     'pinax.announcements',
