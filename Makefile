@@ -14,6 +14,6 @@ clean_migrations:
 	rm -f web/migrations/0*
 
 load_fixtures:
-	cd fixtures && python ../migrate.py loaddata *
+	cd fixtures && python ../manage.py loaddata *
 
 .PHONY: fixtures

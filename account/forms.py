@@ -24,12 +24,6 @@ alnum_re = re.compile(r"^\w+$")
 
 class SignupForm(forms.Form):
 
-    username = forms.CharField(
-        label=_("Username"),
-        max_length=30,
-        widget=forms.TextInput(),
-        required=True
-    )
     password = forms.CharField(
         label=_("Password"),
         widget=forms.PasswordInput(render_value=False)
@@ -47,18 +41,6 @@ class SignupForm(forms.Form):
         required=False,
         widget=forms.HiddenInput()
     )
-
-    def clean_username(self):
-        if not alnum_re.search(self.cleaned_data["username"]):
-            raise forms.ValidationError(_("Usernames can only contain letters, numbers and underscores."))
-        User = get_user_model()
-        lookup_kwargs = get_user_lookup_kwargs({
-            "{username}__iexact": self.cleaned_data["username"]
-        })
-        qs = User.objects.filter(**lookup_kwargs)
-        if not qs.exists():
-            return self.cleaned_data["username"]
-        raise forms.ValidationError(_("This username is already taken. Please choose another."))
 
     def clean_email(self):
         value = self.cleaned_data["email"]
