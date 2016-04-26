@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
-from directory.models import Person, PersonTag
+from directory.models import PersonTag
+from account.models import Account, EmailAddress
+from django.contrib.auth.models import User
 
 class Command(BaseCommand):
     help = 'Load person table'
@@ -38,16 +40,46 @@ class Command(BaseCommand):
 
             md = {k: v.strip() for (k, v) in zip(cols, rowData)}
 
-            p = Person.objects.get_or_create(
+            username = md['f'][0] + md['l']
+            pu = User.objects.get_or_create(
+                username=username.lower(),
+                email=md['email'].strip(),
+            )
+            pu = pu[0]
+            print pu
+
+            import pprint; pprint.pprint(md)
+            p = pu.account
+            data = dict(
+                timezone='UTC',
                 name=md['fullname'].strip(),
-                initials=md['initials'].strip(),
-                emails=md['email'].strip(),
+                language='en',
+                # initials=md.get('initials', '').strip(),
+                # emails=md['email'].strip(),
                 phone_number=md['phone'].strip(),
                 orcid=md['orcid'].strip(),
                 netid=md['netid'].strip(),
-                original_id=md['ID'].strip()
+                original_id=md['ID'].strip(),
             )
-            p = p[0]
+            for (k, v) in data.iteritems():
+                setattr(p, k, v)
+
+            # Emails
+            em = md['email'].strip()
+            if len(em) > 0:
+                try:
+                    EmailAddress.objects.get(email=em)
+                except:
+                    ea = EmailAddress(
+                        user=pu,
+                        email=em,
+                        verified=False,
+                        primary=True
+                    )
+                    ea.save()
+
+
+            p.save()
 
             pts = []
 
@@ -60,4 +92,3 @@ class Command(BaseCommand):
 
             p.tags = pts
             p.save()
-            print p

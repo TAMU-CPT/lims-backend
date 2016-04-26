@@ -59,12 +59,14 @@ class Account(models.Model):
     orgs = models.ManyToManyField(Organisation, blank=True)
     original_id = models.CharField(max_length=4, blank=True)
 
-    def email_iter(self):
-        for email in self.emails.split('\n'):
-            yield email
+    def emails(self):
+        return self.user.emailaddress_set.all()
 
-    def primary_email(self):
-        return self.emails.split('\n')[0]
+    def primaryEmail(self):
+        try:
+            return self.user.emailaddress_set.get(primary=True)
+        except:
+            return None
 
     @classmethod
     def for_request(cls, request):

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load cpt %}
+{% load gravatar %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'directory:index' %}">Directory</a></li>
+    <li><a href="{% url 'directory:person-list' %}">People</a></li>
+    <li class="active">{{ object.name }}</li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ object.name }}</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ object.primaryEmail.email | gravatar }}" width="100%"/>
+        </div>
+        <div class="col-md-8">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>CPT Person ID</td>
+                    <td>
+                        <div><code>{{ object.id | cptids_encode:"person"  }}</code></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CPT Person ID Barcode</td>
+                    <td>
+                        <div>{{ object.id | cptids_encode:'person' | ibarcode:'200x20' }}</div>
+                    </td>
+                </tr>
+                {% if object.nickname %}
+                <tr><td>Preferred Name</td><td>{{ object.nickname }}</td></tr>
+                {% endif %}
+                <tr>
+                    <td>NetID</td>
+                    <td><a target="_blank" href="https://hdc.tamu.edu/hdcapps/ldap/index.php?zone=search&org=people&text={{ object.netid }}&target=searchmailbox">{{ object.netid }}</a></td>
+                </tr>
+                <tr><td>Phone #</td><td><a target="_blank" href="tel:{{ object.phone_number }}">{{ object.phone_number }}</a></td></tr>
+                <tr>
+                    <td>Email</td>
+                    <td>
+                        {{  object.primaryEmail.email | urlize }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Categories</td>
+                    <td>
+                        {% for tag in person.tags.all %}
+                        {{ tag | persontag }}
+                        {% endfor %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>ORCID</td>
+                    <td>
+                        <a target="_blank" href="https://orcid.org/{{ person.orcid }}">{{ person.orcid }}</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Legacy ID</td>
+                    <td>
+                        {{ person.original_id }}
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
