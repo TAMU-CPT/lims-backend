@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 import uuid
 from django.db import models
-from directory.models import Person, Organisation
+from directory.models import Organisation
+from account.models import Account
 
 
 PHAGE_MORPHOLOGY = (
@@ -59,6 +60,43 @@ class Box(models.Model):
     class Meta:
         verbose_name_plural = "boxes"
 
+    def getEnvironmentalTubes(self):
+        return self.tube_set.all().exclude(environmentalsample__isnull=True)
+
+    def getLysateTubes(self):
+        return self.tube_set.all().exclude(lysate__isnull=True)
+
+    def getPhageDNAPrepTubes(self):
+        return self.tube_set.all().exclude(phagednaprep__isnull=True)
+
+class Tube(models.Model):
+    # DOES NOT HAVE CPT_HASHID. Inherits the hashid of whoever is
+    #m referring to it.
+    # Human readable name that gets written on it
+    name = models.CharField(max_length=64)
+    box = models.ForeignKey(Box)
+    type = models.ForeignKey(TubeType)
+
+    def __str__(self):
+        return '{} in {}'.format(self.name, self.box)
+
+    def getType(self):
+        rType = None
+        if self.environmentalsample is not None:
+            rType = 'envsample'
+        elif self.phagednaprep is not None:
+            if rType is not None:
+                raise Exception("More than one sample stored in tube")
+            else:
+                rType = 'dnaprep'
+        elif self.lystate is not None:
+            if rType is not None:
+                raise Exception("More than one sample stored in tube")
+            else:
+                rType = 'lysate'
+
+        return rType
+
 class EnvironmentalSample(models.Model):
     # HAS_CPT_HASHID
     collection = models.DateTimeField()
@@ -67,8 +105,7 @@ class EnvironmentalSample(models.Model):
     sample_type = models.ForeignKey(SampleType)
 
     # Tube Storage
-    tube_type = models.ForeignKey(TubeType)
-    box = models.ForeignKey(Box)
+    tube = models.OneToOneField(Tube)
 
     def __str__(self):
         return '{} sample from {}'.format(self.sample_type, self.collection)
@@ -90,12 +127,11 @@ class Lysate(models.Model):
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(blank=True)
-    owner = models.ForeignKey(Person, blank=True, null=True)
+    owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
 
     # Tube Storage
-    tube_type = models.ForeignKey(TubeType)
-    box = models.ForeignKey(Box)
+    tube = models.OneToOneField(Tube)
 
     def __str__(self):
         return 'Lysate from {}'.format(self.env_sample)
@@ -114,6 +150,7 @@ class ExperimentalResult(models.Model):
     experiment = models.ForeignKey(Experiment)
     result = models.TextField()
     date = models.DateTimeField()
+    run_by = models.ForeignKey(Account)
     # result_type = models.IntegerField(choices=EXP_RESULT_TYPES)
 
     def __str__(self):
@@ -134,8 +171,7 @@ class PhageDNAPrep(models.Model):
     experiments = models.ManyToManyField(ExperimentalResult, blank=True)
 
     # Tube Storage
-    tube_type = models.ForeignKey(TubeType)
-    box = models.ForeignKey(Box)
+    tube = models.OneToOneField(Tube)
 
     def __str__(self):
         return '{} kb {}'.format(int(self.pfge_expected_size / 1000), self.get_morphology_display())

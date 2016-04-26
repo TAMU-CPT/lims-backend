@@ -31,6 +31,8 @@ from account.signals import signup_code_sent, signup_code_used
 
 from bootstrap_themes import list_themes
 
+from directory.models import Organisation, PersonTag
+
 
 
 @python_2_unicode_compatible
@@ -45,6 +47,24 @@ class Account(models.Model):
         default=settings.LANGUAGE_CODE
     )
     theme = models.CharField(max_length=255, default='default', choices=list_themes())
+
+    name = models.TextField(default='')
+    initials = models.TextField(default='')
+    nickname = models.TextField(blank=True)
+    netid = models.CharField(max_length=32, blank=True)
+    emails = models.TextField(blank=True)
+    phone_number = models.CharField(max_length=16, blank=True)
+    tags = models.ManyToManyField(PersonTag, blank=True)
+    orcid = models.CharField(max_length=32, blank=True)
+    orgs = models.ManyToManyField(Organisation, blank=True)
+    original_id = models.CharField(max_length=4, blank=True)
+
+    def email_iter(self):
+        for email in self.emails.split('\n'):
+            yield email
+
+    def primary_email(self):
+        return self.emails.split('\n')[0]
 
     @classmethod
     def for_request(cls, request):

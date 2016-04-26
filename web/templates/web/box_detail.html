@@ -23,7 +23,7 @@
             </div>
     </div>
 
-    {% if object.environmentalsample_set.all.count > 0 %}
+    {% if object.getEnvironmentalTubes.count > 0 %}
     <div class="row">
         <h2>Environmental Samples</h2>
         <table class="table table-striped">
@@ -47,16 +47,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for tube in object.environmentalsample_set.all%}
+                {% for tube in object.getEnvironmentalTubes.all %}
                 <tr id="{{ tube.id | cptids_encode:'envsample' }}">
                     <td style="text-align:center">
                         <div>{{ tube.id | cptids_encode:'envsample' }}</div>
                         <div>{{ tube.id  | ibarcode:'160x20' }}</div>
                     </td>
-                    <td>{{ tube.sample_type }}</td>
-                    <td>{{ tube.collection }}</td>
-                    <td>{{ tube.location }}</td>
-                    <td>{{ tube.tube_type }}</td>
+                    <td>{{ tube.environmentalsample.sample_type }}</td>
+                    <td>{{ tube.environmentalsample.collection }}</td>
+                    <td>{{ tube.environmentalsample.location }}</td>
+                    <td>{{ tube.type }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -64,7 +64,7 @@
     </div>
     {% endif %}
 
-    {% if object.lysate_set.all.count > 0 %}
+    {% if object.getLysateTubes.count > 0 %}
     <div class="row">
         <h2>Lysates</h2>
         <table class="table table-striped">
@@ -79,34 +79,38 @@
                 </tr>
             </thead>
             <tbody>
-                {% for tube in object.lysate_set.all %}
-                <tr id="{{ tube.id | cptids_encode:'lysate' }}">
+                {% for tube in object.getLysateTubes.all  %}
+                <tr id="{{ tube.lysate.id | cptids_encode:'lysate' }}">
                     <td style="text-align:center">
-                        <div>{{ tube.id | cptids_encode:'lysate' }}</div>
-                        <div>{{ tube.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
+                        <div>{{ tube.lysate.id | cptids_encode:'lysate' }}</div>
+                        <div>{{ tube.lysate.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
                     </td>
                     <td style="text-align:center">
-                        <div><a href="{% url 'lims:box-detail' tube.env_sample.box.id %}">{{ tube.env_sample.id | cptids_encode:'envsample' }}</a></div>
-                        <div>{{ tube.env_sample.id | cptids_encode:'envsample' | ibarcode:'160x20' }}</div>
+                        <a href="{% url 'lims:box-detail' tube.lysate.env_sample.tube.box.id %}#{{ tube.lysate.env_sample.id | cptids_encode:'envsample' }}">
+                            <div>
+                                {{ tube.lysate.env_sample.id | cptids_encode:'envsample' }}
+                            </div>
+                            <div>{{ tube.lysate.env_sample.id | cptids_encode:'envsample' | ibarcode:'160x20' }}</div>
+                        </a>
                     </td>
                     <td>
                         <ul>
-                        {% for host in tube.host_lims.all %}
+                        {% for host in tube.lysate.host_lims.all %}
                             <li>{{ host }}</li>
                         {% endfor %}
                         </ul>
                     </td>
-                    <td>{{ tube.oldid }}</td>
-                    <td>{{ tube.isolation }}</td>
+                    <td>{{ tube.lysate.oldid }}</td>
+                    <td>{{ tube.lysate.isolation }}</td>
                     <td>
-                        {% if tube.owner and tube.source %}
-                            <a href="{% url 'directory:person-detail' tube.owner.id %}">{{ tube.owner }}</a>
+                        {% if tube.lysate.owner and tube.lysate.source %}
+                            <a href="{% url 'directory:person-detail' tube.lysate.owner.id %}">{{ tube.lysate.owner }}</a>
                                 <br />
-                            <a href="{% url 'directory:org-detail' tube.source.id %}">{{ tube.source }}</a>
-                        {% elif tube.owner %}
-                            <a href="{% url 'directory:person-detail' tube.owner.id %}">{{ tube.owner }}</a>
-                        {% elif tube.source %}
-                            <a href="{% url 'directory:org-detail' tube.source.id %}">{{ tube.source }}</a>
+                            <a href="{% url 'directory:org-detail' tube.lysate.source.id %}">{{ tube.lysate.source }}</a>
+                        {% elif tube.lysate.owner %}
+                            <a href="{% url 'directory:person-detail' tube.lysate.owner.id %}">{{ tube.lysate.owner }}</a>
+                        {% elif tube.lysate.source %}
+                            <a href="{% url 'directory:org-detail' tube.lysate.source.id %}">{{ tube.lysate.source }}</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -116,7 +120,7 @@
     </div>
     {% endif %}
 
-    {% if object.phagednaprep_set.all.count > 0 %}
+    {% if object.getPhageDNAPrepTubes.count > 0 %}
     <div class="row">
         <h2>Phage DNA Preparation</h2>
         <table class="table table-striped">
@@ -130,29 +134,29 @@
                 </tr>
             </thead>
             <tbody>
-                {% for tube in object.phagednaprep_set.all %}
+                {% for tube in object.getPhageDNAPrepTubes.all %}
                 <tr id="{{ tube.id | cptids_encode:'dnaprep' }}">
                     <td style="text-align:center">
                         <div>{{ tube.id | cptids_encode:'dnaprep' }}</div>
                         <div>{{ tube.id  | cptids_encode:'dnaprep' | ibarcode:'160x20' }}</div>
                     </td>
                     <td style="text-align:center">
-                        <div>
-                            <a href="{% url 'lims:box-detail' tube.lysate.box.id %}">
-                                {{ tube.id | cptids_encode:'lysate' }}
-                            </a>
-                        </div>
-                        <div>
-                            {{ tube.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
-                        </div>
+                        <a href="{% url 'lims:box-detail' tube.phagednaprep.lysate.tube.box.id %}#{{ tube.phagednaprep.lysate.id  | cptids_encode:'lysate' }}">
+                            <div>
+                                {{ tube.phagednaprep.lysate.id | cptids_encode:'lysate' }}
+                            </div>
+                            <div>
+                                {{ tube.phagednaprep.lysate.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
+                            </div>
+                        </a>
                     </td>
-                    <td>{{ tube.get_morphology_display }}</td>
-                    <td>{{ tube.pfge_expected_size }}</td>
+                    <td>{{ tube.phagednaprep.get_morphology_display }}</td>
+                    <td>{{ tube.phagednaprep.pfge_expected_size }}</td>
                     <td>
                         <ul>
-                            {% for experiment in tube.experiments.all %}
+                            {% for experiment in tube.phagednaprep.experiments.all %}
                             <li>
-                                <a href="{% url 'lims:experiment-detail' experiment.id }">
+                                <a href="{% url 'lims:experiment-detail' experiment.id %}">
                                 {{ experiment }}
                                 </a>
                             </li>

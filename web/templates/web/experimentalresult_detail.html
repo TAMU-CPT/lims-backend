@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load cpt %}
+{% load markdown_deux_tags %}
+{% load fontawesome %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'lims:index' %}">LIMS</a></li>
+    <li><a href="{% url 'lims:experiment-list' %}">Experiments</a></li>
+    <li class="active">{{ object.short_name }}</li>
+</ul>
+{% endblock %}
+
+{% block body %}
+<h1>{{ object.experiment.short_name }} run by {{ object.run_by }}</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for experiment in object.experimentalresult_set.all %}
+        <tr>
+            <td><a href="{% url 'lims:experiment-result-detail' experiment.id %}">{{ experiment.id }}</a></td>
+            <td>{{ experiment.date }}</td>
+            <td>{{ experiment.result }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

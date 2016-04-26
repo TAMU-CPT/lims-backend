@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
-from directory.models import Organisation, Person, PersonTag
+from directory.models import Organisation, PersonTag
+from account.models import Account
 
 class PersonList(ListView):
-    model = Person
+    model = Account
 
 class PersonDetail(DetailView):
-    model = Person
+    model = Account
 
 class OrganisationList(ListView):
     model = Organisation

@@ -3,13 +3,13 @@ from django.http import HttpResponseRedirect
 import re
 import cgi
 import cptids
-from directory.models import Person
+from account.models import Account
 
 def guessAtMeaning(term):
     try:
         (id_type, id_val) = cptids.decode(term)
         if id_type == 'person':
-            return Person.objects.get(id=id_val)
+            return Accoutn.objects.get(id=id_val)
     except:
         return 'Unknown term: %s' % cgi.escape(term)
 

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load cpt %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'lims:index' %}">LIMS</a></li>
+    <li class="active">Data Dump</li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h2>CPT LIMS Data</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sample Type</th>
+                <th>Collected on</th>
+                <th>Stored</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for obj in object_list %}
+            <tr>
+                <td>{{ obj.sample_type.name }}</td>
+                <td>{{ obj.collection }}</td>
+                <td><a href="{% url 'lims:box-detail' obj.tube.box.id %}">{{ obj.tube }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
