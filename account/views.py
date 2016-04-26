@@ -685,6 +685,9 @@ class SettingsView(LoginRequiredMixin, FormView):
         },
     }
 
+    data_keys = ('timezone', 'language', 'theme', 'name', 'initials', 'nickname',
+            'netid', 'orcid', 'phone_number', 'orgs')
+
     def get_form_class(self):
         # @@@ django: this is a workaround to not having a dedicated method
         # to initialize self with a request in a known good state (of course
@@ -696,8 +699,14 @@ class SettingsView(LoginRequiredMixin, FormView):
         initial = super(SettingsView, self).get_initial()
         if self.primary_email_address:
             initial["email"] = self.primary_email_address.email
-        initial["timezone"] = self.request.user.account.timezone
-        initial["language"] = self.request.user.account.language
+
+        for prop in self.data_keys:
+            if hasattr(self.request.user.account, prop):
+                if prop == 'orgs':
+                    initial[prop] = getattr(getattr(self.request.user.account, prop), 'all')
+                else:
+                    initial[prop] = getattr(self.request.user.account, prop)
+
         return initial
 
     def form_valid(self, form):
@@ -739,12 +748,10 @@ class SettingsView(LoginRequiredMixin, FormView):
 
     def update_account(self, form):
         fields = {}
-        if "timezone" in form.cleaned_data:
-            fields["timezone"] = form.cleaned_data["timezone"]
-        if "language" in form.cleaned_data:
-            fields["language"] = form.cleaned_data["language"]
-        if "theme" in form.cleaned_data:
-            fields["theme"] = form.cleaned_data["theme"]
+        for k in self.data_keys:
+            if k in form.cleaned_data:
+                fields[k] = form.cleaned_data[k]
+
         if fields:
             account = self.request.user.account
             for k, v in fields.items():

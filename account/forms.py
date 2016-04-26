@@ -18,6 +18,7 @@ from account.hooks import hookset
 from account.models import EmailAddress
 from account.utils import get_user_lookup_kwargs
 
+from directory.models import Organisation
 
 alnum_re = re.compile(r"^\w+$")
 
@@ -176,6 +177,16 @@ class PasswordResetTokenForm(forms.Form):
 
 
 class SettingsForm(forms.Form):
+
+    name = forms.CharField(label=_("Name"), required=True, help_text="Full name. First-, any middle-, and last name(s).")
+    initials = forms.CharField(max_length=16, help_text="First and middle initials (PubMed format)")
+    nickname = forms.CharField(max_length=255, label=_("Preferred/alternate name"), required=False, help_text="Your preferred name, if applicable. Many non-American students choose to go by a different name.")
+    netid = forms.CharField(max_length=32, required=False, help_text="Your netid, if you are TAMU associated")
+    phone_number = forms.CharField(max_length=16, required=False, help_text="A phone number which you will continue to be reachable at (i.e. not an office phone #)")
+    # tags = tagulous.forms.TagField(PersonTag, required=False, help_text="Tags allow us to group users easily and see in what way they were involved with the CPT's research")
+    orcid = forms.CharField(max_length=32, required=False, help_text="See <a href='https://orcid.org' target='_blank'>https://orcid.org</a>")
+    orgs = forms.ModelMultipleChoiceField(Organisation.objects, required=False, help_text="Organisations you are associated with. Please add an appropriate organisation if there is not one available")
+
 
     email = forms.EmailField(label=_("Email"), required=True)
     timezone = forms.ChoiceField(

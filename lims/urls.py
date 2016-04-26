@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from directory.models import PersonTag
+import tagulous.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,4 +27,11 @@ urlpatterns = [
     url(r'^account/', include('account.urls')),
     url(r'^announcements/', include('pinax.announcements.urls', namespace='pinax_announcements')),
     url(r'^', include('base.urls', namespace='base')),
+    url(
+        r'^api/peopletags/$',
+        tagulous.views.autocomplete,
+        {'tag_model': PersonTag},
+        name='person_tags_autocomplete',
+    ),
+
 ]

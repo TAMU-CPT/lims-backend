@@ -68,6 +68,16 @@
                     </td>
                 </tr>
 
+                <tr>
+                    <td>Organisations</td>
+                    <td>
+                        <ul>
+                        {% for org in object.orgs.all %}
+                            <li><a href="{% url 'directory:org-detail' org.id %}">{{ org }}</a></li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

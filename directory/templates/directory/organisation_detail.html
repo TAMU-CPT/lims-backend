@@ -47,7 +47,7 @@
         <div class="col-md-6">
             <h2>Members</h2>
             <ul>
-                {% for person in organisation.person_set.all %}
+                {% for person in organisation.account_set.all %}
                     <li><a href="{% url 'directory:person-detail' person.id %}">{{ person.name }}</a></li>
                 {% endfor %}
             </ul>

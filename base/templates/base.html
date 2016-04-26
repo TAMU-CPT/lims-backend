@@ -41,6 +41,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="{% url 'account_settings' %}">Settings</a></li>
+                        <li><a href="{% url 'directory:person-detail' request.user.account.id %}">Public Profile</a></li>
                         <li><a href="{% url 'account_logout' %}">Log out</a></li>
 
                         {% if request.user.is_superuser %}

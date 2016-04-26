@@ -4,7 +4,7 @@
 {% block crumbs %}
 <ul class="breadcrumb">
     <li><a href="{% url 'directory:index' %}">Directory</a></li>
-    <li class="active">Organisation</li>
+    <li class="active">Organisations</li>
 </ul>
 {% endblock %}
 
@@ -14,12 +14,14 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Members</th>
             </tr>
         </thead>
         <tbody>
         {% for org in object_list %}
             <tr>
                 <td><a href="{% url 'directory:org-detail' org.id %}">{{ org.name }}</a></td>
+                <td>{{ org.account_set.count }}</td>
             </tr>
         {% endfor %}
         </tbody>
