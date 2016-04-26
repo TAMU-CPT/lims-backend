@@ -1,5 +1,6 @@
 {% load bootstrap_themes %}
 {% load fontawesome %}
+{% load pinax_announcements_tags %}
 
 <html>
     <head>
@@ -56,6 +57,33 @@
       </div>
     </div>
     <div class="container">
+{{ TODO }}
+{% if announcements_list %}
+    <div class="announcements">
+        {% for announcement in announcement_list %}
+            <div class="announcement">
+                <strong>{{ announcement.title }}</strong><br />
+                {{ announcement.content }}
+
+                <a href="{{ announcement.get_absolute_url }}">Read more...</a>
+
+                {% if announcement.dismiss_url %}
+                    <a href="{{ announcement.dismiss_url }}" class="btn ajax" data-method="post" data-replace-closest=".announcement">
+                        Clear
+                    </a>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+
+
+
+
+
         {% if messages %}
             <div class="row">
             {% for message in messages %}

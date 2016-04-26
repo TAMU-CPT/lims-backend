@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'markdown_deux',
     'bootstrap_themes',
+    'pinax.announcements',
     'bootstrap3',
     'rest_framework',
     'fontawesome',

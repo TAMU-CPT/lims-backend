@@ -1,5 +1,11 @@
 Django==1.9.5
 git+ssh://git@github.tamu.edu/cpt/hashids-py.git
+django-appconf==1.0.2
 django-bootstrap-themes==3.3.6
+django-bootstrap3==7.0.1
 django-fontawesome==0.2.6
+django-markdown-deux==1.0.5
 djangorestframework==3.3.3
+pinax-announcements==2.0.3
+pytz==2016.4
+PyYAML==3.11
