@@ -9,7 +9,7 @@ def guessAtMeaning(term):
     try:
         (id_type, id_val) = cptids.decode(term)
         if id_type == 'person':
-            return Accoutn.objects.get(id=id_val)
+            return Account.objects.get(id=id_val)
     except:
         return 'Unknown term: %s' % cgi.escape(term)
 

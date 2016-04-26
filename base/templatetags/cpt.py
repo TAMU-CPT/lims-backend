@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from base.templatetags.gravatar import gravatarUrl
 
-import directory.models
+import account.models
 import hashlib
 import cptids
 register = template.Library()
@@ -63,7 +63,7 @@ def hrefize(url, text):
 
 @register.filter
 def card(value):
-    if isinstance(value, directory.models.Person):
+    if isinstance(value, account.models.Account):
         orgs = ""
         if value.orgs.count() > 0:
             orgs = "Member of " + ', '.join(hrefize(org2url(x), x.name) for x in value.orgs.all())
@@ -72,7 +72,7 @@ def card(value):
 
         return mark_safe(
             _baseCard(
-                gravatarUrl(value.primary_email(), size=200),
+                gravatarUrl(value.primaryEmail().email, size=200),
                 value.name,
                 orgs + "<hr />" + tags,
             ),

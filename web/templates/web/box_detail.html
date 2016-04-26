@@ -19,7 +19,9 @@
                 <div>In <a href="{% url 'lims:storage-location-detail' object.location.id %}">{{ object.location }}</a></div>
             </div>
             <div class="col-md-6">
+                <h1>
                 {{ object.id | cptids_encode:'box' | ibarcode:'400x40' }}
+                </h1>
             </div>
     </div>
 
@@ -29,6 +31,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>
+                        Tube Label
+                    </th>
                     <th>
                         EnvSample ID
                     </th>
@@ -49,6 +54,7 @@
             <tbody>
                 {% for tube in object.getEnvironmentalTubes.all %}
                 <tr id="{{ tube.id | cptids_encode:'envsample' }}">
+                    <td>{{ tube.name }}</td>
                     <td style="text-align:center">
                         <div>{{ tube.id | cptids_encode:'envsample' }}</div>
                         <div>{{ tube.id  | ibarcode:'160x20' }}</div>
@@ -70,6 +76,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Tube Label</th>
                     <th>Lysate ID</th>
                     <th>Env. Sample</th>
                     <th>Host(s)</th>
@@ -81,6 +88,7 @@
             <tbody>
                 {% for tube in object.getLysateTubes.all  %}
                 <tr id="{{ tube.lysate.id | cptids_encode:'lysate' }}">
+                    <td>{{ tube.name }}</td>
                     <td style="text-align:center">
                         <div>{{ tube.lysate.id | cptids_encode:'lysate' }}</div>
                         <div>{{ tube.lysate.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
@@ -122,10 +130,11 @@
 
     {% if object.getPhageDNAPrepTubes.count > 0 %}
     <div class="row">
-        <h2>Phage DNA Preparation</h2>
+        <h2>Phage DNA Preparations</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Tube Label</th>
                     <th>DNA Prep ID</th>
                     <th>Lysate ID</th>
                     <th>Morphology</th>
@@ -136,6 +145,7 @@
             <tbody>
                 {% for tube in object.getPhageDNAPrepTubes.all %}
                 <tr id="{{ tube.id | cptids_encode:'dnaprep' }}">
+                    <td>{{ tube.name }}</td>
                     <td style="text-align:center">
                         <div>{{ tube.id | cptids_encode:'dnaprep' }}</div>
                         <div>{{ tube.id  | cptids_encode:'dnaprep' | ibarcode:'160x20' }}</div>
