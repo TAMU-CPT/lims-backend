@@ -1,0 +1,78 @@
+[
+   {
+      "fields" : {
+         "type" : "info",
+         "name" : "BICH4642013"
+      },
+      "model" : "directory.persontag",
+      "pk" : 1
+   },
+   {
+      "model" : "directory.persontag",
+      "pk" : 2,
+      "fields" : {
+         "type" : "default",
+         "name" : "Staff"
+      }
+   },
+   {
+      "model" : "directory.persontag",
+      "pk" : 3,
+      "fields" : {
+         "type" : "info",
+         "name" : "BICH4642015"
+      }
+   },
+   {
+      "model" : "directory.persontag",
+      "pk" : 4,
+      "fields" : {
+         "name" : "BICH4642016",
+         "type" : "info"
+      }
+   },
+   {
+      "fields" : {
+         "type" : "default",
+         "name" : "Young Lab"
+      },
+      "model" : "directory.persontag",
+      "pk" : 5
+   },
+   {
+      "fields" : {
+         "name" : "CPT PI",
+         "type" : "primary"
+      },
+      "pk" : 6,
+      "model" : "directory.persontag"
+   },
+   {
+      "fields" : {
+         "name" : "Gonzalez Lab",
+         "type" : "default"
+      },
+      "pk" : 7,
+      "model" : "directory.persontag"
+   },
+   {
+      "pk" : 8,
+      "model" : "directory.persontag",
+      "fields" : {
+         "type" : "info",
+         "name" : "BICH4642014"
+      }
+   },
+   {
+      "fields" : {
+         "phone_number" : "123-456-7890",
+         "website" : "https://cpt.tamu.edu",
+         "name" : "Center for Phage Technology",
+         "street_address" : "2128 TAMU\r\nCollege Station, Texas, 77840\r\nUnited States of America",
+         "emails" : "cpt@tamu.edu",
+         "fax_number" : "123-456-7890"
+      },
+      "model" : "directory.organisation",
+      "pk" : 1
+   }
+]
