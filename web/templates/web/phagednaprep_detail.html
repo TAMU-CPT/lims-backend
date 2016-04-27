@@ -29,7 +29,33 @@
     </h1>
 
     <div class="row">
-        <!-- Object Metadata -->
+        <table class="table table-striped">
+{% load model_field %}
+            <tr>
+                <td>
+                    {% model_field_verbose_name from object.lysate %}
+                </td>
+                <td>
+                    {{ object.lysate }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% model_field_verbose_name from object.morphology %}
+                </td>
+                <td>
+                    {{ object.morphology }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% model_field_verbose_name from object.tube %}
+                </td>
+                <td>
+                    {{ object.tube }}
+                </td>
+            </tr>
+        </table>
     </div>
 
 {% endblock %}

@@ -11,14 +11,16 @@
 {% block body %}
 
 <style type="text/css">
+body {
+  background: url("{% static "img/cpt.png" %}");
+  background-repeat: no-repeat;
+  background-size: 50%;
+}
 .Aligner {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 85%;
-  background: url("{% static "img/cpt.png" %}");
-  background-repeat: no-repeat;
-  background-size: 50%;
 }
 
 .Aligner-item div.row {

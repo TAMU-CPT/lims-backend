@@ -108,8 +108,12 @@ class Lysate_create(CreateView):
 
 class Lysate_edit(UpdateView):
     model = Lysate
-    fields = ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')
     template_name_suffix = '_update'
+    form_class =  modelform_factory(
+        Lysate,
+        fields=('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube'),
+        widgets={"isolation": DateTimeWidget(attrs={'id':"yourdatetimeid"}, usel10n = True, bootstrap_version=3)}
+    )
 
 class Lysate_delete(DeleteView):
     model = Lysate

@@ -91,7 +91,7 @@ SECTIONS = {
     </h1>
 
     <div class="row">
-        <!-- Object Metadata -->
+        {OBJ_META}
     </div>
 """,
 # FORM
@@ -158,14 +158,37 @@ action_name_mapping = {
     'delete': 'Delete',
 }
 
-def x(url_form, human_name):
+OBJ_META_ROW = """            <tr>
+                <td>
+                    {key}
+                </td>
+                <td>
+                    {value}
+                </td>
+            </tr>"""
+OBJ_META = """<table class="table table-striped">
+{{% load model_field %}}
+{META_ROWS}
+        </table>"""
+
+def x(url_form, human_name, fields):
     for sec in section_file_mapping.keys():
         fn = section_file_mapping[sec] % human_name.replace(' ', '').lower()
+
+        omr = []
+        for field in fields:
+            omr.append(OBJ_META_ROW.format(
+                key="{% model_field_verbose_name from object." + field + " %}",
+                value="{{ object." + field +" }}"
+            ))
+
+        print fields
         data = {
             'TYPE_HUMAN': human_name,
             'ACTION_HUMAN': action_name_mapping[sec],
             'URL_FORM': url_form,
             'CRUMBS': crumbs[sec].replace('{TYPE_HUMAN}', human_name),
+            'OBJ_META': OBJ_META.format(META_ROWS='\n'.join(omr))
         }
         section = SECTIONS.get(sec)
 
@@ -177,9 +200,9 @@ def x(url_form, human_name):
 
 
 q = (
-    ('envsample', 'Environmental Sample'),
-    ('lysate', 'Lysate'),
-    ('phagednaprep', 'Phage DNA Prep'),
+    ('envsample', 'Environmental Sample', ('collection', 'location', 'sample_type', 'tube')),
+    ('lysate', 'Lysate', ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')),
+    ('phagednaprep', 'Phage DNA Prep', ('lysate', 'morphology', 'tube')),
 )
 
 for w in q:

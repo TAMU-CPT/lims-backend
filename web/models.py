@@ -106,6 +106,9 @@ class Tube(models.Model):
 
         return rType
 
+    def get_absolute_url(self):
+        return reverse_lazy('lims:box-detail', args=[self.box.location.id, self.box.id])
+
 class EnvironmentalSample(models.Model):
     name = models.CharField(max_length=64, blank=True)
     description = models.TextField(blank=True)
@@ -121,23 +124,28 @@ class EnvironmentalSample(models.Model):
     def __unicode__(self):
         return smart_unicode(u'{} sample from {}'.format(self.sample_type, self.collection))
 
+    def get_absolute_url(self):
+        return reverse_lazy('lims:envsample-detail', args=[self.id])
+
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
     species = models.CharField(max_length=64, blank=True)
     strain = models.CharField(max_length=64, blank=True)
 
     def __unicode__(self):
-        return smart_unicode(u'{}. {} spp {}'.format(self.genus[0], self.species, self.strain))
+        if self.strain:
+            return smart_unicode(u'{}. {} spp {}'.format(self.genus[0], self.species, self.strain))
+        return smart_unicode(u'{}. {}'.format(self.genus[0], self.species))
 
     class Meta:
         verbose_name_plural = "bacteria"
 
 class Lysate(models.Model):
     # HAS_CPT_HASHID
-    env_sample = models.ForeignKey(EnvironmentalSample, blank=True)
+    env_sample = models.ForeignKey(EnvironmentalSample, null=True, blank=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     oldid = models.CharField(max_length=64, blank=True)
-    isolation = models.DateTimeField(blank=True)
+    isolation = models.DateTimeField(null=True, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
 
@@ -146,6 +154,9 @@ class Lysate(models.Model):
 
     def __unicode__(self):
         return smart_unicode(u'Lysate from {}'.format(self.env_sample))
+
+    def get_absolute_url(self):
+        return reverse_lazy('lims:lysate-detail', args=[self.id])
 
 class Experiment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -171,7 +182,7 @@ class ExperimentalResult(models.Model):
 
 class PhageDNAPrep(models.Model):
     # HAS_CPT_HASHID
-    lysate = models.ForeignKey(Lysate, blank=True)
+    lysate = models.ForeignKey(Lysate, blank=True, null=True)
 
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
 
@@ -186,6 +197,9 @@ class PhageDNAPrep(models.Model):
 
     def __unicode__(self):
         return smart_unicode(self.get_morphology_display())
+
+    def get_absolute_url(self):
+        return reverse_lazy('lims:phagedna-detail', args=[self.id])
 
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -211,8 +225,8 @@ class SequencingRun(models.Model):
 
 class Assembly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    dna_prep = models.ForeignKey(PhageDNAPrep)
-    sequencing_run = models.ForeignKey(SequencingRunPool)
+    dna_prep = models.ForeignKey(PhageDNAPrep, blank=True, null=True)
+    sequencing_run = models.ForeignKey(SequencingRunPool, blank=True, null=True)
     galaxy_dataset = models.URLField()
     notes = models.TextField()
 

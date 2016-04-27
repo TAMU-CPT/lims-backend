@@ -38,15 +38,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    # GeoDjango
     'django.contrib.gis',
+    # External
     'tagulous',
     'markdown_deux',
     'pinax.announcements',
     'bootstrap3',
     'bootstrap_themes',
     'datetimewidget',
+    'etc',
     'rest_framework',
     'fontawesome',
+
+    # Internal Apps
     'directory',
     'project',
     'account',

@@ -29,7 +29,77 @@
     </h1>
 
     <div class="row">
-        <!-- Object Metadata -->
+        <table class="table table-striped">
+{% load model_field %}
+            <tr>
+                <td>
+                    Environmental Sample
+                </td>
+                <td>
+                    {{ object.env_sample }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Host(s)
+                </td>
+                <td>
+                    <ul>
+                    {% for bact in object.host_lims.all %}
+                        <li><i>{{ object.host_lims }}</i></li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Legacy ID(s)
+                </td>
+                <td>
+                    {{ object.oldid }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Isolation Date
+                </td>
+                <td>
+                    {{ object.isolation }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Owner / Source
+                </td>
+                <td>
+                    {{ object.owner }} / {{ object.source }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Location
+                </td>
+                <td>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{% url 'lims:storage-location-detail' object.tube.box.location.id %}">
+                                {{ object.tube.box.location.name }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'lims:box-detail' object.tube.box.location.id object.tube.box.id %}">
+                                {{ object.tube.box.name }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'lims:box-detail' object.tube.box.location.id object.tube.box.id %}#{{ object.tube.lysate.id | cptids_encode:'lysate' }}">
+                                {{ object.tube.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
     </div>
 
 {% endblock %}
