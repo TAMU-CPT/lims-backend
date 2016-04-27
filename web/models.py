@@ -174,7 +174,6 @@ class PhageDNAPrep(models.Model):
     lysate = models.ForeignKey(Lysate)
 
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
-    pfge_expected_size = models.FloatField(blank=True)
     # Nanodrop, pico green, other?
     experiments = models.ManyToManyField(ExperimentalResult, blank=True)
 

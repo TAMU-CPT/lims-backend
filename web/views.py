@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from web.models import StorageLocation, Box, EnvironmentalSample, Experiment, ExperimentalResult
+from web.models import StorageLocation, Box, EnvironmentalSample, Lysate, PhageDNAPrep, Experiment, ExperimentalResult
 from django.core.urlresolvers import reverse_lazy
 
 
@@ -64,3 +64,57 @@ class ExperimentalResultList(ListView):
 
 class ExperimentalResultDetail(DetailView):
     model = ExperimentalResult
+
+
+class EnvSample_list(ListView):
+    model = EnvironmentalSample
+
+class EnvSample_view(DetailView):
+    model = EnvironmentalSample
+
+class EnvSample_create(CreateView):
+    model = EnvironmentalSample
+    fields = ('collection', 'location', 'sample_type', 'tube')
+
+class EnvSample_edit(UpdateView):
+    model = EnvironmentalSample
+    fields = ('collection', 'location', 'sample_type', 'tube')
+
+class EnvSample_delete(DeleteView):
+    model = EnvironmentalSample
+    success_url = reverse_lazy('lims:env-sample-list')
+
+class Lysate_list(ListView):
+    model = Lysate
+
+class Lysate_view(DetailView):
+    model = Lysate
+
+class Lysate_create(CreateView):
+    model = Lysate
+    fields = ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')
+
+class Lysate_edit(UpdateView):
+    model = Lysate
+    fields = ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')
+
+class Lysate_delete(DeleteView):
+    model = Lysate
+
+class PhageDNAPrep_list(ListView):
+    model = PhageDNAPrep
+
+class PhageDNAPrep_view(DetailView):
+    model = PhageDNAPrep
+
+class PhageDNAPrep_create(CreateView):
+    model = PhageDNAPrep
+    # Exempt are experiments
+    fields = ('lysate', 'morphology', 'tube')
+
+class PhageDNAPrep_edit(UpdateView):
+    model = PhageDNAPrep
+    fields = ('lysate', 'morphology', 'tube')
+
+class PhageDNAPrep_delete(DeleteView):
+    model = PhageDNAPrep
