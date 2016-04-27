@@ -3,6 +3,9 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from web.models import StorageLocation, Box, EnvironmentalSample, Lysate, PhageDNAPrep, Experiment, ExperimentalResult
 from django.core.urlresolvers import reverse_lazy
+from django.forms.models import modelform_factory
+from datetimewidget.widgets import DateTimeWidget
+
 
 
 class LIMSDataDump(ListView):
@@ -96,8 +99,12 @@ class Lysate_view(DetailView):
 
 class Lysate_create(CreateView):
     model = Lysate
-    fields = ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')
     template_name_suffix = '_create'
+    form_class =  modelform_factory(
+        Lysate,
+        fields=('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube'),
+        widgets={"isolation": DateTimeWidget(attrs={'id':"yourdatetimeid"}, usel10n = True, bootstrap_version=3)}
+    )
 
 class Lysate_edit(UpdateView):
     model = Lysate

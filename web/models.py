@@ -134,7 +134,7 @@ class Bacteria(models.Model):
 
 class Lysate(models.Model):
     # HAS_CPT_HASHID
-    env_sample = models.ForeignKey(EnvironmentalSample)
+    env_sample = models.ForeignKey(EnvironmentalSample, blank=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(blank=True)
@@ -171,12 +171,13 @@ class ExperimentalResult(models.Model):
 
 class PhageDNAPrep(models.Model):
     # HAS_CPT_HASHID
+    lysate = models.ForeignKey(Lysate, blank=True)
+
+    morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
+
     # These will point to OMERO eventually...
     # tem_image = models.URLField()
     # gel_image = models.URLField()
-    lysate = models.ForeignKey(Lysate)
-
-    morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
     # Nanodrop, pico green, other?
     experiments = models.ManyToManyField(ExperimentalResult, blank=True)
 

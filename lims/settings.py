@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'tagulous',
     'markdown_deux',
-    'bootstrap_themes',
     'pinax.announcements',
     'bootstrap3',
+    'bootstrap_themes',
+    'datetimewidget',
     'rest_framework',
     'fontawesome',
     'directory',
@@ -66,6 +67,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'lims.urls'

@@ -3,7 +3,8 @@ from django.conf import settings
 import search.views
 
 # from web import views
+from search.views import Index
 
 urlpatterns = [
-    url(r'^$', 'search.views.Index', name='index'),
+    url(r'^$', Index, name='index'),
 ]
