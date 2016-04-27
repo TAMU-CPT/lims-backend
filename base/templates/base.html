@@ -14,59 +14,61 @@
         {% fontawesome_stylesheet %}
     </head>
     <body>
- <div class="navbar navbar-default">
-      <div class="container">
-        <div class="navbar-header">
-          <a href="/" class="navbar-brand">LIMS</a>
-        </div>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand">LIMS</a>
+                </div>
+                <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
+                    {% block search %}
+                    <form class="navbar-form navbar-left" role="search" method="POST" action="{% url 'search:index' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    {% endblock %}
+                    <ul class="nav navbar-nav navbar-right">
+                      {%if request.user.is_authenticated %}
+                          <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                  {{ request.user.account.name }}
+                                  <span class="caret"></span>
+                              </a>
+                              <ul class="dropdown-menu" role="menu">
+                                  <li><a href="{% url 'account_settings' %}">Settings</a></li>
+                                  <li><a href="{% url 'directory:person-detail' request.user.account.id %}">Public Profile</a></li>
+                                  <li><a href="{% url 'account_logout' %}">Log out</a></li>
 
-        <div class="navbar-collapse collapse" id="navbar-main">
-
-          {% block search %}
-          <form class="navbar-form navbar-left" role="search" method="POST" action="{% url 'search:index' %}">
-              {% csrf_token %}
-              <div class="form-group">
-                  <input type="text" name="search" class="form-control" placeholder="Search">
-              </div>
-              <button type="submit" class="btn btn-default">Submit</button>
-          </form>
-          {% endblock %}
-
-          <ul class="nav navbar-nav navbar-right">
-            {%if request.user.is_authenticated %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        {{ request.user.account.name }}
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="{% url 'account_settings' %}">Settings</a></li>
-                        <li><a href="{% url 'directory:person-detail' request.user.account.id %}">Public Profile</a></li>
-                        <li><a href="{% url 'account_logout' %}">Log out</a></li>
-
-                        {% if request.user.is_superuser %}
-                        <li class="divider"></li>
-                        <li><a href="/admin">Admin</a></li>
-                        {% endif %}
+                                  {% if request.user.is_superuser %}
+                                  <li class="divider"></li>
+                                  <li><a href="/admin">Admin</a></li>
+                                  {% endif %}
+                              </ul>
+                          </li>
+                      {% else %}
+                          <li>
+                              <a href="{% url 'account_signup' %}">
+                                  Signup
+                              </a>
+                          </li>
+                          <li>
+                              <a href="{% url 'account_login' %}">
+                                  Login
+                              </a>
+                          </li>
+                      {% endif %}
                     </ul>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{% url 'account_signup' %}">
-                        Signup
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'account_login' %}">
-                        Login
-                    </a>
-                </li>
-            {% endif %}
-          </ul>
-
-        </div>
-      </div>
-    </div>
+                </div>
+            </div>
+        </nav>
     <div class="container">
 {{ TODO }}
 {% if announcements_list %}
