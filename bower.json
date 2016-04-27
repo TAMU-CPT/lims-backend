@@ -1,0 +1,22 @@
+{
+  "name": "lims",
+  "authors": [
+    "Eric Rasche <esr@tamu.edu>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "AGPL-3.0",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "select2": "^4.0.2"
+  }
+}
