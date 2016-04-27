@@ -106,6 +106,8 @@ class Tube(models.Model):
         return rType
 
 class EnvironmentalSample(models.Model):
+    name = models.CharField(max_length=64, blank=True)
+    description = models.TextField(blank=True)
     # HAS_CPT_HASHID
     collection = models.DateTimeField()
     # location = models.
@@ -181,7 +183,7 @@ class PhageDNAPrep(models.Model):
     tube = models.OneToOneField(Tube)
 
     def __str__(self):
-        return '{} kb {}'.format(int(self.pfge_expected_size / 1000), self.get_morphology_display())
+        return self.get_morphology_display()
 
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

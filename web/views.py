@@ -77,10 +77,12 @@ class EnvSample_view(DetailView):
 class EnvSample_create(CreateView):
     model = EnvironmentalSample
     fields = ('collection', 'location', 'sample_type', 'tube')
+    template_name_suffix = '_create'
 
 class EnvSample_edit(UpdateView):
     model = EnvironmentalSample
     fields = ('collection', 'location', 'sample_type', 'tube')
+    template_name_suffix = '_update'
 
 class EnvSample_delete(DeleteView):
     model = EnvironmentalSample
@@ -95,10 +97,12 @@ class Lysate_view(DetailView):
 class Lysate_create(CreateView):
     model = Lysate
     fields = ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')
+    template_name_suffix = '_create'
 
 class Lysate_edit(UpdateView):
     model = Lysate
     fields = ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')
+    template_name_suffix = '_update'
 
 class Lysate_delete(DeleteView):
     model = Lysate
@@ -113,10 +117,12 @@ class PhageDNAPrep_create(CreateView):
     model = PhageDNAPrep
     # Exempt are experiments
     fields = ('lysate', 'morphology', 'tube')
+    template_name_suffix = '_create'
 
 class PhageDNAPrep_edit(UpdateView):
     model = PhageDNAPrep
     fields = ('lysate', 'morphology', 'tube')
+    template_name_suffix = '_update'
 
 class PhageDNAPrep_delete(DeleteView):
     model = PhageDNAPrep

@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+{% load cpt %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'lims:index' %}">LIMS</a></li>
+    
+    <li><a href="{% url 'lims:storage-location-detail' object.tube.box.location.id %}">{{ object.tube.box.location.name }}</a></li>
+    <li><a href="{% url 'lims:box-detail' object.tube.box.location.id object.tube.box.id %}">{{ object.tube.box.name }}</a></li>
+    <li class="active">{{ object }}</li>
+    
+</ul>
+{% endblock %}
+
+{% block body %}
+    
+    <h1>
+        {{ object }}
+        <div class="btn-group">
+            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Actions <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'lims:envsample-edit' object.id %}">Edit Environmental Sample</a></li>
+                <li><a href="{% url 'lims:envsample-delete' object.id %}">Delete Environmental Sample</a></li>
+            </ul>
+        </div>
+    </h1>
+
+    <div class="row">
+        <!-- Object Metadata -->
+    </div>
+
+{% endblock %}

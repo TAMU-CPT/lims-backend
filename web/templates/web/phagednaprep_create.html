@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% load cpt %}
 {% load bootstrap3 %}
@@ -6,12 +7,13 @@
 {% block crumbs %}
 <ul class="breadcrumb">
     <li><a href="{% url 'lims:index' %}">LIMS</a></li>
-    <li class="active">Data Dump</li>
+    Add a new
 </ul>
 {% endblock %}
 
 {% block body %}
-    <h1>New Environmental Sample</h1>
+    
+    <h1>Add a new Phage DNA Prep</h1>
     <div class="row">
         <div class="col-md-8">
             <form method="post">
@@ -21,9 +23,5 @@
             </form>
         </div>
     </div>
-{% endblock %}
 
-{% block scripts %}
-    <script type="text/javascript" src="{% static "bower_components/openlayers/lib/OpenLayers.js" %}"></script>
-    <script type="text/javascript" src="http://localhost:8000/static/gis/js/OLMapWidget.js"></script>
 {% endblock %}
