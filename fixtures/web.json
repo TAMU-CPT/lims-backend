@@ -66,15 +66,6 @@
    },
    {
       "pk" : 1,
-      "fields" : {
-         "tube" : 1,
-         "sample_type" : 1,
-         "collection" : "2016-04-21T04:45:04Z"
-      },
-      "model" : "web.environmentalsample"
-   },
-   {
-      "pk" : 1,
       "model" : "web.bacteria",
       "fields" : {
          "species" : "coli",
@@ -90,22 +81,6 @@
          "genus" : "Staphylococcus"
       },
       "model" : "web.bacteria"
-   },
-   {
-      "model" : "web.lysate",
-      "fields" : {
-         "tube" : 3,
-         "isolation" : "2016-04-21T05:08:15Z",
-         "owner" : 1,
-         "host_lims" : [
-            1,
-            2
-         ],
-         "env_sample" : 1,
-         "source" : 1,
-         "oldid" : "1230adsdf"
-      },
-      "pk" : 1
    },
    {
       "pk" : "6917645d-b838-499a-9d90-88850fe8505e",
@@ -125,18 +100,5 @@
          "result" : "123.04",
          "experiment" : "6917645d-b838-499a-9d90-88850fe8505e"
       }
-   },
-   {
-      "pk" : 1,
-      "fields" : {
-         "pfge_expected_size" : 100000,
-         "morphology" : 1,
-         "lysate" : 1,
-         "tube" : 2,
-         "experiments" : [
-            "ca051c71-ea2b-450e-8b30-b26e67b9e898"
-         ]
-      },
-      "model" : "web.phagednaprep"
    }
 ]
