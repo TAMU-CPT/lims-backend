@@ -5,7 +5,6 @@ from web.models import StorageLocation, Box, EnvironmentalSample, Experiment, Ex
 from django.core.urlresolvers import reverse_lazy
 
 
-
 class LIMSDataDump(ListView):
     model = EnvironmentalSample
 
@@ -65,5 +64,3 @@ class ExperimentalResultList(ListView):
 
 class ExperimentalResultDetail(DetailView):
     model = ExperimentalResult
-
-class

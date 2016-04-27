@@ -4,6 +4,7 @@ from django.db import models
 from directory.models import Organisation
 from account.models import Account
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.gis.db import models as gis_models
 
 
 PHAGE_MORPHOLOGY = (
@@ -108,7 +109,7 @@ class EnvironmentalSample(models.Model):
     # HAS_CPT_HASHID
     collection = models.DateTimeField()
     # location = models.
-    # TODO: location
+    location = gis_models.PointField()
     sample_type = models.ForeignKey(SampleType)
 
     # Tube Storage
