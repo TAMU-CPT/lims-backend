@@ -11,13 +11,25 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ object.name }}</h1>
+    <h1>
+        {{ object.name }}
+        <div class="btn-group">
+            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Actions <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'lims:storage-location-edit' object.id %}">Edit Storage Location</a></li>
+                <li><a href="{% url 'lims:storage-location-delete' object.id %}">Delete Storage Location</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'lims:box-create' container_id=object.id %}">Add a Box</a></li>
+            </ul>
+        </div>
+    </h1>
 
     <div class="row">
         <ul>
+            <li><a href="{% url 'lims:box-create' container_id=object.id %}">Add a box</a></li>
         {% for box in object.box_set.all %}
         <li>
-            <a href="{% url 'lims:box-detail' box.id %}">{{ box }}</a>
+            <a href="{% url 'lims:box-detail' object.id box.id %}">{{ box }}</a>
         </li>
         {% endfor %}
         </ul>

@@ -23,7 +23,7 @@
             <tr>
                 <td>{{ obj.sample_type.name }}</td>
                 <td>{{ obj.collection }}</td>
-                <td><a href="{% url 'lims:box-detail' obj.tube.box.id %}">{{ obj.tube }}</td>
+                <td><a href="{% url 'lims:box-detail' obj.tube.box.location.id obj.tube.box.id %}">{{ obj.tube }}</td>
             </tr>
         {% endfor %}
         </tbody>

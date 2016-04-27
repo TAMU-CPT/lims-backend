@@ -15,7 +15,20 @@
 <div class="col-md-12">
         <div class="row">
             <div class="col-md-6">
-                <h1>{{ object.name }}</h1>
+                <h1>
+                    {{ object.name }}
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Actions <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'lims:box-edit' object.location.id object.id %}">Edit Box</a></li>
+                            <li><a href="{% url 'lims:box-delete' object.location.id object.id %}">Delete Box</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'lims:env-sample-create' object.location.id object.id %}">Add an Environmental Sample</a></li>
+                            <li><a href="{% url 'lims:lysate-create' object.location.id object.id %}">Add a Lysate</a></li>
+                            <li><a href="{% url 'lims:phage-dna-prep-create' object.location.id object.id %}">Add a Phage DNA Prep</a></li>
+                        </ul>
+                    </div>
+                </h1>
                 <div>In <a href="{% url 'lims:storage-location-detail' object.location.id %}">{{ object.location }}</a></div>
             </div>
             <div class="col-md-6">
@@ -27,7 +40,7 @@
 
     {% if object.getEnvironmentalTubes.count > 0 %}
     <div class="row">
-        <h2>Environmental Samples</h2>
+        <h2>Environmental Samples</h2> 
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -94,7 +107,7 @@
                         <div>{{ tube.lysate.id  | cptids_encode:'lysate' | ibarcode:'160x20' }}</div>
                     </td>
                     <td style="text-align:center">
-                        <a href="{% url 'lims:box-detail' tube.lysate.env_sample.tube.box.id %}#{{ tube.lysate.env_sample.id | cptids_encode:'envsample' }}">
+                        <a href="{% url 'lims:box-detail' tube.lysate.env_sample.tube.box.location.id tube.lysate.env_sample.tube.box.id %}#{{ tube.lysate.env_sample.id | cptids_encode:'envsample' }}">
                             <div>
                                 {{ tube.lysate.env_sample.id | cptids_encode:'envsample' }}
                             </div>
@@ -151,7 +164,7 @@
                         <div>{{ tube.id  | cptids_encode:'dnaprep' | ibarcode:'160x20' }}</div>
                     </td>
                     <td style="text-align:center">
-                        <a href="{% url 'lims:box-detail' tube.phagednaprep.lysate.tube.box.id %}#{{ tube.phagednaprep.lysate.id  | cptids_encode:'lysate' }}">
+                        <a href="{% url 'lims:box-detail' tube.phagednaprep.lysate.tube.box.location.id tube.phagednaprep.lysate.tube.box.id %}#{{ tube.phagednaprep.lysate.id  | cptids_encode:'lysate' }}">
                             <div>
                                 {{ tube.phagednaprep.lysate.id | cptids_encode:'lysate' }}
                             </div>

@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from directory.models import Organisation
 from account.models import Account
+from django.core.urlresolvers import reverse_lazy
 
 
 PHAGE_MORPHOLOGY = (
@@ -48,10 +49,13 @@ class StorageLocation(models.Model):
     def __str__(self):
         return '{} in {}'.format(self.name, self.location)
 
+    def get_absolute_url(self):
+        return reverse_lazy('lims:storage-location-detail', args=[self.id])
+
 class Box(models.Model):
     # HAS_CPT_HASHID
     # Human readable name that gets written on it
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, help_text="The name which is written on the outside of the box.")
     location = models.ForeignKey(StorageLocation)
 
     def __str__(self):
@@ -68,6 +72,9 @@ class Box(models.Model):
 
     def getPhageDNAPrepTubes(self):
         return self.tube_set.all().exclude(phagednaprep__isnull=True)
+
+    def get_absolute_url(self):
+        return reverse_lazy('lims:box-detail', args=[self.location.id, self.id])
 
 class Tube(models.Model):
     # DOES NOT HAVE CPT_HASHID. Inherits the hashid of whoever is
