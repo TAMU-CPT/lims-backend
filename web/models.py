@@ -5,6 +5,7 @@ from directory.models import Organisation
 from account.models import Account
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.gis.db import models as gis_models
+from django.utils.encoding import smart_unicode
 
 
 PHAGE_MORPHOLOGY = (
@@ -23,20 +24,20 @@ EXP_RESULT_TYPES = (
 class ContainerType(models.Model):
     name = models.CharField(max_length=32)
 
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return smart_unicode(self.name)
 
 class TubeType(models.Model):
     name = models.CharField(max_length=32)
 
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return smart_unicode(self.name)
 
 class SampleType(models.Model):
     name = models.CharField(max_length=32)
 
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return smart_unicode(self.name)
 
 class StorageLocation(models.Model):
     # HAS_CPT_HASHID
@@ -47,8 +48,8 @@ class StorageLocation(models.Model):
     # Type of container
     container_type = models.ForeignKey(ContainerType)
 
-    def __str__(self):
-        return '{} in {}'.format(self.name, self.location)
+    def __unicode__(self):
+        return smart_unicode(u'{} in {}'.format(self.name, self.location))
 
     def get_absolute_url(self):
         return reverse_lazy('lims:storage-location-detail', args=[self.id])
@@ -59,8 +60,8 @@ class Box(models.Model):
     name = models.CharField(max_length=64, help_text="The name which is written on the outside of the box.")
     location = models.ForeignKey(StorageLocation)
 
-    def __str__(self):
-        return '{} in {}'.format(self.name, self.location)
+    def __unicode__(self):
+        return smart_unicode(u'{} in {}'.format(self.name, self.location))
 
     class Meta:
         verbose_name_plural = "boxes"
@@ -85,8 +86,8 @@ class Tube(models.Model):
     box = models.ForeignKey(Box)
     type = models.ForeignKey(TubeType)
 
-    def __str__(self):
-        return '{} in {}'.format(self.name, self.box)
+    def __unicode__(self):
+        return smart_unicode(u'{} in {}'.format(self.name, self.box))
 
     def getType(self):
         rType = None
@@ -117,16 +118,16 @@ class EnvironmentalSample(models.Model):
     # Tube Storage
     tube = models.OneToOneField(Tube)
 
-    def __str__(self):
-        return '{} sample from {}'.format(self.sample_type, self.collection)
+    def __unicode__(self):
+        return smart_unicode(u'{} sample from {}'.format(self.sample_type, self.collection))
 
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
     species = models.CharField(max_length=64, blank=True)
     strain = models.CharField(max_length=64, blank=True)
 
-    def __str__(self):
-        return '{}. {} spp {}'.format(self.genus[0], self.species, self.strain)
+    def __unicode__(self):
+        return smart_unicode(u'{}. {} spp {}'.format(self.genus[0], self.species, self.strain))
 
     class Meta:
         verbose_name_plural = "bacteria"
@@ -143,8 +144,8 @@ class Lysate(models.Model):
     # Tube Storage
     tube = models.OneToOneField(Tube)
 
-    def __str__(self):
-        return 'Lysate from {}'.format(self.env_sample)
+    def __unicode__(self):
+        return smart_unicode(u'Lysate from {}'.format(self.env_sample))
 
 class Experiment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -152,8 +153,8 @@ class Experiment(models.Model):
     full_name = models.TextField()
     methods = models.TextField()
 
-    def __str__(self):
-        return self.short_name
+    def __unicode__(self):
+        return smart_unicode(self.short_name)
 
 class ExperimentalResult(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -163,10 +164,10 @@ class ExperimentalResult(models.Model):
     run_by = models.ForeignKey(Account)
     # result_type = models.IntegerField(choices=EXP_RESULT_TYPES)
 
-    def __str__(self):
-        return '{} - {}'.format(
+    def __unicode__(self):
+        return smart_unicode(u'{} - {}'.format(
                 self.experiment.short_name,
-                self.result)
+                self.result))
 
 class PhageDNAPrep(models.Model):
     # HAS_CPT_HASHID
@@ -182,16 +183,16 @@ class PhageDNAPrep(models.Model):
     # Tube Storage
     tube = models.OneToOneField(Tube)
 
-    def __str__(self):
-        return self.get_morphology_display()
+    def __unicode__(self):
+        return smart_unicode(self.get_morphology_display())
 
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pool = models.CharField(max_length=16)
     dna_preps = models.ManyToManyField(PhageDNAPrep)
 
-    def __str__(self):
-        return 'Pool {}'.format(self.pool)
+    def __unicode__(self):
+        return smart_unicode(u'Pool {}'.format(self.pool))
 
 class SequencingRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -204,8 +205,8 @@ class SequencingRun(models.Model):
     bioanalyzer_qc = models.TextField()
     run_prep_spreadsheet = models.URLField()
 
-    def __str__(self):
-        return '{} on {}'.format(self.name, self.date)
+    def __unicode__(self):
+        return smart_unicode(u'{} on {}'.format(self.name, self.date))
 
 class Assembly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -216,3 +217,6 @@ class Assembly(models.Model):
 
     class Meta:
         verbose_name_plural = "assemblies"
+
+    def __unicode__(self):
+        return 'Assembly %s' % id
