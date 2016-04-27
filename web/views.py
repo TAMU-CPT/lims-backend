@@ -36,6 +36,7 @@ class BoxDetail(DetailView):
 class BoxCreate(CreateView):
     model = Box
     fields = ('name',)
+    template_name_suffix = '_create'
 
     def form_valid(self, form):
         form.instance.location = StorageLocation.objects.get(pk=self.kwargs['container_id'])
@@ -44,6 +45,7 @@ class BoxCreate(CreateView):
 class BoxEdit(UpdateView):
     model = Box
     fields = ('name', 'location')
+    template_name_suffix = '_update'
 
 class BoxDelete(DeleteView):
     model = Box
