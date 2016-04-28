@@ -21,4 +21,8 @@
 
 - Bathtub distribution of GO annotations
 - No challenges
-- Crappy docs / hard to know exactly which buttons to click
+- GO - Crappy docs / hard to know exactly which buttons to click
+- course resource link doc wasn't updated
+- no one responded to genome questionnaire until <1 week to go
+- need to ensure that cpt/bich464/
+- need to link to bich464 docs from CPT website
