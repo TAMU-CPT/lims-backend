@@ -204,10 +204,40 @@ class PhageDNAPrep(models.Model):
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pool = models.CharField(max_length=16)
-    dna_preps = models.ManyToManyField(PhageDNAPrep)
 
     def __unicode__(self):
         return smart_unicode(u'Pool {}'.format(self.pool))
+
+    def numPhages(self):
+        return self.sequencingrunpoolitem_set.count()
+
+    def totalGenomeSize(self):
+        return sum([poolitem.phage.expected_size() for poolitem in self.sequencingrunpoolitem_set.objects.all()])
+
+    def expectedFullCoverageFromFLXTiFullPlate(self):
+        return 60000000 / self.totalGenomeSize()
+
+    def expectedDnaConcInFinalUndilultedMix(self, desiredSize):
+        a = sum([poolitem.volumeInMix(desiredSize) for poolitem in self.sequencingrunpoolitem_set.objects.all()])
+        b = sum([poolitem.ngDnaInMix(poolitem.volumeInMix(desiredSize)) for poolitem in self.sequencingrunpoolitem_set.objects.all()])
+        return b / a
+
+    def poolSize(self):
+        return self.sequencingrunpoolitem_set.count
+
+    def meanGenomeSize(self):
+        return sum([poolitem.phage.expected_size() for poolitem in self.sequencingrunpoolitem_set.objects.all()]) / self.poolSize()
+
+class SequencingRunPoolItem(models.Model):
+    pool = models.ForeignKey(SequencingRunPool)
+    phage = models.ForeignKey(PhageDNAPrep)
+    dna_conc = models.FloatField(help_text='ng/µL')
+
+    def volumeInMix(self, desiredSize):
+        return (desiredSize * self.dna_conc) / (self.phage.expected_size() / self.pool.totalGenomeSize())
+
+    def ngDnaInMix(self, volumeInMix):
+        return volumeInMix * self.dna_conc
 
 class SequencingRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
