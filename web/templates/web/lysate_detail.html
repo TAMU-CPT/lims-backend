@@ -46,7 +46,7 @@
                 <td>
                     <ul>
                     {% for bact in object.host_lims.all %}
-                        <li><i>{{ object.host_lims }}</i></li>
+                        <li><i>{{ bact }}</i></li>
                     {% endfor %}
                     </ul>
                 </td>
@@ -72,7 +72,13 @@
                     Owner / Source
                 </td>
                 <td>
-                    {{ object.owner }} / {{ object.source }}
+                    <a href="{% url 'directory:person-detail' object.owner.id %}">
+                        {{ object.owner.name }}
+                    </a>
+                    /
+                    <a href="{% url 'directory:org-detail' object.source.id %}">
+                        {{ object.source }}
+                    </a>
                 </td>
             </tr>
             <tr>

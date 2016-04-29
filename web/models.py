@@ -1,3 +1,4 @@
+# encoding: utf-8
 from __future__ import unicode_literals
 import uuid
 from django.db import models
@@ -215,18 +216,25 @@ class SequencingRunPool(models.Model):
         return sum([poolitem.phage.expected_size() for poolitem in self.sequencingrunpoolitem_set.objects.all()])
 
     def expectedFullCoverageFromFLXTiFullPlate(self):
-        return 60000000 / self.totalGenomeSize()
+        if self.numPhages() > 0:
+            return 60000000 / self.totalGenomeSize()
+        else:
+            return 0
 
     def expectedDnaConcInFinalUndilultedMix(self, desiredSize):
-        a = sum([poolitem.volumeInMix(desiredSize) for poolitem in self.sequencingrunpoolitem_set.objects.all()])
-        b = sum([poolitem.ngDnaInMix(poolitem.volumeInMix(desiredSize)) for poolitem in self.sequencingrunpoolitem_set.objects.all()])
-        return b / a
+        if self.poolSize() > 0:
+            a = sum([poolitem.volumeInMix(desiredSize) for poolitem in self.sequencingrunpoolitem_set.objects.all()])
+            b = sum([poolitem.ngDnaInMix(poolitem.volumeInMix(desiredSize)) for poolitem in self.sequencingrunpoolitem_set.objects.all()])
+            return b / a
+        return 0
 
     def poolSize(self):
         return self.sequencingrunpoolitem_set.count
 
     def meanGenomeSize(self):
-        return sum([poolitem.phage.expected_size() for poolitem in self.sequencingrunpoolitem_set.objects.all()]) / self.poolSize()
+        if self.poolSize() > 0:
+            return sum([poolitem.phage.expected_size() for poolitem in self.sequencingrunpoolitem_set.objects.all()]) / self.poolSize()
+        return 0
 
 class SequencingRunPoolItem(models.Model):
     pool = models.ForeignKey(SequencingRunPool)
@@ -234,7 +242,9 @@ class SequencingRunPoolItem(models.Model):
     dna_conc = models.FloatField(help_text='ng/µL')
 
     def volumeInMix(self, desiredSize):
-        return (desiredSize * self.dna_conc) / (self.phage.expected_size() / self.pool.totalGenomeSize())
+        if self.pool.poolSize() > 0:
+            return (desiredSize * self.dna_conc) / (self.phage.expected_size() / self.pool.totalGenomeSize())
+        return 0
 
     def ngDnaInMix(self, volumeInMix):
         return volumeInMix * self.dna_conc
