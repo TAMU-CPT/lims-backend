@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from web.models import StorageLocation, Box, EnvironmentalSample, Lysate, PhageDNAPrep, Experiment, ExperimentalResult
+from web.models import StorageLocation, Box, EnvironmentalSample, Lysate, PhageDNAPrep, Experiment, ExperimentalResult, Bacteria
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelform_factory
 from datetimewidget.widgets import DateTimeWidget
@@ -137,3 +137,23 @@ class PhageDNAPrep_edit(UpdateView):
 
 class PhageDNAPrep_delete(DeleteView):
     model = PhageDNAPrep
+
+class BacteriaList(ListView):
+    model = Bacteria
+
+class BacteriaDetail(DetailView):
+    model = Bacteria
+
+class BacteriaCreate(CreateView):
+    model = Bacteria
+    fields = ("genus", "species", "strain")
+    template_name_suffix = '_create'
+
+class BacteriaEdit(UpdateView):
+    model = Bacteria
+    fields = ("genus", "species", "strain")
+    template_name_suffix = '_update'
+
+class BacteriaDelete(DeleteView):
+    model = Bacteria
+    success_url = reverse_lazy('lims:bacteria-list')

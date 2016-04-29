@@ -11,6 +11,9 @@ from views import \
     LIMSDataDump, \
     Index
 
+from views import BacteriaList, BacteriaDetail, BacteriaCreate, BacteriaEdit, BacteriaDelete
+
+
 
 urlpatterns = [
     url(r'^$',                                         Index.as_view(),                   name='index'),
@@ -46,6 +49,15 @@ urlpatterns = [
     url(r'^phage_dna_prep/(?P<pk>[0-9]+)$',        PhageDNAPrep_view.as_view(),   name='phagednaprep-detail'),
     url(r'^phage_dna_prep/(?P<pk>[0-9]+)/edit$',   PhageDNAPrep_edit.as_view(),   name='phagednaprep-edit'),
     url(r'^phage_dna_prep/(?P<pk>[0-9]+)/delete$', PhageDNAPrep_delete.as_view(), name='phagednaprep-delete'),
+
+
+    url(r'^bacteria/$',                          BacteriaList.as_view(),     name='bacteria-list'),
+    url(r'^bacteria/create$',                    BacteriaCreate.as_view(),   name='bacteria-create'),
+    url(r'^bacteria/(?P<pk>[0-9]+)$',            BacteriaDetail.as_view(),     name='bacteria-detail'),
+    url(r'^bacteria/(?P<pk>[0-9]+)/edit$',       BacteriaEdit.as_view(),     name='bacteria-edit'),
+    url(r'^bacteria/(?P<pk>[0-9]+)/delete$',     BacteriaDelete.as_view(),   name='bacteria-delete'),
+
+
 
     url(r'^experiment/$', ExperimentList.as_view(), name='experiment-list'),
     url(r'^experiment/(?P<pk>[0-9a-f-]{36})/$', ExperimentDetail.as_view(), name='experiment-detail'),

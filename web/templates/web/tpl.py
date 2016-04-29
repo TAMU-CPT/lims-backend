@@ -31,7 +31,9 @@ SECTIONS = {
         {{% for object in object_list %}}
             <tr>
                 <td>
+                    <a href="{{% url 'lims:{URL_FORM2}-detail' object.id %}}">
                     {{{{ object }}}}
+                    </a>
                 </td>
                 <td>
                     <ul class="breadcrumb">
@@ -56,7 +58,8 @@ SECTIONS = {
                     <div class="btn-group">
                         <a href="#" class="btn btn-default dropdown-toggle noUnderline" data-toggle="dropdown">Actions <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li>Test</li>
+                            <li><a class="noUnderline" href="{{% url 'lims:{URL_FORM2}-edit'   object.id %}}">Edit {TYPE_HUMAN}</a></li>
+                            <li><a class="noUnderline" href="{{% url 'lims:{URL_FORM2}-delete' object.id %}}">Delete {TYPE_HUMAN}</a></li>
                         </ul>
                     </div>
                 </td>
@@ -171,7 +174,46 @@ OBJ_META = """<table class="table table-striped">
 {META_ROWS}
         </table>"""
 
+URLS_TEMPLATE="""
+from views import {fn}List, {fn}Detail, {fn}Create, {fn}Edit, {fn}Delete
+
+url(r'^{URL_FORM}/$',                          {fn}List.as_view(),     name='{URL_FORM2}-list'),
+url(r'^{URL_FORM}/create$',                    {fn}Create.as_view(),   name='{URL_FORM2}-create'),
+url(r'^{URL_FORM}/(?P<pk>[0-9]+)$',            {fn}Detail.as_view(),   name='{URL_FORM2}-detail'),
+url(r'^{URL_FORM}/(?P<pk>[0-9]+)/edit$',       {fn}Edit.as_view(),     name='{URL_FORM2}-edit'),
+url(r'^{URL_FORM}/(?P<pk>[0-9]+)/delete$',     {fn}Delete.as_view(),   name='{URL_FORM2}-delete'),
+
+## views.py
+
+class {fn}List(ListView):
+    model = {fn}
+
+class {fn}Detail(DetailView):
+    model = {fn}
+
+class {fn}Create(CreateView):
+    model = {fn}
+    fields = ("{fields}")
+    template_name_suffix = '_create'
+
+class {fn}Edit(UpdateView):
+    model = {fn}
+    fields = ("{fields}")
+    template_name_suffix = '_update'
+
+class {fn}Delete(DeleteView):
+    model = {fn}
+    success_url = reverse_lazy('lims:{URL_FORM2}-list')
+"""
+
 def x(url_form, human_name, fields):
+    print URLS_TEMPLATE.format(
+        URL_FORM=url_form, # env_sample
+        URL_FORM2=url_form.replace('_', '-'), #env-sample
+        fn=human_name.replace(' ', ''), #EnvironmentalSample
+        fields='", "'.join(fields), #...
+    )
+
     for sec in section_file_mapping.keys():
         fn = section_file_mapping[sec] % human_name.replace(' ', '').lower()
 
@@ -182,11 +224,11 @@ def x(url_form, human_name, fields):
                 value="{{ object." + field +" }}"
             ))
 
-        print fields
         data = {
-            'TYPE_HUMAN': human_name,
-            'ACTION_HUMAN': action_name_mapping[sec],
-            'URL_FORM': url_form,
+            'TYPE_HUMAN': human_name, # Environmental Sample
+            'ACTION_HUMAN': action_name_mapping[sec], # Delete/View
+            'URL_FORM': url_form, # env_sample
+            'URL_FORM2': url_form.replace('_', '-'),
             'CRUMBS': crumbs[sec].replace('{TYPE_HUMAN}', human_name),
             'OBJ_META': OBJ_META.format(META_ROWS='\n'.join(omr))
         }
@@ -200,9 +242,10 @@ def x(url_form, human_name, fields):
 
 
 q = (
-    ('envsample', 'Environmental Sample', ('collection', 'location', 'sample_type', 'tube')),
-    ('lysate', 'Lysate', ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')),
-    ('phagednaprep', 'Phage DNA Prep', ('lysate', 'morphology', 'tube')),
+    # ('envsample', 'Environmental Sample', ('collection', 'location', 'sample_type', 'tube')),
+    # ('lysate', 'Lysate', ('env_sample', 'host_lims', 'oldid', 'isolation', 'owner', 'source', 'tube')),
+    # ('phagednaprep', 'Phage DNA Prep', ('lysate', 'morphology', 'tube')),
+    ('bacteria', 'Bacteria', ('genus', 'species', 'strain')),
 )
 
 for w in q:

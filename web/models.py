@@ -141,6 +141,10 @@ class Bacteria(models.Model):
     class Meta:
         verbose_name_plural = "bacteria"
 
+    def get_absolute_url(self):
+        return reverse_lazy('lims:bacteria-detail', args=[self.id])
+
+
 class Lysate(models.Model):
     # HAS_CPT_HASHID
     env_sample = models.ForeignKey(EnvironmentalSample, null=True, blank=True)

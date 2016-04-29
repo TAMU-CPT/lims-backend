@@ -46,7 +46,7 @@
                 <td>
                     <ul>
                     {% for bact in object.host_lims.all %}
-                        <li><i>{{ bact }}</i></li>
+                    <li><i><a href="{% url 'lims:bacteria-detail' bact.id %}">{{ bact }}</a></i></li>
                     {% endfor %}
                     </ul>
                 </td>
