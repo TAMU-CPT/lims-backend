@@ -9,3 +9,4 @@ djangorestframework==3.3.3
 pinax-announcements==2.0.3
 pytz==2016.4
 PyYAML==3.11
+django-tagulous
