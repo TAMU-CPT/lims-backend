@@ -6,8 +6,6 @@ from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelform_factory
 from datetimewidget.widgets import DateTimeWidget
 
-
-
 class LIMSDataDump(ListView):
     model = EnvironmentalSample
 
