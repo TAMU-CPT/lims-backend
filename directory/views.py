@@ -1,16 +1,15 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
-from django import forms
-from easy_select2 import apply_select2
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy
-import tagulous
 
 from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView
 
 from directory.models import Organisation, PersonTag
 from account.models import Account
+
+from rest_framework import viewsets
+from directory.serializers import AccountSerializer, OrganisationSerializer
 
 class PersonList(ListView):
     model = Account
@@ -55,3 +54,11 @@ class PersonCreate(CreateView):
         # self.object.save()
         success_url = reverse_lazy('person-list')
         return HttpResponseRedirect(reverse_lazy('directory:person-list'))
+
+class PersonViewSet(viewsets.ModelViewSet):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+class OrganisationViewSet(viewsets.ModelViewSet):
+    queryset = Organisation.objects.all()
+    serializer_class = OrganisationSerializer

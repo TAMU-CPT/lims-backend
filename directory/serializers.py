@@ -1,0 +1,55 @@
+from directory.models import Organisation
+from account.models import Account
+
+from rest_framework import serializers
+
+
+class AccountLessOrgSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Organisation
+        fields = (
+            'name', 'emails', 'phone_number', 'fax_number',
+            'street_address', 'website'
+        )
+
+class AccountSerializer(serializers.ModelSerializer):
+    orgs = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Account
+        fields = (
+            'user', 'timezone', 'language', 'name', 'initials',
+            'nickname', 'netid', 'phone_number', 'tags', 'orcid', 'orgs',
+            'original_id'
+        )
+
+    def get_orgs(self, obj):
+        for org in obj.orgs.all():
+            yield AccountLessOrgSerializer(org).data
+
+
+class OrgLessUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Account
+        fields = (
+            'user', 'timezone', 'language', 'name', 'initials',
+            'nickname', 'netid', 'phone_number', 'tags', 'orcid',
+            'original_id'
+        )
+
+
+class OrganisationSerializer(serializers.ModelSerializer):
+    users = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Organisation
+        fields = (
+            'name', 'emails', 'phone_number', 'fax_number',
+            'street_address', 'website', 'users'
+        )
+
+    def get_users(self, obj):
+        for user in obj.account_set.all():
+            yield OrgLessUserSerializer(user).data
