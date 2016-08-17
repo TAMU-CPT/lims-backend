@@ -28,17 +28,20 @@ class ContainerType(models.Model):
     def __unicode__(self):
         return smart_unicode(self.name)
 
+
 class TubeType(models.Model):
     name = models.CharField(max_length=32)
 
     def __unicode__(self):
         return smart_unicode(self.name)
 
+
 class SampleType(models.Model):
     name = models.CharField(max_length=32)
 
     def __unicode__(self):
         return smart_unicode(self.name)
+
 
 class StorageLocation(models.Model):
     # HAS_CPT_HASHID
@@ -54,6 +57,7 @@ class StorageLocation(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('lims:storage-location-detail', args=[self.id])
+
 
 class Box(models.Model):
     # HAS_CPT_HASHID
@@ -78,6 +82,7 @@ class Box(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('lims:box-detail', args=[self.location.id, self.id])
+
 
 class Tube(models.Model):
     # DOES NOT HAVE CPT_HASHID. Inherits the hashid of whoever is
@@ -110,6 +115,7 @@ class Tube(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('lims:box-detail', args=[self.box.location.id, self.box.id])
 
+
 class EnvironmentalSample(models.Model):
     name = models.CharField(max_length=64, blank=True)
     description = models.TextField(blank=True)
@@ -127,6 +133,7 @@ class EnvironmentalSample(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('lims:envsample-detail', args=[self.id])
+
 
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
@@ -163,6 +170,7 @@ class Lysate(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('lims:lysate-detail', args=[self.id])
 
+
 class Experiment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     short_name = models.CharField(max_length=32)
@@ -171,6 +179,7 @@ class Experiment(models.Model):
 
     def __unicode__(self):
         return smart_unicode(self.short_name)
+
 
 class ExperimentalResult(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -184,6 +193,7 @@ class ExperimentalResult(models.Model):
         return smart_unicode(u'{} - {}'.format(
                 self.experiment.short_name,
                 self.result))
+
 
 class PhageDNAPrep(models.Model):
     # HAS_CPT_HASHID
@@ -206,12 +216,31 @@ class PhageDNAPrep(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('lims:phagedna-detail', args=[self.id])
 
+
+class SequencingRun(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    galaxy_history = models.URLField()
+    name = models.TextField()
+    date = models.DateField()
+    # Illumina, miseq, etc need to be in experiments
+    methods = models.ForeignKey(Experiment)
+    bioanalyzer_qc = models.TextField()
+    run_prep_spreadsheet = models.URLField()
+
+    def __unicode__(self):
+        return smart_unicode(u'{} on {}'.format(self.name, self.date))
+
+
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pool = models.CharField(max_length=16)
+    run = models.ForeignKey(SequencingRun)
+
+    class Meta:
+        unique_together = (('pool', 'run'),)
 
     def __unicode__(self):
-        return smart_unicode(u'Pool {}'.format(self.pool))
+        return smart_unicode(u'Run "{0.run.name}" Pool {0.pool}'.format(self))
 
     def numPhages(self):
         return self.sequencingrunpoolitem_set.count()
@@ -240,6 +269,7 @@ class SequencingRunPool(models.Model):
             return sum([poolitem.phage.expected_size() for poolitem in self.sequencingrunpoolitem_set.objects.all()]) / self.poolSize()
         return 0
 
+
 class SequencingRunPoolItem(models.Model):
     pool = models.ForeignKey(SequencingRunPool)
     phage = models.ForeignKey(PhageDNAPrep)
@@ -253,19 +283,6 @@ class SequencingRunPoolItem(models.Model):
     def ngDnaInMix(self, volumeInMix):
         return volumeInMix * self.dna_conc
 
-class SequencingRun(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    pools = models.ManyToManyField(SequencingRunPool)
-    galaxy_history = models.URLField()
-    name = models.TextField()
-    date = models.DateField()
-    # Illumina, miseq, etc need to be in experiments
-    methods = models.ForeignKey(Experiment)
-    bioanalyzer_qc = models.TextField()
-    run_prep_spreadsheet = models.URLField()
-
-    def __unicode__(self):
-        return smart_unicode(u'{} on {}'.format(self.name, self.date))
 
 class Assembly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

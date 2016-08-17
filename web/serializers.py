@@ -82,7 +82,7 @@ class SequencingRunPoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = SequencingRunPool
         fields = (
-            'id', 'pool'
+            'id', 'pool', 'run'
         )
 
 class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
