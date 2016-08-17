@@ -3,8 +3,7 @@
 
 {% block crumbs %}
 <ul class="breadcrumb">
-    <li><a href="{% url 'lims:index' %}">LIMS</a></li>
-    <li class="active">Storage Locations</li>
+    <li class="active">Projects</li>
 </ul>
 {% endblock %}
 
@@ -19,7 +18,7 @@
         <tbody>
         {% for object in object_list %}
             <tr>
-                <td>{{object}}</td>
+                <td><a href="{% url 'project:bioproject-detail' object.id %}">{{object.name}}</a></td>
             </tr>
         {% endfor %}
         </tbody>

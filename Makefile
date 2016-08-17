@@ -11,7 +11,7 @@ bootstrap: ## Migrate and load fixures
 	$(MAKE) load_fixtures
 
 launch_pg: ## launch postgres container
-	docker run -d -p 5432:5432 -v $(shell pwd)/.pgdata:/var/lib/postgresql/9.4/ mdillon/postgis
+	docker run -d -p 5432:5432 -v $(shell pwd)/.pgdata:/var/lib/postgresql/data/ mdillon/postgis
 
 kill_pg: ## kill postgres container
 	docker ps | grep postgis | awk '{print $$1}' | xargs docker kill

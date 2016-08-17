@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'etc',
     'rest_framework',
     'fontawesome',
+    'widget_tweaks',
 
     # Internal Apps
     'directory',

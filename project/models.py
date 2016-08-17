@@ -7,5 +7,5 @@ from web.models import EnvironmentalSample
 class Bioproject(models.Model):
     name = models.CharField(max_length=32)
     description = models.TextField(blank=True)
-    sample = models.ForeignKey(EnvironmentalSample)
-    date = models.DateTimeField()
+    sample = models.ManyToManyField(EnvironmentalSample)
+    date = models.DateTimeField(auto_now_add=True)

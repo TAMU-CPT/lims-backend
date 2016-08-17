@@ -1,3 +1,4 @@
 from django.contrib import admin
 
-# Register your models here.
+from project.models import Bioproject
+admin.site.register(Bioproject)
