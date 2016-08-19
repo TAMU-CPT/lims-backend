@@ -23,7 +23,7 @@ EXP_RESULT_TYPES = (
 )
 
 class ContainerType(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
 
     def __unicode__(self):
         return smart_unicode(self.name)
@@ -117,7 +117,6 @@ class Tube(models.Model):
 
 
 class EnvironmentalSample(models.Model):
-    name = models.CharField(max_length=64, blank=True)
     description = models.TextField(blank=True)
     # HAS_CPT_HASHID
     collection = models.DateTimeField()
@@ -211,7 +210,7 @@ class PhageDNAPrep(models.Model):
     tube = models.OneToOneField(Tube)
 
     def __unicode__(self):
-        return smart_unicode(self.get_morphology_display())
+        return u'Prep of %s with %s morphology' % (self.lysate, smart_unicode(self.get_morphology_display()))
 
     def get_absolute_url(self):
         return reverse_lazy('lims:phagedna-detail', args=[self.id])
@@ -289,10 +288,10 @@ class Assembly(models.Model):
     dna_prep = models.ForeignKey(PhageDNAPrep, blank=True, null=True)
     sequencing_run = models.ForeignKey(SequencingRunPool, blank=True, null=True)
     galaxy_dataset = models.URLField()
-    notes = models.TextField()
+    notes = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = "assemblies"
 
     def __unicode__(self):
-        return 'Assembly %s' % id
+        return 'Assembly %s' % self.id
