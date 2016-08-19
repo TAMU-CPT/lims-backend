@@ -3,17 +3,17 @@
 help:
 	@egrep '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-fixtures: fixtures/base.app.json  ## Load fixtures for base set of apps
-
 bootstrap: ## Migrate and load fixures
 	python manage.py migrate
 	python manage.py createsuperuser
-	$(MAKE) load_fixtures
+	$(MAKE) dj_load_fixtures
+
+dj_fixtures: fixtures/base.app.json  ## Load fixtures for base set of apps
 
 fixtures/%.json:
 	python manage.py dumpdata $(notdir $(basename $@)) | json_pp > fixtures/$(notdir $(basename $@)).json
 
-clean_migrations: ## Remove migrations
+dj_clean_migrations: ## Remove migrations
 	rm -f base/migrations/0*
 	rm -f directory/migrations/0*
 	rm -f lims/migrations/0*
@@ -21,7 +21,7 @@ clean_migrations: ## Remove migrations
 	rm -f search/migrations/0*
 	rm -f web/migrations/0*
 
-load_fixtures: ## Load all fixture data
+dj_load_fixtures: ## Load all fixture data
 	cd fixtures && python ../manage.py loaddata *
 
 dj_run: ## Run the server
