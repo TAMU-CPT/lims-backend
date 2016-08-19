@@ -15,5 +15,6 @@ etc
 six
 django-easy-select2
 django-widget-tweaks
+django-cors-headers
 pinax
 psycopg2

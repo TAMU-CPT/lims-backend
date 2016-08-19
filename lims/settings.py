@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'fontawesome',
     'widget_tweaks',
+    'corsheaders',
+
 
     # Internal Apps
     'directory',
@@ -67,6 +69,7 @@ SITE_ID = 1
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -75,6 +78,8 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = ('localhost:3000')
 
 ROOT_URLCONF = 'lims.urls'
 
