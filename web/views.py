@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from web.models import Assembly, StorageLocation, Box, EnvironmentalSample, Lysate, PhageDNAPrep, Experiment, ExperimentalResult, Bacteria, ContainerType, SampleType, SequencingRun, SequencingRunPool, SequencingRunPoolItem, Tube, TubeType
@@ -160,7 +159,13 @@ class BacteriaDelete(DeleteView):
     success_url = reverse_lazy('lims:bacteria-list')
 
 from rest_framework import viewsets
-from web.serializers import AssemblySerializer, BacteriaSerializer, BoxSerializer, ContainerTypeSerializer, EnvironmentalSampleSerializer, ExperimentSerializer, ExperimentalResultSerializer, LysateSerializer, PhageDNAPrepSerializer, SampleTypeSerializer, SequencingRunSerializer, SequencingRunPoolSerializer, SequencingRunPoolItemSerializer, StorageLocationSerializer, TubeSerializer, TubeTypeSerializer
+from web.serializers import AssemblySerializer, BacteriaSerializer, \
+    BoxSerializer, ContainerTypeSerializer, EnvironmentalSampleSerializer, \
+    ExperimentSerializer, ExperimentalResultSerializer, LysateSerializer, \
+    PhageDNAPrepSerializer, SampleTypeSerializer, SequencingRunSerializer, \
+    SequencingRunPoolSerializer, SequencingRunPoolItemSerializer, \
+    StorageLocationSerializer, TubeSerializer, TubeTypeSerializer, \
+    StorageLocationDetailSerializer, BoxDetailSerializer
 
 class AssemblyViewSet(viewsets.ModelViewSet):
     queryset = Assembly.objects.all()
@@ -173,6 +178,11 @@ class BacteriaViewSet(viewsets.ModelViewSet):
 class BoxViewSet(viewsets.ModelViewSet):
     queryset = Box.objects.all()
     serializer_class = BoxSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return BoxDetailSerializer
+        return BoxSerializer
 
 class ContainerTypeViewSet(viewsets.ModelViewSet):
     queryset = ContainerType.objects.all()
@@ -217,6 +227,11 @@ class SequencingRunPoolItemViewSet(viewsets.ModelViewSet):
 class StorageLocationViewSet(viewsets.ModelViewSet):
     queryset = StorageLocation.objects.all()
     serializer_class = StorageLocationSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return StorageLocationDetailSerializer
+        return StorageLocationSerializer
 
 class TubeViewSet(viewsets.ModelViewSet):
     queryset = Tube.objects.all()

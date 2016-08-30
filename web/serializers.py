@@ -1,6 +1,22 @@
 from web.models import Assembly, Bacteria, Box, ContainerType, EnvironmentalSample, Experiment, ExperimentalResult, Lysate, PhageDNAPrep, SampleType, SequencingRun, SequencingRunPool, SequencingRunPoolItem, StorageLocation, Tube, TubeType
 from rest_framework import serializers
 
+
+class TubeTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TubeType
+        fields = (
+            'id', 'name'
+        )
+class TubeSerializer(serializers.ModelSerializer):
+    type = TubeTypeSerializer(read_only=True)
+
+    class Meta:
+        model = Tube
+        fields = (
+            'id', 'name', 'box', 'type'
+        )
+
 class AssemblySerializer(serializers.ModelSerializer):
     class Meta:
         model = Assembly
@@ -30,10 +46,12 @@ class ContainerTypeSerializer(serializers.ModelSerializer):
         )
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
+    tube = TubeSerializer(read_only=True)
+
     class Meta:
         model = EnvironmentalSample
         fields = (
-            'id', 'name', 'description', 'collection', 'location', 'sample_type', 'tube'
+            'id', 'description', 'collection', 'location', 'sample_type', 'tube'
         )
 
 class ExperimentSerializer(serializers.ModelSerializer):
@@ -51,6 +69,8 @@ class ExperimentalResultSerializer(serializers.ModelSerializer):
         )
 
 class LysateSerializer(serializers.ModelSerializer):
+    tube = TubeSerializer(read_only=True)
+
     class Meta:
         model = Lysate
         fields = (
@@ -58,6 +78,8 @@ class LysateSerializer(serializers.ModelSerializer):
         )
 
 class PhageDNAPrepSerializer(serializers.ModelSerializer):
+    tube = TubeSerializer(read_only=True)
+
     class Meta:
         model = PhageDNAPrep
         fields = (
@@ -93,23 +115,47 @@ class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
         )
 
 class StorageLocationSerializer(serializers.ModelSerializer):
+    container_type = serializers.SerializerMethodField()
     class Meta:
         model = StorageLocation
         fields = (
-            'id', 'name', 'location', 'container_type'
+            'id', 'name', 'location', 'container_type', 'box_set'
         )
 
-class TubeSerializer(serializers.ModelSerializer):
+    def get_container_type(self, obj):
+        return obj.container_type.name
+
+class StorageLocationDetailSerializer(serializers.ModelSerializer):
+    boxen = serializers.SerializerMethodField()
     class Meta:
-        model = Tube
+        model = StorageLocation
         fields = (
-            'id', 'name', 'box', 'type'
+            'id', 'name', 'location', 'container_type', 'boxen'
         )
 
-class TubeTypeSerializer(serializers.ModelSerializer):
+    def get_boxen(self, obj):
+        for box in obj.box_set.all():
+            yield BoxSerializer(box).data
+
+class BoxDetailSerializer(serializers.ModelSerializer):
+    env_sample = serializers.SerializerMethodField()
+    lysate = serializers.SerializerMethodField()
+    dna_prep = serializers.SerializerMethodField()
+
     class Meta:
-        model = TubeType
+        model = Box
         fields = (
-            'id', 'name'
+            'id', 'name', 'location', 'env_sample', 'lysate', 'dna_prep'
         )
 
+    def get_env_sample(self, obj):
+        for tube in obj.getEnvironmentalTubes():
+            yield EnvironmentalSampleSerializer(tube.environmentalsample).data
+
+    def get_lysate(self, obj):
+        for tube in obj.getLysateTubes():
+            yield LysateSerializer(tube.lysate).data
+
+    def get_dna_prep(self, obj):
+        for tube in obj.getPhageDNAPrepTubes():
+            yield PhageDNAPrepSerializer(tube.phagednaprep).data

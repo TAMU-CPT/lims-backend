@@ -35,14 +35,19 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class OrgLessUserSerializer(serializers.ModelSerializer):
+    gravatar_email = serializers.SerializerMethodField()
 
     class Meta:
         model = Account
         fields = (
             'user', 'timezone', 'language', 'name', 'initials',
             'nickname', 'netid', 'phone_number', 'tags', 'orcid',
-            'original_id'
+            'original_id', 'gravatar_email'
         )
+
+    def get_gravatar_email(self, obj):
+        for email in obj.emails():
+            return hashlib.md5(email.email).hexdigest()
 
 
 class OrganisationSerializer(serializers.ModelSerializer):
@@ -52,7 +57,7 @@ class OrganisationSerializer(serializers.ModelSerializer):
         model = Organisation
         fields = (
             'name', 'emails', 'phone_number', 'fax_number',
-            'street_address', 'website', 'users'
+            'street_address', 'website', 'users', 'id'
         )
 
     def get_users(self, obj):
