@@ -18,3 +18,4 @@ django-widget-tweaks
 django-cors-headers
 pinax
 psycopg2
+django-etc
