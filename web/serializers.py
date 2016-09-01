@@ -1,6 +1,14 @@
 from web.models import Assembly, Bacteria, Box, ContainerType, EnvironmentalSample, Experiment, ExperimentalResult, Lysate, PhageDNAPrep, SampleType, SequencingRun, SequencingRunPool, SequencingRunPoolItem, StorageLocation, Tube, TubeType
 from rest_framework import serializers
+from directory.serializers import AccountSerializer, AccountLessOrgSerializer
 
+
+class SampleTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SampleType
+        fields = (
+            'id', 'name'
+        )
 
 class TubeTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,12 +18,23 @@ class TubeTypeSerializer(serializers.ModelSerializer):
         )
 class TubeSerializer(serializers.ModelSerializer):
     type = TubeTypeSerializer(read_only=True)
+    location = serializers.SerializerMethodField()
 
     class Meta:
         model = Tube
         fields = (
-            'id', 'name', 'box', 'type'
+            'id', 'name', 'type', 'location'
         )
+
+    def get_location(self, obj):
+        return {
+            'tube_id': obj.id,
+            'tube_name': obj.name,
+            'box_id': obj.box.id,
+            'box_name': obj.box.name,
+            'storage_id': obj.box.location.id,
+            'storage_name': obj.box.location.name,
+        }
 
 class AssemblySerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,12 +66,17 @@ class ContainerTypeSerializer(serializers.ModelSerializer):
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
     tube = TubeSerializer(read_only=True)
+    sample_type = SampleTypeSerializer(read_only=True)
+    latlon = serializers.SerializerMethodField()
 
     class Meta:
         model = EnvironmentalSample
         fields = (
-            'id', 'description', 'collection', 'location', 'sample_type', 'tube'
+            'id', 'description', 'collection', 'location', 'sample_type', 'tube', 'latlon',
         )
+
+    def get_latlon(self, obj):
+        return obj.location.get_coords()
 
 class ExperimentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -70,15 +94,34 @@ class ExperimentalResultSerializer(serializers.ModelSerializer):
 
 class LysateSerializer(serializers.ModelSerializer):
     tube = TubeSerializer(read_only=True)
+    env_sample_data = serializers.SerializerMethodField()
+    hosts = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    owner = AccountSerializer(read_only=True)
+    source = AccountLessOrgSerializer(read_only=True)
 
     class Meta:
         model = Lysate
         fields = (
-            'id', 'env_sample', 'oldid', 'isolation', 'owner', 'source', 'tube'
+            'id', 'oldid', 'isolation', 'owner', 'source',
+            'tube', 'env_sample_data', 'hosts', 'name'
         )
+
+    def get_env_sample_data(self, obj):
+        for env_sample in obj.env_sample.all():
+            yield EnvironmentalSampleSerializer(env_sample).data
+
+    def get_hosts(self, obj):
+        for host in obj.host_lims.all():
+            yield BacteriaSerializer(host).data
+
+    def get_name(self, obj):
+        return str(obj)
 
 class PhageDNAPrepSerializer(serializers.ModelSerializer):
     tube = TubeSerializer(read_only=True)
+    morphology = serializers.SerializerMethodField()
+    lysate = LysateSerializer(read_only=True)
 
     class Meta:
         model = PhageDNAPrep
@@ -86,12 +129,8 @@ class PhageDNAPrepSerializer(serializers.ModelSerializer):
             'id', 'lysate', 'morphology', 'tube'
         )
 
-class SampleTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SampleType
-        fields = (
-            'id', 'name'
-        )
+    def get_morphology(self, obj):
+        return obj.get_morphology_display()
 
 class SequencingRunSerializer(serializers.ModelSerializer):
     class Meta:

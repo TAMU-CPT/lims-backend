@@ -153,7 +153,7 @@ class Bacteria(models.Model):
 
 class Lysate(models.Model):
     # HAS_CPT_HASHID
-    env_sample = models.ForeignKey(EnvironmentalSample, null=True, blank=True)
+    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
@@ -164,7 +164,10 @@ class Lysate(models.Model):
     tube = models.OneToOneField(Tube)
 
     def __unicode__(self):
-        return smart_unicode(u'Lysate from {}'.format(self.env_sample))
+        if self.env_sample.count() == 1:
+            return smart_unicode(u'Lysate from {}'.format(self.env_sample.get()))
+        else:
+            return smart_unicode(u'Lysate from {} samples'.format(self.env_sample.count()))
 
     def get_absolute_url(self):
         return reverse_lazy('lims:lysate-detail', args=[self.id])
