@@ -151,8 +151,13 @@ class Bacteria(models.Model):
         return reverse_lazy('lims:bacteria-detail', args=[self.id])
 
 
+class Phage(models.Model):
+    primary_name = models.CharField(max_length=64, unique=True)
+    historical_names = models.TextField() # JSON encoded list of old names
+
 class Lysate(models.Model):
     # HAS_CPT_HASHID
+    phage = models.OneToOneField(Phage)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     oldid = models.CharField(max_length=64, blank=True)
@@ -199,7 +204,7 @@ class ExperimentalResult(models.Model):
 
 class PhageDNAPrep(models.Model):
     # HAS_CPT_HASHID
-    lysate = models.ForeignKey(Lysate, blank=True, null=True)
+    lysate = models.OneToOneField(Lysate, blank=True, null=True)
 
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
 
