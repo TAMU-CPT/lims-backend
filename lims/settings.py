@@ -56,7 +56,7 @@ INSTALLED_APPS = [
 
     # Internal Apps
     'directory',
-    'project',
+    'bioproject',
     'account',
     'lims_app',
     'search',

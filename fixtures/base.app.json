@@ -47,7 +47,7 @@
          "priority" : 100,
          "description" : "Apollo & Galaxy! The CPT's innovative bioproject management will let you accomplish tasks like selecting a subset of genomes from a database, delegating employees to work on their annotations and analysis, and then merging results into the shared database. Allows for storage, management, and analysis of complex structured data.",
          "hidden" : true,
-         "url" : "/project/"
+         "url" : "/bioproject/"
       },
       "pk" : 4
    }
