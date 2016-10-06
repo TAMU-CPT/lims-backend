@@ -1,4 +1,4 @@
 from django.contrib import admin
-from base.models import App
+from lims_app.models import App
 
 admin.site.register(App)

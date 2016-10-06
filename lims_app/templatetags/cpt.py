@@ -3,7 +3,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
-from base.templatetags.gravatar import gravatarUrl
+from lims_app.templatetags.gravatar import gravatarUrl
 
 import account.models
 import hashlib

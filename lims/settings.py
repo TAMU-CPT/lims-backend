@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'directory',
     'project',
     'account',
-    'base',
+    'lims_app',
     'search',
     'web',
 ]

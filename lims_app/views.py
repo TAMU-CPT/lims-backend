@@ -1,13 +1,11 @@
-from django.shortcuts import render
 from django.views.generic import TemplateView
-from base.models import App
-from rest_framework.response import Response
-from rest_framework import viewsets, permissions, filters
-from base.serializers import AppSerializer
+from lims_app.models import App
+from lims_app.serializers import AppSerializer
+from rest_framework import viewsets
 
 
 class Index(TemplateView):
-    template_name = "base/index.html"
+    template_name = "lims_app/index.html"
 
     def get_context_data(self, **kwargs):
         context = super(Index, self).get_context_data(**kwargs)

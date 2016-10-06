@@ -1,4 +1,4 @@
-from base.models import App
+from lims_app.models import App
 from rest_framework import serializers
 
 

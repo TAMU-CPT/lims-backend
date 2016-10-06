@@ -4,7 +4,7 @@ from views import Index
 from rest_framework import routers
 router = routers.DefaultRouter()
 
-from base.views import AppViewSet
+from lims_app.views import AppViewSet
 router.register(r'apps', AppViewSet)
 
 urlpatterns = [
