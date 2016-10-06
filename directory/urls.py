@@ -1,10 +1,14 @@
-from django.conf.urls import url
-from django.conf import settings
+from django.conf.urls import url, include
 from views import \
         PersonList, PersonDetail, PersonCreate, \
         OrganisationList, OrganisationDetail, \
         Index, TagDetail
 
+from rest_framework import routers
+router = routers.DefaultRouter()
+from directory.views import PersonViewSet, OrganisationViewSet
+router.register('dir/account', PersonViewSet)
+router.register('dir/org', OrganisationViewSet)
 # from web import views
 
 urlpatterns = [
@@ -18,4 +22,5 @@ urlpatterns = [
     url(r'^org/(?P<pk>[0-9]+)/$', OrganisationDetail.as_view(), name='org-detail'),
 
     url(r'^tag/(?P<pk>[0-9]+)/$', TagDetail.as_view(), name='tag-detail'),
+    url(r'', include(router.urls)),
 ]
