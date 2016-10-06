@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.conf import settings
 from views import \
     StorageLocationList, StorageLocationDetail, StorageLocationCreate, StorageLocationEdit, StorageLocationDelete, \
     ExperimentList, ExperimentDetail, \
@@ -13,6 +12,33 @@ from views import \
 
 from views import BacteriaList, BacteriaDetail, BacteriaCreate, BacteriaEdit, BacteriaDelete
 
+from django.conf.urls import include
+from rest_framework import routers
+router = routers.DefaultRouter()
+
+from web.views import AssemblyViewSet, BacteriaViewSet, BoxViewSet, \
+    ContainerTypeViewSet, EnvironmentalSampleViewSet, ExperimentViewSet, \
+    ExperimentalResultViewSet, LysateViewSet, PhageDNAPrepViewSet, \
+    SampleTypeViewSet, SequencingRunViewSet, SequencingRunPoolViewSet, \
+    SequencingRunPoolItemViewSet, StorageLocationViewSet, TubeViewSet, \
+    TubeTypeViewSet
+
+router.register('web/assembly', AssemblyViewSet)
+router.register('web/bacteria', BacteriaViewSet)
+router.register('web/box', BoxViewSet)
+router.register('web/containertype', ContainerTypeViewSet)
+router.register('web/environmentalsample', EnvironmentalSampleViewSet)
+router.register('web/experiment', ExperimentViewSet)
+router.register('web/experimentalresult', ExperimentalResultViewSet)
+router.register('web/lysate', LysateViewSet)
+router.register('web/phagednaprep', PhageDNAPrepViewSet)
+router.register('web/sampletype', SampleTypeViewSet)
+router.register('web/sequencingrun', SequencingRunViewSet)
+router.register('web/sequencingrunpool', SequencingRunPoolViewSet)
+router.register('web/sequencingrunpoolitem', SequencingRunPoolItemViewSet)
+router.register('web/storagelocation', StorageLocationViewSet)
+router.register('web/tube', TubeViewSet)
+router.register('web/tubetype', TubeTypeViewSet)
 
 
 urlpatterns = [
@@ -62,6 +88,9 @@ urlpatterns = [
     url(r'^experiment/$', ExperimentList.as_view(), name='experiment-list'),
     url(r'^experiment/(?P<pk>[0-9a-f-]{36})/$', ExperimentDetail.as_view(), name='experiment-detail'),
 
-    # url(r'^experiment-result/$', ExperimentalResultList.as_view(), name='experiment-result-list'),
+    url(r'^experiment-result/$', ExperimentalResultList.as_view(), name='experiment-result-list'),
     url(r'^experiment-result/(?P<pk>[0-9a-f-]{36})/$', ExperimentalResultDetail.as_view(), name='experiment-result-detail'),
+
+
+    url(r'', include(router.urls)),
 ]

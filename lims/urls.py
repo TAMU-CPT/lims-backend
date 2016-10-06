@@ -26,7 +26,6 @@ urlpatterns = [
     url(r'^search/', include('search.urls', namespace='search')),
     url(r'^account/', include('account.urls')),
     url(r'^announcements/', include('pinax.announcements.urls', namespace='pinax_announcements')),
-    url(r'^api/', include('api.urls', namespace='api')),
     url(r'^', include('base.urls', namespace='base')),
     url(
         r'^api/peopletags/$',
