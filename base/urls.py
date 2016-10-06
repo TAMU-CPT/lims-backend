@@ -20,7 +20,7 @@ import tagulous.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^lims/', include('web.urls', namespace='lims')),
+    url(r'^lims/', include('lims.urls', namespace='lims')),
     url(r'^bioproject/', include('bioproject.urls', namespace='project')),
     url(r'^directory/', include('directory.urls', namespace='directory')),
     url(r'^search/', include('search.urls', namespace='search')),

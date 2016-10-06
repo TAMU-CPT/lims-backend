@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'account',
     'lims_app',
     'search',
-    'web',
+    'lims',
 ]
 
 SITE_ID = 1
