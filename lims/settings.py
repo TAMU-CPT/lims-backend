@@ -79,7 +79,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.locale.LocaleMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = ('localhost:8080')
+CORS_ORIGIN_WHITELIST = ('localhost:10000')
 
 ROOT_URLCONF = 'lims.urls'
 

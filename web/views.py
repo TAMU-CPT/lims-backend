@@ -233,6 +233,11 @@ class StorageLocationViewSet(viewsets.ModelViewSet):
             return StorageLocationDetailSerializer
         return StorageLocationSerializer
 
+    def perform_create(self, serializer):
+        container, created = ContainerType.objects.get_or_create(name=self.request.data['container_type'])
+        serializer.save(container_type=container)
+
+
 class TubeViewSet(viewsets.ModelViewSet):
     queryset = Tube.objects.all()
     serializer_class = TubeSerializer
