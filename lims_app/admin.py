@@ -3,6 +3,6 @@ from .models import App
 
 class AppAdmin(admin.ModelAdmin):
     queryset = App.objects.all()
-    list_display = ('name', 'url', 'description', 'enabled', 'priority', 'hidden', 'id', 'icon',)
+    list_display = ('name', 'url', 'description', 'enabled', 'priority', 'hidden', 'id')
 
 admin.site.register(App, AppAdmin)

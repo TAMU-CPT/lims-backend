@@ -7,7 +7,6 @@
          "description" : "Complete directory of people and organisations related to phage research. A central directory of people allow us to manage access to projects and ensure that appropriate staff are linked, credited, and named according to their preferred name.",
          "hidden" : false,
          "url" : "/directory/",
-         "icon" : "users",
          "name" : "Directory",
          "enabled" : true
       }
@@ -20,8 +19,7 @@
          "description" : "Phage LIMS",
          "priority" : 100,
          "enabled" : true,
-         "name" : "LIMS",
-         "icon" : "database"
+         "name" : "LIMS"
       },
       "pk" : 2
    },
@@ -30,7 +28,6 @@
       "fields" : {
          "enabled" : true,
          "name" : "Search",
-         "icon" : "search",
          "url" : "/search/",
          "hidden" : true,
          "description" : "Unified search for the CPT's Phage Database, allowing you to find your samples, proteins, and phages",
@@ -42,7 +39,6 @@
       "model" : "lims_app.app",
       "fields" : {
          "enabled" : true,
-         "icon" : "th-list",
          "name" : "Bioproject Management",
          "priority" : 100,
          "description" : "Apollo & Galaxy! The CPT's innovative bioproject management will let you accomplish tasks like selecting a subset of genomes from a database, delegating employees to work on their annotations and analysis, and then merging results into the shared database. Allows for storage, management, and analysis of complex structured data.",
