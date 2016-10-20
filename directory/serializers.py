@@ -13,6 +13,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 'groups',)
 
+class GrouplessUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email')
+
 class PersonTagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PersonTag
