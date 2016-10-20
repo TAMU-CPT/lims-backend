@@ -8,5 +8,5 @@ router = routers.DefaultRouter()
 router.register(r'apps', views.AppViewSet)
 
 urlpatterns = [
-    url(r'^lims_app/', include(router.urls)),
+    url(r'^', include(router.urls)),
 ]

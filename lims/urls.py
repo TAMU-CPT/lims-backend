@@ -24,5 +24,5 @@ router.register(r'lysates', views.LysateViewSet)
 router.register(r'bacterias', views.BacteriaViewSet)
 
 urlpatterns = [
-    url(r'^lims/', include(router.urls)),
+    url(r'', include(router.urls)),
 ]

@@ -1,35 +1,33 @@
-from __future__ import unicode_literals
-
 from django.contrib import admin
-
-from account.models import Account, SignupCode, AccountDeletion, EmailAddress
-
-
-class SignupCodeAdmin(admin.ModelAdmin):
-
-    list_display = ["code", "max_uses", "use_count", "expiry", "created"]
-    search_fields = ["code", "email"]
-    list_filter = ["created"]
-    raw_id_fields = ["inviter"]
-
+from .models import Account, EmailConfirmation, SignupCodeResult, SignupCode, EmailAddress, AccountDeletion, AnonymousAccount
 
 class AccountAdmin(admin.ModelAdmin):
+    queryset = Account.objects.all()
+    list_display = ('phone_number', 'name', 'language', 'netid', 'theme', 'original_id', 'user', 'orcid', 'timezone', 'nickname', 'id', 'initials',)
 
-    raw_id_fields = ["user"]
+class EmailConfirmationAdmin(admin.ModelAdmin):
+    queryset = EmailConfirmation.objects.all()
+    list_display = ('created', 'objects', 'key', 'email_address', 'id', 'sent',)
 
+class SignupCodeResultAdmin(admin.ModelAdmin):
+    queryset = SignupCodeResult.objects.all()
+    list_display = ('timestamp', 'signup_code', 'user', 'id',)
 
-class AccountDeletionAdmin(AccountAdmin):
+class SignupCodeAdmin(admin.ModelAdmin):
+    queryset = SignupCode.objects.all()
+    list_display = ('code', 'created', 'notes', 'expiry', 'use_count', 'id', 'max_uses', 'inviter', 'email', 'sent',)
 
-    list_display = ["email", "date_requested", "date_expunged"]
+class EmailAddressAdmin(admin.ModelAdmin):
+    queryset = EmailAddress.objects.all()
+    list_display = ('verified', 'primary', 'email', 'objects', 'user', 'id',)
 
-
-class EmailAddressAdmin(AccountAdmin):
-
-    list_display = ["user", "email", "verified", "primary"]
-    search_fields = ["email", "user__username"]
-
+class AccountDeletionAdmin(admin.ModelAdmin):
+    queryset = AccountDeletion.objects.all()
+    list_display = ('id', 'date_requested', 'user', 'date_expunged', 'email',)
 
 admin.site.register(Account, AccountAdmin)
+admin.site.register(EmailConfirmation, EmailConfirmationAdmin)
+admin.site.register(SignupCodeResult, SignupCodeResultAdmin)
 admin.site.register(SignupCode, SignupCodeAdmin)
-admin.site.register(AccountDeletion, AccountDeletionAdmin)
 admin.site.register(EmailAddress, EmailAddressAdmin)
+admin.site.register(AccountDeletion, AccountDeletionAdmin)

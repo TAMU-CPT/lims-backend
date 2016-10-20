@@ -9,9 +9,18 @@ def write_files(app_name, ug=False):
         for i in m.body:
             if type(i) == _ast.ClassDef:
                 models[i.name] = {}
+                print i.name
                 for x in i.body:
                     if type(x) == _ast.Assign:
-                        models[i.name][x.targets[0].id] = x.value.func.attr
+                        var_name = x.targets[0].id
+
+                        func_name = None
+                        try:
+                            func_name = x.value.func.attr
+                        except Exception:
+                            func_name = x.value.func.id
+
+                        models[i.name][var_name] = func_name
                 models[i.name]['id'] = "Intrinsic"
 
 

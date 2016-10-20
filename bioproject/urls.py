@@ -10,5 +10,5 @@ router.register(r'editingrolegroups', views.EditingRoleGroupViewSet)
 router.register(r'bioprojects', views.BioprojectViewSet)
 
 urlpatterns = [
-    url(r'^bioproject/', include(router.urls)),
+    url(r'', include(router.urls)),
 ]

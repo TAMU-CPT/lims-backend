@@ -9,5 +9,5 @@ router.register(r'persontags', views.PersonTagViewSet)
 router.register(r'organisations', views.OrganisationViewSet)
 
 urlpatterns = [
-    url(r'^directory/', include(router.urls)),
+    url(r'', include(router.urls)),
 ]

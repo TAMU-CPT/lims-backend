@@ -6,5 +6,5 @@ import search.views
 from search.views import Index
 
 urlpatterns = [
-    url(r'^$', Index, name='index'),
+    url(r'', Index, name='index'),
 ]
