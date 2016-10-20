@@ -1,13 +1,12 @@
 from django.conf.urls import url, include
-from views import Index
-
 from rest_framework import routers
-router = routers.DefaultRouter()
+from lims_app import views
 
-from lims_app.views import AppViewSet
-router.register(r'apps', AppViewSet)
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+router.register(r'apps', views.AppViewSet)
 
 urlpatterns = [
-    url(r'^$', Index.as_view(), name='index'),
-    url(r'', include(router.urls)),
+    url(r'^lims_app/', include(router.urls)),
 ]
