@@ -86,30 +86,6 @@
    },
    {
       "fields" : {
-         "source" : 1,
-         "oldid" : "",
-         "owner" : 1,
-         "host_lims" : [
-            1
-         ],
-         "env_sample" : 1,
-         "tube" : 2,
-         "isolation" : "2016-08-19T16:37:18Z"
-      },
-      "model" : "lims.lysate",
-      "pk" : 1
-   },
-   {
-      "pk" : "27e43ccc-1c27-4d6d-9ac1-4f0988bcadce",
-      "model" : "lims.experiment",
-      "fields" : {
-         "methods" : "Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina",
-         "short_name" : "Illumina",
-         "full_name" : "Illuuuuumina"
-      }
-   },
-   {
-      "fields" : {
          "methods" : "aslfkasldfk asldkf as\r\n\r\n- a\r\n- d\r\n- 32",
          "full_name" : "Pulse field gel electro",
          "short_name" : "PFGE (464)"
@@ -126,47 +102,5 @@
       },
       "pk" : "26244828-21b3-4fc9-a648-e02385b8cfc4",
       "model" : "lims.experimentalresult"
-   },
-   {
-      "fields" : {
-         "lysate" : 1,
-         "experiments" : [
-            "26244828-21b3-4fc9-a648-e02385b8cfc4"
-         ],
-         "morphology" : 0,
-         "tube" : 3
-      },
-      "model" : "lims.phagednaprep",
-      "pk" : 1
-   },
-   {
-      "fields" : {
-         "bioanalyzer_qc" : "???",
-         "methods" : "27e43ccc-1c27-4d6d-9ac1-4f0988bcadce",
-         "galaxy_history" : "https://galaxy.com/history/asdf",
-         "run_prep_spreadsheet" : "https://example.com",
-         "name" : "Fall sequencing run",
-         "date" : "2016-08-19"
-      },
-      "model" : "lims.sequencingrun",
-      "pk" : "65b91907-c8b6-4af6-970a-ef93c58ea86c"
-   },
-   {
-      "fields" : {
-         "run" : "65b91907-c8b6-4af6-970a-ef93c58ea86c",
-         "pool" : "12"
-      },
-      "pk" : "b12c3bc7-cef5-4683-af13-c4eb8608b9a6",
-      "model" : "lims.sequencingrunpool"
-   },
-   {
-      "fields" : {
-         "dna_prep" : 1,
-         "notes" : "none",
-         "galaxy_dataset" : "https://galaxy.com/asdf",
-         "sequencing_run" : "b12c3bc7-cef5-4683-af13-c4eb8608b9a6"
-      },
-      "model" : "lims.assembly",
-      "pk" : "d74af529-5e1b-4c99-9c0e-7c60d0f37b31"
    }
 ]

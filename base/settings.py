@@ -80,7 +80,7 @@ MIDDLEWARE_CLASSES = [
 
 CORS_ORIGIN_WHITELIST = ('localhost:10000')
 
-ROOT_URLCONF = 'lims.urls'
+ROOT_URLCONF = 'base.urls'
 
 TEMPLATES = [
     {
@@ -98,7 +98,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'lims.wsgi.application'
+WSGI_APPLICATION = 'base.wsgi.application'
 
 
 # Database
