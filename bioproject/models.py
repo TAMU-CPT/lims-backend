@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from web.models import Phage
+from lims.models import Phage
 from django.contrib.auth.models import User, Group
 # Create your models here.
 

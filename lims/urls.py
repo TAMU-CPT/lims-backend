@@ -16,7 +16,7 @@ from django.conf.urls import include
 from rest_framework import routers
 router = routers.DefaultRouter()
 
-from web.views import AssemblyViewSet, BacteriaViewSet, BoxViewSet, \
+from lims.views import AssemblyViewSet, BacteriaViewSet, BoxViewSet, \
     ContainerTypeViewSet, EnvironmentalSampleViewSet, ExperimentViewSet, \
     ExperimentalResultViewSet, LysateViewSet, PhageDNAPrepViewSet, \
     SampleTypeViewSet, SequencingRunViewSet, SequencingRunPoolViewSet, \

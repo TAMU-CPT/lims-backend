@@ -1,20 +1,20 @@
 from django.contrib import admin
 
-from web.models import ContainerType
-from web.models import TubeType
-from web.models import SampleType
-from web.models import StorageLocation
-from web.models import Box
-from web.models import Tube
-from web.models import EnvironmentalSample
-from web.models import Bacteria
-from web.models import Lysate
-from web.models import Experiment
-from web.models import ExperimentalResult
-from web.models import PhageDNAPrep
-from web.models import SequencingRunPool
-from web.models import SequencingRun
-from web.models import Assembly
+from lims.models import ContainerType
+from lims.models import TubeType
+from lims.models import SampleType
+from lims.models import StorageLocation
+from lims.models import Box
+from lims.models import Tube
+from lims.models import EnvironmentalSample
+from lims.models import Bacteria
+from lims.models import Lysate
+from lims.models import Experiment
+from lims.models import ExperimentalResult
+from lims.models import PhageDNAPrep
+from lims.models import SequencingRunPool
+from lims.models import SequencingRun
+from lims.models import Assembly
 
 admin.site.register(ContainerType)
 admin.site.register(TubeType)

@@ -4,10 +4,10 @@
          "name" : "freezer"
       },
       "pk" : 2,
-      "model" : "web.containertype"
+      "model" : "lims.containertype"
    },
    {
-      "model" : "web.tubetype",
+      "model" : "lims.tubetype",
       "pk" : 1,
       "fields" : {
          "name" : "microfuge"
@@ -15,14 +15,14 @@
    },
    {
       "pk" : 1,
-      "model" : "web.sampletype",
+      "model" : "lims.sampletype",
       "fields" : {
          "name" : "water"
       }
    },
    {
       "pk" : 1,
-      "model" : "web.storagelocation",
+      "model" : "lims.storagelocation",
       "fields" : {
          "name" : "-80 Freezer",
          "container_type" : 2,
@@ -30,7 +30,7 @@
       }
    },
    {
-      "model" : "web.box",
+      "model" : "lims.box",
       "pk" : 1,
       "fields" : {
          "location" : 1,
@@ -39,7 +39,7 @@
    },
    {
       "pk" : 1,
-      "model" : "web.tube",
+      "model" : "lims.tube",
       "fields" : {
          "type" : 1,
          "box" : 1,
@@ -48,7 +48,7 @@
    },
    {
       "pk" : 2,
-      "model" : "web.tube",
+      "model" : "lims.tube",
       "fields" : {
          "type" : 1,
          "box" : 1,
@@ -61,11 +61,11 @@
          "name" : "p125",
          "box" : 1
       },
-      "model" : "web.tube",
+      "model" : "lims.tube",
       "pk" : 3
    },
    {
-      "model" : "web.environmentalsample",
+      "model" : "lims.environmentalsample",
       "pk" : 1,
       "fields" : {
          "description" : "collected from a gently running stream",
@@ -81,7 +81,7 @@
          "strain" : "K12",
          "species" : "coli"
       },
-      "model" : "web.bacteria",
+      "model" : "lims.bacteria",
       "pk" : 1
    },
    {
@@ -96,12 +96,12 @@
          "tube" : 2,
          "isolation" : "2016-08-19T16:37:18Z"
       },
-      "model" : "web.lysate",
+      "model" : "lims.lysate",
       "pk" : 1
    },
    {
       "pk" : "27e43ccc-1c27-4d6d-9ac1-4f0988bcadce",
-      "model" : "web.experiment",
+      "model" : "lims.experiment",
       "fields" : {
          "methods" : "Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina Illumina",
          "short_name" : "Illumina",
@@ -114,7 +114,7 @@
          "full_name" : "Pulse field gel electro",
          "short_name" : "PFGE (464)"
       },
-      "model" : "web.experiment",
+      "model" : "lims.experiment",
       "pk" : "c96a3d19-3c96-4ee6-8971-d3b661be01f2"
    },
    {
@@ -125,7 +125,7 @@
          "result" : "100kb"
       },
       "pk" : "26244828-21b3-4fc9-a648-e02385b8cfc4",
-      "model" : "web.experimentalresult"
+      "model" : "lims.experimentalresult"
    },
    {
       "fields" : {
@@ -136,7 +136,7 @@
          "morphology" : 0,
          "tube" : 3
       },
-      "model" : "web.phagednaprep",
+      "model" : "lims.phagednaprep",
       "pk" : 1
    },
    {
@@ -148,7 +148,7 @@
          "name" : "Fall sequencing run",
          "date" : "2016-08-19"
       },
-      "model" : "web.sequencingrun",
+      "model" : "lims.sequencingrun",
       "pk" : "65b91907-c8b6-4af6-970a-ef93c58ea86c"
    },
    {
@@ -157,7 +157,7 @@
          "pool" : "12"
       },
       "pk" : "b12c3bc7-cef5-4683-af13-c4eb8608b9a6",
-      "model" : "web.sequencingrunpool"
+      "model" : "lims.sequencingrunpool"
    },
    {
       "fields" : {
@@ -166,7 +166,7 @@
          "galaxy_dataset" : "https://galaxy.com/asdf",
          "sequencing_run" : "b12c3bc7-cef5-4683-af13-c4eb8608b9a6"
       },
-      "model" : "web.assembly",
+      "model" : "lims.assembly",
       "pk" : "d74af529-5e1b-4c99-9c0e-7c60d0f37b31"
    }
 ]

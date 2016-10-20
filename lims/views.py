@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from web.models import Assembly, StorageLocation, Box, EnvironmentalSample, Lysate, PhageDNAPrep, Experiment, ExperimentalResult, Bacteria, ContainerType, SampleType, SequencingRun, SequencingRunPool, SequencingRunPoolItem, Tube, TubeType
+from lims.models import Assembly, StorageLocation, Box, EnvironmentalSample, Lysate, PhageDNAPrep, Experiment, ExperimentalResult, Bacteria, ContainerType, SampleType, SequencingRun, SequencingRunPool, SequencingRunPoolItem, Tube, TubeType
 from django.core.urlresolvers import reverse_lazy
 from django.forms.models import modelform_factory
 from datetimewidget.widgets import DateTimeWidget
@@ -159,7 +159,7 @@ class BacteriaDelete(DeleteView):
     success_url = reverse_lazy('lims:bacteria-list')
 
 from rest_framework import viewsets
-from web.serializers import AssemblySerializer, BacteriaSerializer, \
+from lims.serializers import AssemblySerializer, BacteriaSerializer, \
     BoxSerializer, ContainerTypeSerializer, EnvironmentalSampleSerializer, \
     ExperimentSerializer, ExperimentalResultSerializer, LysateSerializer, \
     PhageDNAPrepSerializer, SampleTypeSerializer, SequencingRunSerializer, \
