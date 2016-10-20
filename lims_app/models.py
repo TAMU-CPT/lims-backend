@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from fontawesome.fields import IconField
 from django.db import models
 
 class App(models.Model):
@@ -8,7 +7,6 @@ class App(models.Model):
     url = models.CharField(max_length=32)
     hidden = models.BooleanField(default=False)
     enabled = models.BooleanField(default=False)
-    icon = IconField()
     # 0 is lower
     priority = models.IntegerField(default=100)
 

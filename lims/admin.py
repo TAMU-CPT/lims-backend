@@ -1,33 +1,88 @@
 from django.contrib import admin
+from .models import Box, StorageLocation, Assembly, TubeType, ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, EnvironmentalSample, Lysate, Bacteria
 
-from lims.models import ContainerType
-from lims.models import TubeType
-from lims.models import SampleType
-from lims.models import StorageLocation
-from lims.models import Box
-from lims.models import Tube
-from lims.models import EnvironmentalSample
-from lims.models import Bacteria
-from lims.models import Lysate
-from lims.models import Experiment
-from lims.models import ExperimentalResult
-from lims.models import PhageDNAPrep
-from lims.models import SequencingRunPool
-from lims.models import SequencingRun
-from lims.models import Assembly
+class BoxAdmin(admin.ModelAdmin):
+    queryset = Box.objects.all()
+    list_display = ('id', 'name', 'location',)
 
-admin.site.register(ContainerType)
-admin.site.register(TubeType)
-admin.site.register(SampleType)
-admin.site.register(StorageLocation)
-admin.site.register(Box)
-admin.site.register(Tube)
-admin.site.register(EnvironmentalSample)
-admin.site.register(Bacteria)
-admin.site.register(Lysate)
-admin.site.register(Experiment)
-admin.site.register(ExperimentalResult)
-admin.site.register(PhageDNAPrep)
-admin.site.register(SequencingRunPool)
-admin.site.register(SequencingRun)
-admin.site.register(Assembly)
+class StorageLocationAdmin(admin.ModelAdmin):
+    queryset = StorageLocation.objects.all()
+    list_display = ('id', 'name', 'container_type', 'location',)
+
+class AssemblyAdmin(admin.ModelAdmin):
+    queryset = Assembly.objects.all()
+    list_display = ('notes', 'sequencing_run', 'galaxy_dataset', 'id', 'dna_prep',)
+
+class TubeTypeAdmin(admin.ModelAdmin):
+    queryset = TubeType.objects.all()
+    list_display = ('name', 'id',)
+
+class ExperimentalResultAdmin(admin.ModelAdmin):
+    queryset = ExperimentalResult.objects.all()
+    list_display = ('date', 'experiment', 'id', 'run_by', 'result',)
+
+class SequencingRunAdmin(admin.ModelAdmin):
+    queryset = SequencingRun.objects.all()
+    list_display = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'id', 'name',)
+
+class TubeAdmin(admin.ModelAdmin):
+    queryset = Tube.objects.all()
+    list_display = ('box', 'type', 'name', 'id',)
+
+class SampleTypeAdmin(admin.ModelAdmin):
+    queryset = SampleType.objects.all()
+    list_display = ('name', 'id',)
+
+class ExperimentAdmin(admin.ModelAdmin):
+    queryset = Experiment.objects.all()
+    list_display = ('full_name', 'id', 'short_name', 'methods',)
+
+class PhageAdmin(admin.ModelAdmin):
+    queryset = Phage.objects.all()
+    list_display = ('historical_names', 'primary_name', 'id',)
+
+class PhageDNAPrepAdmin(admin.ModelAdmin):
+    queryset = PhageDNAPrep.objects.all()
+    list_display = ('morphology', 'lysate', 'tube', 'id',)
+
+class SequencingRunPoolAdmin(admin.ModelAdmin):
+    queryset = SequencingRunPool.objects.all()
+    list_display = ('run', 'id', 'pool',)
+
+class SequencingRunPoolItemAdmin(admin.ModelAdmin):
+    queryset = SequencingRunPoolItem.objects.all()
+    list_display = ('dna_conc', 'phage', 'id', 'pool',)
+
+class ContainerTypeAdmin(admin.ModelAdmin):
+    queryset = ContainerType.objects.all()
+    list_display = ('name', 'id',)
+
+class EnvironmentalSampleAdmin(admin.ModelAdmin):
+    queryset = EnvironmentalSample.objects.all()
+    list_display = ('description', 'tube', 'sample_type', 'collection', 'id', 'location',)
+
+class LysateAdmin(admin.ModelAdmin):
+    queryset = Lysate.objects.all()
+    list_display = ('isolation', 'tube', 'source', 'phage', 'owner', 'id', 'oldid',)
+
+class BacteriaAdmin(admin.ModelAdmin):
+    queryset = Bacteria.objects.all()
+    list_display = ('strain', 'genus', 'species', 'id',)
+
+admin.site.register(Box, BoxAdmin)
+admin.site.register(StorageLocation, StorageLocationAdmin)
+admin.site.register(Assembly, AssemblyAdmin)
+admin.site.register(TubeType, TubeTypeAdmin)
+admin.site.register(ExperimentalResult, ExperimentalResultAdmin)
+admin.site.register(SequencingRun, SequencingRunAdmin)
+admin.site.register(Tube, TubeAdmin)
+admin.site.register(SampleType, SampleTypeAdmin)
+admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Phage, PhageAdmin)
+admin.site.register(PhageDNAPrep, PhageDNAPrepAdmin)
+admin.site.register(SequencingRunPool, SequencingRunPoolAdmin)
+admin.site.register(SequencingRunPoolItem, SequencingRunPoolItemAdmin)
+admin.site.register(ContainerType, ContainerTypeAdmin)
+admin.site.register(EnvironmentalSample, EnvironmentalSampleAdmin)
+admin.site.register(Lysate, LysateAdmin)
+admin.site.register(Bacteria, BacteriaAdmin)

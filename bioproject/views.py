@@ -1,25 +1,16 @@
-from django.shortcuts import render
-from models import Bioproject
-from django.views.generic import ListView, DetailView, TemplateView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.core.urlresolvers import reverse_lazy
+from rest_framework import viewsets
 
-class BioprojectList(ListView):
-    model = Bioproject
+from bioproject.serializers import EditingRoleUserSerializer, EditingRoleGroupSerializer, BioprojectSerializer
+from bioproject.models import EditingRoleUser, EditingRoleGroup, Bioproject
 
-class BioprojectDetail(DetailView):
-    model = Bioproject
+class EditingRoleUserViewSet(viewsets.ModelViewSet):
+    queryset = EditingRoleUser.objects.all()
+    serializer_class = EditingRoleUserSerializer
 
-class BioprojectCreate(CreateView):
-    model = Bioproject
-    fields = ('name', 'description', 'sample')
-    success_url = reverse_lazy('project:bioproject-list')
+class EditingRoleGroupViewSet(viewsets.ModelViewSet):
+    queryset = EditingRoleGroup.objects.all()
+    serializer_class = EditingRoleGroupSerializer
 
-class BioprojectEdit(UpdateView):
-    model = Bioproject
-    fields = ('name', 'description', 'sample')
-    success_url = reverse_lazy('project:bioproject-list')
-
-class BioprojectDelete(DeleteView):
-    model = Bioproject
-    success_url = reverse_lazy('project:bioproject-list')
+class BioprojectViewSet(viewsets.ModelViewSet):
+    queryset = Bioproject.objects.all()
+    serializer_class = BioprojectSerializer

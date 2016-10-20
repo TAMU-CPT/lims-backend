@@ -1,200 +1,88 @@
-from lims.models import Assembly, Bacteria, Box, ContainerType, EnvironmentalSample, Experiment, ExperimentalResult, Lysate, PhageDNAPrep, SampleType, SequencingRun, SequencingRunPool, SequencingRunPoolItem, StorageLocation, Tube, TubeType
+
 from rest_framework import serializers
-from directory.serializers import AccountSerializer, AccountLessOrgSerializer
+from lims.models import Box, StorageLocation, Assembly, TubeType, ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, EnvironmentalSample, Lysate, Bacteria
 
-
-class SampleTypeSerializer(serializers.ModelSerializer):
+class BoxSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = SampleType
-        fields = (
-            'id', 'name'
-        )
+        model = Box
+        fields = ('id', 'name', 'location',)
 
-class TubeTypeSerializer(serializers.ModelSerializer):
+class StorageLocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = TubeType
-        fields = (
-            'id', 'name'
-        )
-class TubeSerializer(serializers.ModelSerializer):
-    type = TubeTypeSerializer(read_only=True)
-    location = serializers.SerializerMethodField()
+        model = StorageLocation
+        fields = ('id', 'name', 'container_type', 'location',)
 
-    class Meta:
-        model = Tube
-        fields = (
-            'id', 'name', 'type', 'location'
-        )
-
-    def get_location(self, obj):
-        return {
-            'tube_id': obj.id,
-            'tube_name': obj.name,
-            'box_id': obj.box.id,
-            'box_name': obj.box.name,
-            'storage_id': obj.box.location.id,
-            'storage_name': obj.box.location.name,
-        }
-
-class AssemblySerializer(serializers.ModelSerializer):
+class AssemblySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Assembly
-        fields = (
-            'id', 'dna_prep', 'sequencing_run', 'galaxy_dataset', 'notes'
-        )
+        fields = ('notes', 'sequencing_run', 'galaxy_dataset', 'id', 'dna_prep',)
 
-class BacteriaSerializer(serializers.ModelSerializer):
+class TubeTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Bacteria
-        fields = (
-            'id', 'genus', 'species', 'strain'
-        )
+        model = TubeType
+        fields = ('name', 'id',)
 
-class BoxSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Box
-        fields = (
-            'id', 'name', 'location'
-        )
-
-class ContainerTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ContainerType
-        fields = (
-            'id', 'name'
-        )
-
-class EnvironmentalSampleSerializer(serializers.ModelSerializer):
-    tube = TubeSerializer(read_only=True)
-    sample_type = SampleTypeSerializer(read_only=True)
-    latlon = serializers.SerializerMethodField()
-
-    class Meta:
-        model = EnvironmentalSample
-        fields = (
-            'id', 'description', 'collection', 'location', 'sample_type', 'tube', 'latlon',
-        )
-
-    def get_latlon(self, obj):
-        return obj.location.get_coords()
-
-class ExperimentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Experiment
-        fields = (
-            'id', 'short_name', 'full_name', 'methods'
-        )
-
-class ExperimentalResultSerializer(serializers.ModelSerializer):
+class ExperimentalResultSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ExperimentalResult
-        fields = (
-            'id', 'experiment', 'result', 'date', 'run_by'
-        )
+        fields = ('date', 'experiment', 'id', 'run_by', 'result',)
 
-class LysateSerializer(serializers.ModelSerializer):
-    tube = TubeSerializer(read_only=True)
-    env_sample_data = serializers.SerializerMethodField()
-    hosts = serializers.SerializerMethodField()
-    name = serializers.SerializerMethodField()
-    owner = AccountSerializer(read_only=True)
-    source = AccountLessOrgSerializer(read_only=True)
-
-    class Meta:
-        model = Lysate
-        fields = (
-            'id', 'oldid', 'isolation', 'owner', 'source',
-            'tube', 'env_sample_data', 'hosts', 'name'
-        )
-
-    def get_env_sample_data(self, obj):
-        for env_sample in obj.env_sample.all():
-            yield EnvironmentalSampleSerializer(env_sample).data
-
-    def get_hosts(self, obj):
-        for host in obj.host_lims.all():
-            yield BacteriaSerializer(host).data
-
-    def get_name(self, obj):
-        return str(obj)
-
-class PhageDNAPrepSerializer(serializers.ModelSerializer):
-    tube = TubeSerializer(read_only=True)
-    morphology = serializers.SerializerMethodField()
-    lysate = LysateSerializer(read_only=True)
-
-    class Meta:
-        model = PhageDNAPrep
-        fields = (
-            'id', 'lysate', 'morphology', 'tube'
-        )
-
-    def get_morphology(self, obj):
-        return obj.get_morphology_display()
-
-class SequencingRunSerializer(serializers.ModelSerializer):
+class SequencingRunSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SequencingRun
-        fields = (
-            'id', 'galaxy_history', 'name', 'date', 'methods', 'bioanalyzer_qc', 'run_prep_spreadsheet'
-        )
+        fields = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'id', 'name',)
 
-class SequencingRunPoolSerializer(serializers.ModelSerializer):
+class TubeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Tube
+        fields = ('box', 'type', 'name', 'id',)
+
+class SampleTypeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SampleType
+        fields = ('name', 'id',)
+
+class ExperimentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Experiment
+        fields = ('full_name', 'id', 'short_name', 'methods',)
+
+class PhageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Phage
+        fields = ('historical_names', 'primary_name', 'id',)
+
+class PhageDNAPrepSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PhageDNAPrep
+        fields = ('morphology', 'lysate', 'experiments', 'tube', 'id',)
+
+class SequencingRunPoolSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SequencingRunPool
-        fields = (
-            'id', 'pool', 'run'
-        )
+        fields = ('run', 'id', 'pool',)
 
-class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
+class SequencingRunPoolItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SequencingRunPoolItem
-        fields = (
-            'id', 'pool', 'phage', 'dna_conc'
-        )
+        fields = ('dna_conc', 'phage', 'id', 'pool',)
 
-class StorageLocationSerializer(serializers.ModelSerializer):
-    container_type = serializers.SerializerMethodField()
+class ContainerTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = StorageLocation
-        fields = (
-            'id', 'name', 'location', 'container_type', 'box_set'
-        )
+        model = ContainerType
+        fields = ('name', 'id',)
 
-    def get_container_type(self, obj):
-        return obj.container_type.name
-
-class StorageLocationDetailSerializer(serializers.ModelSerializer):
-    boxen = serializers.SerializerMethodField()
+class EnvironmentalSampleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = StorageLocation
-        fields = (
-            'id', 'name', 'location', 'container_type', 'boxen'
-        )
+        model = EnvironmentalSample
+        fields = ('description', 'tube', 'sample_type', 'collection', 'id', 'location',)
 
-    def get_boxen(self, obj):
-        for box in obj.box_set.all():
-            yield BoxSerializer(box).data
-
-class BoxDetailSerializer(serializers.ModelSerializer):
-    env_sample = serializers.SerializerMethodField()
-    lysate = serializers.SerializerMethodField()
-    dna_prep = serializers.SerializerMethodField()
-
+class LysateSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Box
-        fields = (
-            'id', 'name', 'location', 'env_sample', 'lysate', 'dna_prep'
-        )
+        model = Lysate
+        fields = ('isolation', 'tube', 'source', 'phage', 'host_lims', 'owner', 'env_sample', 'id', 'oldid',)
 
-    def get_env_sample(self, obj):
-        for tube in obj.getEnvironmentalTubes():
-            yield EnvironmentalSampleSerializer(tube.environmentalsample).data
-
-    def get_lysate(self, obj):
-        for tube in obj.getLysateTubes():
-            yield LysateSerializer(tube.lysate).data
-
-    def get_dna_prep(self, obj):
-        for tube in obj.getPhageDNAPrepTubes():
-            yield PhageDNAPrepSerializer(tube.phagednaprep).data
+class BacteriaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Bacteria
+        fields = ('strain', 'genus', 'species', 'id',)

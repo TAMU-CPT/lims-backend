@@ -29,8 +29,6 @@ from account.hooks import hookset
 from account.managers import EmailAddressManager, EmailConfirmationManager
 from account.signals import signup_code_sent, signup_code_used
 
-from bootstrap_themes import list_themes
-
 from directory.models import Organisation, PersonTag
 import tagulous
 
@@ -48,7 +46,7 @@ class Account(models.Model):
         choices=settings.ACCOUNT_LANGUAGES,
         default=settings.LANGUAGE_CODE
     )
-    theme = models.CharField(max_length=255, default='default', choices=list_themes())
+    theme = models.CharField(max_length=255, default='default')
 
     name = models.CharField(max_length=255, default='', help_text="The full name of the person")
     initials = models.CharField(max_length=16, default='', help_text="Their first and middle initials (PubMed format)")

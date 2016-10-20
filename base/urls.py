@@ -1,37 +1,26 @@
-"""lims URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.9/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.conf.urls import url, include
 from django.contrib import admin
-from directory.models import PersonTag
-import tagulous.views
+# from directory.models import PersonTag
+# import tagulous.views
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^lims/', include('lims.urls', namespace='lims')),
+    url(r'^account/', include('account.urls')),
+    url(r'^lims/', include('lims.urls')),
+    url(r'^lims_app/', include('lims_app.urls')),
     url(r'^bioproject/', include('bioproject.urls', namespace='project')),
     url(r'^directory/', include('directory.urls', namespace='directory')),
     url(r'^search/', include('search.urls', namespace='search')),
-    url(r'^account/', include('account.urls')),
-    url(r'^announcements/', include('pinax.announcements.urls', namespace='pinax_announcements')),
-    url(r'^', include('lims_app.urls', namespace='base')),
-    url(
-        r'^api/peopletags/$',
-        tagulous.views.autocomplete,
-        {'tag_model': PersonTag},
-        name='person_tags_autocomplete',
-    ),
 
+    # url(r'^announcements/', include('pinax.announcements.urls', namespace='pinax_announcements')),
+    # url(
+        # r'^api/peopletags/$',
+        # tagulous.views.autocomplete,
+        # {'tag_model': PersonTag},
+        # name='person_tags_autocomplete',
+    # ),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-verify/', verify_jwt_token),
 ]

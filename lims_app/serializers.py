@@ -1,9 +1,8 @@
-from lims_app.models import App
+
 from rest_framework import serializers
+from lims_app.models import App
 
-
-class AppSerializer(serializers.ModelSerializer):
-
+class AppSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = App
-        fields = ('name', 'description', 'url', 'hidden', 'enabled', 'icon')
+        fields = ('name', 'url', 'description', 'enabled', 'priority', 'hidden', 'id')
