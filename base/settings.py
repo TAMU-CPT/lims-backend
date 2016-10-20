@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     # External
     'tagulous',
+    'fontawesome',
     'etc',
     'rest_framework',
     'corsheaders',

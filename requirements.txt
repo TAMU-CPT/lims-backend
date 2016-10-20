@@ -8,6 +8,7 @@ django-markdown-deux==1.0.5
 django-tagulous
 djangorestframework-jwt
 djangorestframework==3.3.3
+django-fontawesome==0.2.6
 etc
 git+ssh://git@github.tamu.edu/cpt/hashids-py.git
 pinax
