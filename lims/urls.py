@@ -3,8 +3,8 @@ from rest_framework import routers
 from lims import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+
+
 router.register(r'boxs', views.BoxViewSet)
 router.register(r'storagelocations', views.StorageLocationViewSet)
 router.register(r'assemblys', views.AssemblyViewSet)

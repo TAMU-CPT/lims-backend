@@ -11,6 +11,7 @@ def write_files(app_name, ug=False):
                 models[i.name] = {}
                 for x in i.body:
                     if type(x) == _ast.Assign:
+                        print x.value.func
                         models[i.name][x.targets[0].id] = x.value.func.attr
                 models[i.name]['id'] = "Intrinsic"
 
@@ -107,8 +108,8 @@ def write_files(app_name, ug=False):
             "from rest_framework import routers",
             "from %s import views\n" % app_name,
             "router = routers.DefaultRouter()",
-            "router.register(r'users', views.UserViewSet)",
-            "router.register(r'groups', views.GroupViewSet)\n"
+            "router.register(r'users', views.UserViewSet)" if ug else "",
+            "router.register(r'groups', views.GroupViewSet)\n" if ug else "\n"
         ]))
         for model in models:
             plural = 's'
