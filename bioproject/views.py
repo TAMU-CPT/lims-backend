@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from .serializers import bioprojectEditingRoleUserSerializer, EditingRoleGroupSerializer, BioprojectSerializer
+from bioproject.serializers import EditingRoleUserSerializer, EditingRoleGroupSerializer, BioprojectSerializer
 from bioproject.models import EditingRoleUser, EditingRoleGroup, Bioproject
 
 class EditingRoleUserViewSet(viewsets.ModelViewSet):

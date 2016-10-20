@@ -11,7 +11,6 @@ def write_files(app_name, ug=False):
                 models[i.name] = {}
                 for x in i.body:
                     if type(x) == _ast.Assign:
-                        print x.value.func
                         models[i.name][x.targets[0].id] = x.value.func.attr
                 models[i.name]['id'] = "Intrinsic"
 
@@ -66,9 +65,10 @@ def write_files(app_name, ug=False):
         view_file.write('\n'.join([
             "from rest_framework import viewsets",
             "from django.contrib.auth.models import User, Group" if ug else "",
-            "from %s.serializers import %s" % (
+            "from %s.serializers import %s%s" % (
+                app_name,
                 "UserSerializer, GroupSerializer, " if ug else "",
-                app_name + ', '.join([name for name in serializer_names]),
+                ', '.join([name for name in serializer_names]),
             ),
             "from %s.models import " % app_name + ', '.join([model for model in models]) + '\n'
         ]))

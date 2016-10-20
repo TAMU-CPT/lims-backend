@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from .serializers import limsBoxSerializer, StorageLocationSerializer, AssemblySerializer, TubeTypeSerializer, ExperimentalResultSerializer, SequencingRunSerializer, TubeSerializer, SampleTypeSerializer, ExperimentSerializer, PhageSerializer, PhageDNAPrepSerializer, SequencingRunPoolSerializer, SequencingRunPoolItemSerializer, ContainerTypeSerializer, EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer
+from lims.serializers import BoxSerializer, StorageLocationSerializer, AssemblySerializer, TubeTypeSerializer, ExperimentalResultSerializer, SequencingRunSerializer, TubeSerializer, SampleTypeSerializer, ExperimentSerializer, PhageSerializer, PhageDNAPrepSerializer, SequencingRunPoolSerializer, SequencingRunPoolItemSerializer, ContainerTypeSerializer, EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer
 from lims.models import Box, StorageLocation, Assembly, TubeType, ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, EnvironmentalSample, Lysate, Bacteria
 
 class BoxViewSet(viewsets.ModelViewSet):
