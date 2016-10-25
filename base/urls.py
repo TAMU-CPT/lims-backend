@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('account.urls')),
     url(r'^lims/', include('lims.urls')),
-    url(r'^lims_app/', include('lims_app.urls')),
     url(r'^bioproject/', include('bioproject.urls')),
     url(r'^directory/', include('directory.urls')),
     url(r'^search/', include('search.urls')),
