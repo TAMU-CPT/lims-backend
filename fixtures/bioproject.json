@@ -1,0 +1,50 @@
+[
+   {
+      "model" : "bioproject.bioproject",
+      "pk" : 1,
+      "fields" : {
+         "date" : "2016-10-20T20:03:27.922Z",
+         "description" : "project to track student samples from class",
+         "sample" : [
+            1
+         ],
+         "name" : "BICH464 2016 Project"
+      }
+   },
+   {
+      "pk" : 1,
+      "fields" : {
+         "role" : 2,
+         "user" : 1,
+         "bioproject" : 1
+      },
+      "model" : "bioproject.editingroleuser"
+   },
+   {
+      "fields" : {
+         "group" : 1,
+         "bioproject" : 1,
+         "role" : 1
+      },
+      "pk" : 1,
+      "model" : "bioproject.editingrolegroup"
+   },
+   {
+      "model" : "bioproject.editingrolegroup",
+      "pk" : 2,
+      "fields" : {
+         "role" : 2,
+         "bioproject" : 1,
+         "group" : 2
+      }
+   },
+   {
+      "model" : "bioproject.editingrolegroup",
+      "fields" : {
+         "group" : 3,
+         "bioproject" : 1,
+         "role" : 0
+      },
+      "pk" : 3
+   }
+]
