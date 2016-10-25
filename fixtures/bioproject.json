@@ -1,1 +1,50 @@
-[]
+[
+   {
+      "model" : "bioproject.bioproject",
+      "pk" : 1,
+      "fields" : {
+         "name" : "BICH464 2016 Project",
+         "date" : "2016-10-25T21:10:52.642Z",
+         "description" : "wheee",
+         "sample" : [
+            1
+         ]
+      }
+   },
+   {
+      "model" : "bioproject.editingroleuser",
+      "pk" : 1,
+      "fields" : {
+         "bioproject" : 1,
+         "user" : 1,
+         "role" : 2
+      }
+   },
+   {
+      "model" : "bioproject.editingrolegroup",
+      "fields" : {
+         "group" : 1,
+         "bioproject" : 1,
+         "role" : 2
+      },
+      "pk" : 1
+   },
+   {
+      "fields" : {
+         "role" : 1,
+         "group" : 2,
+         "bioproject" : 1
+      },
+      "pk" : 2,
+      "model" : "bioproject.editingrolegroup"
+   },
+   {
+      "model" : "bioproject.editingrolegroup",
+      "fields" : {
+         "bioproject" : 1,
+         "group" : 3,
+         "role" : 0
+      },
+      "pk" : 3
+   }
+]
