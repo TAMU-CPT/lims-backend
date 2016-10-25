@@ -36,6 +36,6 @@ pg_kill: ## kill postgres container
 	@docker ps | grep postgis | awk '{print $$1}' | xargs docker kill
 
 pg_logs: ## Tail the logs from psotgres
-	@docker ps | grep postgis | awk '{print $$1}' | xargs docker logs
+	@docker ps | grep postgis | awk '{print $$1}' | xargs docker logs -f
 
 .PHONY: help fixtures bootstrap clean_migrations load_fixtures pg_launch pg_kill pg_logs
