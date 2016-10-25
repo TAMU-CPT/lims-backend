@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from account.serializers import AccountSerializerLight
 from rest_framework import serializers
-from directory.models import PersonTag, Organisation
+from directory.models import Organisation
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:

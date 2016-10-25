@@ -29,8 +29,7 @@ from account.hooks import hookset
 from account.managers import EmailAddressManager, EmailConfirmationManager
 from account.signals import signup_code_sent, signup_code_used
 
-from directory.models import Organisation, PersonTag
-import tagulous
+from directory.models import Organisation
 
 
 
