@@ -176,9 +176,7 @@
    {
       "fields" : {
          "pool" : "0367bd88-3d37-437f-81f2-f366746bd2c6",
-         "dna_conc" : [
-            "e4e657b5-2cbb-4738-90be-1d41dd606a0f"
-         ]
+         "dna_conc" : "e4e657b5-2cbb-4738-90be-1d41dd606a0f"
       },
       "pk" : 1,
       "model" : "lims.sequencingrunpoolitem"
