@@ -1,7 +1,13 @@
 from rest_framework import viewsets
 from django.db.models import Q
 
-from lims.serializers import BoxSerializer, StorageLocationSerializer, AssemblySerializer, TubeTypeSerializer, ExperimentalResultSerializer, SequencingRunSerializer, TubeSerializer, SampleTypeSerializer, ExperimentSerializer, PhageSerializer, PhageDNAPrepSerializer, SequencingRunPoolSerializer, SequencingRunPoolItemSerializer, ContainerTypeSerializer, EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer
+from lims.serializers import BoxSerializer, StorageLocationSerializer, \
+    AssemblySerializer, TubeTypeSerializer, ExperimentalResultSerializer, \
+    SequencingRunSerializer, TubeSerializer, SampleTypeSerializer, \
+    ExperimentSerializer, PhageSerializerList, PhageSerializerDetail, \
+    PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
+    SequencingRunPoolItemSerializer, ContainerTypeSerializer, \
+    EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer
 from lims.models import Box, StorageLocation, Assembly, TubeType, ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, EnvironmentalSample, Lysate, Bacteria
 
 class BoxViewSet(viewsets.ModelViewSet):
@@ -41,8 +47,6 @@ class ExperimentViewSet(viewsets.ModelViewSet):
     serializer_class = ExperimentSerializer
 
 class PhageViewSet(viewsets.ModelViewSet):
-    # queryset = Phage.objects.all()
-    serializer_class = PhageSerializer
 
     def get_queryset(self):
         qs = Phage.objects.all()
@@ -53,6 +57,12 @@ class PhageViewSet(viewsets.ModelViewSet):
                 Q(historical_names__icontains=name)
             )
         return qs
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return PhageSerializerList
+
+        return PhageSerializerDetail
 
 
 class PhageDNAPrepViewSet(viewsets.ModelViewSet):

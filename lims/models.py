@@ -154,17 +154,18 @@ class Bacteria(models.Model):
 class Phage(models.Model):
     primary_name = models.CharField(max_length=64, unique=True)
     historical_names = models.TextField() # JSON encoded list of old names
+    lysate = models.OneToOneField(Lysate)
+    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
+    host_lims = models.ManyToManyField(Bacteria, blank=True)
+    owner = models.ForeignKey(Account, blank=True, null=True)
+    source = models.ForeignKey(Organisation, blank=True, null=True)
+    assembly = models.ForeignKey(Assembly, blank=True, null=True)
 
 
 class Lysate(models.Model):
     # HAS_CPT_HASHID
-    phage = models.OneToOneField(Phage)
-    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
-    host_lims = models.ManyToManyField(Bacteria, blank=True)
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
-    owner = models.ForeignKey(Account, blank=True, null=True)
-    source = models.ForeignKey(Organisation, blank=True, null=True)
 
     # Tube Storage
     tube = models.OneToOneField(Tube)
@@ -294,7 +295,6 @@ class SequencingRunPoolItem(models.Model):
 
 class Assembly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    dna_prep = models.ForeignKey(PhageDNAPrep, blank=True, null=True)
     sequencing_run = models.ForeignKey(SequencingRunPool, blank=True, null=True)
     galaxy_dataset = models.URLField()
     notes = models.TextField(blank=True)

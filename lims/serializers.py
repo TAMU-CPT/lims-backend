@@ -2,6 +2,18 @@
 from rest_framework import serializers
 from lims.models import Box, StorageLocation, Assembly, TubeType, ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, EnvironmentalSample, Lysate, Bacteria
 
+class TubeTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TubeType
+        fields = ('name', 'id',)
+
+class TubeSerializer(serializers.ModelSerializer):
+    type = TubeTypeSerializer()
+
+    class Meta:
+        model = Tube
+        fields = ('box', 'type', 'name', 'id',)
+
 class BoxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Box
@@ -17,12 +29,18 @@ class AssemblySerializer(serializers.ModelSerializer):
         model = Assembly
         fields = ('notes', 'sequencing_run', 'galaxy_dataset', 'id', 'dna_prep',)
 
-class TubeTypeSerializer(serializers.ModelSerializer):
+class ExperimentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TubeType
-        fields = ('name', 'id',)
+        model = Experiment
+        fields = ('full_name', 'id', 'short_name', 'methods',)
 
 class ExperimentalResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExperimentalResult
+        fields = ('date', 'experiment', 'id', 'run_by', 'result',)
+
+class ExperimentalResultDetailSerializer(serializers.ModelSerializer):
+    experiment = ExperimentSerializer()
     class Meta:
         model = ExperimentalResult
         fields = ('date', 'experiment', 'id', 'run_by', 'result',)
@@ -32,25 +50,24 @@ class SequencingRunSerializer(serializers.ModelSerializer):
         model = SequencingRun
         fields = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'id', 'name',)
 
-class TubeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tube
-        fields = ('box', 'type', 'name', 'id',)
-
 class SampleTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SampleType
         fields = ('name', 'id',)
 
-class ExperimentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Experiment
-        fields = ('full_name', 'id', 'short_name', 'methods',)
-
 class PhageDNAPrepSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhageDNAPrep
         fields = ('morphology', 'lysate', 'experiments', 'tube', 'id',)
+
+class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
+    tube = TubeSerializer()
+    experiments = ExperimentalResultDetailSerializer(many=True, read_only=True)
+    assembly_set = AssemblySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = PhageDNAPrep
+        fields = ('morphology', 'lysate', 'experiments', 'tube', 'id', 'assembly_set')
 
 class SequencingRunPoolSerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,6 +85,8 @@ class ContainerTypeSerializer(serializers.ModelSerializer):
         fields = ('name', 'id',)
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
+    tube = TubeSerializer()
+
     class Meta:
         model = EnvironmentalSample
         fields = ('description', 'tube', 'sample_type', 'collection', 'id', 'location',)
@@ -82,23 +101,27 @@ class BacteriaSerializer(serializers.ModelSerializer):
         model = Bacteria
         fields = ('strain', 'genus', 'species', 'id',)
 
-class PhageSerializer(serializers.ModelSerializer):
-    lysate = serializers.SerializerMethodField()
-    phagednaprep = serializers.SerializerMethodField()
-    env_sample = serializers.SerializerMethodField()
+class LysateSerializerDetail(serializers.ModelSerializer):
+    tube = TubeSerializer()
+    host_lims = BacteriaSerializer(many=True, read_only=True)
+    env_sample = EnvironmentalSampleSerializer(many=True, read_only=True)
+    phagednaprep =PhageDNAPrepSerializerDetail()
+
+    class Meta:
+        model = Lysate
+        fields = ('isolation', 'tube', 'source', 'phage', 'host_lims', 'owner', 'env_sample', 'id', 'oldid', 'phagednaprep')
+
+class PhageSerializerList(serializers.ModelSerializer):
+
+    class Meta:
+        model = Phage
+        fields = ('historical_names', 'primary_name', 'id')
+
+class PhageSerializerDetail(serializers.ModelSerializer):
+    lysate = LysateSerializerDetail()
 
     class Meta:
         model = Phage
         fields = (
-            'historical_names', 'primary_name', 'id',
-            'lysate', 'phagednaprep', 'env_sample',
+            'historical_names', 'primary_name', 'id', 'lysate'
         )
-
-    def get_lysate(self, obj):
-        return LysateSerializer(obj.lysate).data
-
-    def get_phagednaprep(self, obj):
-        return PhageDNAPrepSerializer(obj.lysate.phagednaprep).data
-
-    def get_env_sample(self, obj):
-        return EnvironmentalSampleSerializer(obj.lysate.env_sample).data
