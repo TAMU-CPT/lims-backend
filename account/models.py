@@ -54,7 +54,7 @@ class Account(models.Model):
     netid = models.CharField(max_length=32, blank=True, help_text="Their netid, if available")
     phone_number = models.CharField(max_length=16, blank=True, help_text="A phone number which they will continue to be reachable at (i.e. not an office phone #)")
 
-    tags = tagulous.models.TagField(PersonTag, blank=True, help_text="Tags allow us to group users easily and see in what way they were involved with the CPT's research")
+    # tags = tagulous.models.TagField(PersonTag, blank=True, help_text="Tags allow us to group users easily and see in what way they were involved with the CPT's research")
 
     orcid = models.CharField(max_length=32, blank=True, help_text="See <a href='https://orcid.org' target='_blank'>https://orcid.org</a>")
     orgs = models.ManyToManyField(Organisation, blank=True, help_text="Organisations the person is associated with. Please add an appropriate organisation if there is not one available")

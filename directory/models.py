@@ -9,24 +9,24 @@ PERSONTAG_TYPES = (
 )
 
 
-import tagulous.models
+# import tagulous.models
 
-class PersonTag(tagulous.models.TagTreeModel):
-    class TagMeta:
-        initial = [
-            'BICH464/2012',
-            'BICH464/2013',
-            'BICH464/2014',
-            'BICH464/2015',
-            'BICH464/2016',
-            'CPT/PI',
-            'CPT/Gill',
-            'CPT/Young',
-            'CPT/Gonzalez',
-            'Staff',
-        ]
-        space_delimiter = True
-        autocomplete_view = 'person_tags_autocomplete'
+# class PersonTag(tagulous.models.TagTreeModel):
+    # class TagMeta:
+        # initial = [
+            # 'BICH464/2012',
+            # 'BICH464/2013',
+            # 'BICH464/2014',
+            # 'BICH464/2015',
+            # 'BICH464/2016',
+            # 'CPT/PI',
+            # 'CPT/Gill',
+            # 'CPT/Young',
+            # 'CPT/Gonzalez',
+            # 'Staff',
+        # ]
+        # space_delimiter = True
+        # # autocomplete_view = 'person_tags_autocomplete'
 
 
 class Organisation(models.Model):

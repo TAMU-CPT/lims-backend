@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand, CommandError
-from directory.models import PersonTag
 from account.models import Account, EmailAddress
 from django.contrib.auth.models import User
 
@@ -9,15 +8,15 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('file', type=file)
 
-    def personTagMemo(self, tagName):
-        if not hasattr(self, '_tags'):
-            self._tags = {}
+    # def personTagMemo(self, tagName):
+        # if not hasattr(self, '_tags'):
+            # self._tags = {}
 
-        pt = PersonTag.objects.get_or_create(name=tagName)
+        # pt = PersonTag.objects.get_or_create(name=tagName)
 
-        self._tags[tagName] = pt[0]
+        # self._tags[tagName] = pt[0]
 
-        return self._tags[tagName]
+        # return self._tags[tagName]
 
     def handle(self, *args, **options):
         fn = options['file']
@@ -81,14 +80,14 @@ class Command(BaseCommand):
 
             p.save()
 
-            pts = []
+            # pts = []
 
-            for t in md['tags'].strip().split(';'):
-                if len(t.strip()) == 0:
-                    continue
+            # for t in md['tags'].strip().split(';'):
+                # if len(t.strip()) == 0:
+                    # continue
 
-                pt = self.personTagMemo(t.strip())
-                pts.append(pt)
+                # # pt = self.personTagMemo(t.strip())
+                # # pts.append(pt)
 
-            p.tags = pts
-            p.save()
+            # p.tags = pts
+            # p.save()

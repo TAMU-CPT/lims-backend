@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from django.contrib.auth.models import User, Group
-from directory.serializers import UserSerializer, GroupSerializer, PersonTagSerializer, OrganisationSerializer, OrganisationSerializerList
-from directory.models import PersonTag, Organisation
+from directory.serializers import UserSerializer, GroupSerializer, OrganisationSerializer, OrganisationSerializerList
+from directory.models import Organisation
 import django_filters
 
 
@@ -22,10 +22,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     # filter_fields = ('name', 'id')
     filter_class = GroupFilter
     serializer_class = GroupSerializer
-
-class PersonTagViewSet(viewsets.ModelViewSet):
-    queryset = PersonTag.objects.all()
-    serializer_class = PersonTagSerializer
 
 class OrganisationViewSet(viewsets.ModelViewSet):
     queryset = Organisation.objects.all()

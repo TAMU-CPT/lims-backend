@@ -155,15 +155,16 @@ class Lysate(models.Model):
     # HAS_CPT_HASHID
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
+    phage = models.OneToOneField('Phage')
 
     # Tube Storage
     tube = models.OneToOneField(Tube)
 
     def __unicode__(self):
-        if self.env_sample.count() == 1:
-            return smart_unicode(u'Lysate from {}'.format(self.env_sample.get()))
+        if self.phage.env_sample.count() == 1:
+            return smart_unicode(u'Lysate from {}'.format(self.phage.env_sample.get()))
         else:
-            return smart_unicode(u'Lysate from {} samples'.format(self.env_sample.count()))
+            return smart_unicode(u'Lysate from {} samples'.format(self.phage.env_sample.count()))
 
     def get_absolute_url(self):
         return reverse_lazy('lims:lysate-detail', args=[self.id])
@@ -284,7 +285,7 @@ class SequencingRunPoolItem(models.Model):
 
 class Assembly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    sequencing_run = models.ForeignKey(SequencingRunPool, blank=True, null=True)
+    sequencing_run = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
     galaxy_dataset = models.URLField()
     notes = models.TextField(blank=True)
 
@@ -298,7 +299,6 @@ class Assembly(models.Model):
 class Phage(models.Model):
     primary_name = models.CharField(max_length=64, unique=True)
     historical_names = models.TextField() # JSON encoded list of old names
-    lysate = models.OneToOneField(Lysate)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)

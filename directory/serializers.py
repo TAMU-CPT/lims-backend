@@ -30,10 +30,10 @@ class GrouplessUserSerializer(serializers.ModelSerializer):
     def get_name(self, obj):
         return obj.account.name
 
-class PersonTagSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = PersonTag
-        fields = ('id',)
+# class PersonTagSerializer(serializers.HyperlinkedModelSerializer):
+    # class Meta:
+        # model = PersonTag
+        # fields = ('id',)
 
 class OrganisationSerializer(serializers.HyperlinkedModelSerializer):
     members = serializers.SerializerMethodField(read_only=True)
