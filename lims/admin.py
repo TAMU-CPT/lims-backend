@@ -11,7 +11,7 @@ class StorageLocationAdmin(admin.ModelAdmin):
 
 class AssemblyAdmin(admin.ModelAdmin):
     queryset = Assembly.objects.all()
-    list_display = ('notes', 'sequencing_run', 'galaxy_dataset', 'id')
+    list_display = ('notes', 'sequencing_run_pool_item', 'galaxy_dataset', 'id')
 
 class TubeTypeAdmin(admin.ModelAdmin):
     queryset = TubeType.objects.all()

@@ -20,17 +20,22 @@ class SeqRunExperimentalResultDetailSerializer(serializers.ModelSerializer):
         fields = ('date', 'experiment', 'id', 'run_by', 'result',)
 
 class SequencingRunSerializer(serializers.ModelSerializer):
+    methods = SeqRunExperimentSerializer()
+
     class Meta:
         model = SequencingRun
         fields = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'id', 'name',)
 
 class SequencingRunPoolSerializer(serializers.ModelSerializer):
+    run = SequencingRunSerializer()
     class Meta:
         model = SequencingRunPool
         fields = ('run', 'id', 'pool',)
 
 class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
     # dna_conc = SeqRunExperimentalResultDetailSerializer(many=True)
+    pool = SequencingRunPoolSerializer()
+
     class Meta:
         model = SequencingRunPoolItem
         fields = ('id', 'pool',)
@@ -58,10 +63,10 @@ class StorageLocationSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'container_type', 'location',)
 
 class AssemblySerializer(serializers.ModelSerializer):
-    sequencing_run = SequencingRunPoolItemSerializer()
+    sequencing_run_pool_item = SequencingRunPoolItemSerializer()
     class Meta:
         model = Assembly
-        fields = ('notes', 'sequencing_run', 'galaxy_dataset', 'id')
+        fields = ('notes', 'sequencing_run_pool_item', 'galaxy_dataset', 'id')
 
 class ExperimentSerializer(serializers.ModelSerializer):
     class Meta:

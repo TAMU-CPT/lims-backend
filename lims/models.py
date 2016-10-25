@@ -284,7 +284,7 @@ class SequencingRunPoolItem(models.Model):
 
 class Assembly(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    sequencing_run = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
+    sequencing_run_pool_item = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
     galaxy_dataset = models.URLField()
     notes = models.TextField(blank=True)
 
