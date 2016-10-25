@@ -271,7 +271,7 @@ class SequencingRunPool(models.Model):
 
 class SequencingRunPoolItem(models.Model):
     pool = models.ForeignKey(SequencingRunPool)
-    dna_conc = models.ManyToManyField(ExperimentalResult, blank=True)
+    dna_conc = models.ForeignKey(ExperimentalResult, blank=True)
 
     def volumeInMix(self, desiredSize):
         if self.pool.poolSize() > 0:
