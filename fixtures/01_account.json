@@ -9,7 +9,6 @@
          "phone_number" : "7138518669",
          "nickname" : "",
          "user" : 1,
-         "tags" : [],
          "theme" : "default",
          "netid" : "esr",
          "original_id" : "",
@@ -24,7 +23,6 @@
    {
       "fields" : {
          "theme" : "default",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "8710872741",
@@ -47,7 +45,6 @@
          "phone_number" : "9592581480",
          "user" : 3,
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "netid" : "ewwrv",
          "initials" : "",
@@ -63,7 +60,6 @@
       "model" : "account.account",
       "pk" : 4,
       "fields" : {
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "9930258765",
          "user" : 4,
@@ -89,7 +85,6 @@
          "original_id" : "3",
          "netid" : "eww96",
          "theme" : "default",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "3263888598",
@@ -105,7 +100,6 @@
          "orcid" : "",
          "timezone" : "UTC",
          "theme" : "default",
-         "tags" : [],
          "user" : 6,
          "orgs" : [],
          "phone_number" : "9145513998",
@@ -125,7 +119,6 @@
          "netid" : "vne0r",
          "initials" : "",
          "original_id" : "5",
-         "tags" : [],
          "user" : 7,
          "orgs" : [],
          "phone_number" : "4884524891",
@@ -143,7 +136,6 @@
          "nickname" : "",
          "phone_number" : "8851763057",
          "user" : 8,
-         "tags" : [],
          "initials" : "",
          "original_id" : "6",
          "netid" : "mw5es",
@@ -165,7 +157,6 @@
          "phone_number" : "1397107551",
          "user" : 9,
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "netid" : "t2fks",
          "initials" : "",
@@ -180,7 +171,6 @@
          "initials" : "",
          "netid" : "ankpv",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "1331099966",
          "user" : 10,
@@ -204,7 +194,6 @@
          "initials" : "",
          "netid" : "oi6ni",
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "0753567581",
          "orgs" : [],
          "user" : 11,
@@ -218,7 +207,6 @@
          "original_id" : "0",
          "netid" : "yf5wp",
          "theme" : "default",
-         "tags" : [],
          "user" : 12,
          "orgs" : [],
          "phone_number" : "7521974540",
@@ -245,8 +233,7 @@
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "5671847518",
-         "user" : 13,
-         "tags" : []
+         "user" : 13
       }
    },
    {
@@ -259,7 +246,6 @@
          "initials" : "",
          "netid" : "hokyk",
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "7722404255",
          "orgs" : [],
          "nickname" : "",
@@ -275,7 +261,6 @@
          "name" : "Alicia g Gildea",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "phone_number" : "1813447334",
          "orgs" : [],
          "user" : 15,
@@ -298,7 +283,6 @@
          "orgs" : [],
          "user" : 16,
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "netid" : "xfwyb",
          "initials" : "",
@@ -318,7 +302,6 @@
          "orgs" : [],
          "phone_number" : "4308222495",
          "user" : 17,
-         "tags" : [],
          "theme" : "default",
          "netid" : "us7si",
          "initials" : "",
@@ -340,8 +323,7 @@
          "orgs" : [],
          "phone_number" : "9112015000",
          "user" : 18,
-         "nickname" : "",
-         "tags" : []
+         "nickname" : ""
       }
    },
    {
@@ -349,7 +331,6 @@
       "pk" : 19,
       "fields" : {
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "nickname" : "",
          "phone_number" : "0175437755",
@@ -373,7 +354,6 @@
          "user" : 20,
          "phone_number" : "1857661294",
          "nickname" : "",
-         "tags" : [],
          "orcid" : "",
          "timezone" : "UTC",
          "name" : "Edna i West",
@@ -389,7 +369,6 @@
          "initials" : "",
          "netid" : "lo3le",
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "2841923059",
          "orgs" : [],
          "user" : 21,
@@ -407,7 +386,6 @@
          "initials" : "",
          "netid" : "dd4h3",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "1550914864",
          "user" : 22,
@@ -431,7 +409,6 @@
          "nickname" : "",
          "phone_number" : "2489132208",
          "user" : 23,
-         "tags" : [],
          "orcid" : "",
          "timezone" : "UTC",
          "name" : "Carole c Gumbs",
@@ -449,7 +426,6 @@
          "orgs" : [],
          "nickname" : "",
          "user" : 24,
-         "tags" : [],
          "orcid" : "",
          "timezone" : "UTC",
          "name" : "Joanne v Maldonado",
@@ -464,7 +440,6 @@
          "netid" : "ehpga",
          "initials" : "",
          "original_id" : "3",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "0312141883",
@@ -484,7 +459,6 @@
          "orcid" : "",
          "timezone" : "UTC",
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "0306044979",
          "orgs" : [],
          "user" : 26,
@@ -499,7 +473,6 @@
    {
       "model" : "account.account",
       "fields" : {
-         "tags" : [],
          "phone_number" : "3458609989",
          "orgs" : [],
          "nickname" : "",
@@ -522,7 +495,6 @@
          "name" : "Jessica i Nichols",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "phone_number" : "5995489668",
          "orgs" : [],
          "user" : 28,
@@ -543,7 +515,6 @@
          "orgs" : [],
          "phone_number" : "5875281804",
          "user" : 29,
-         "tags" : [],
          "initials" : "",
          "original_id" : "7",
          "netid" : "1il7l",
@@ -556,7 +527,6 @@
    {
       "fields" : {
          "theme" : "default",
-         "tags" : [],
          "user" : 30,
          "orgs" : [
             1
@@ -580,7 +550,6 @@
          "netid" : "1j8zd",
          "initials" : "",
          "original_id" : "9",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "4000660925",
@@ -606,8 +575,7 @@
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "6274019235",
-         "user" : 32,
-         "tags" : []
+         "user" : 32
       },
       "pk" : 32,
       "model" : "account.account"
@@ -620,7 +588,6 @@
          "user" : 33,
          "phone_number" : "5086021249",
          "nickname" : "",
-         "tags" : [],
          "initials" : "",
          "original_id" : "1",
          "netid" : "x38gs",
@@ -634,7 +601,6 @@
    {
       "pk" : 34,
       "fields" : {
-         "tags" : [],
          "phone_number" : "1599629815",
          "orgs" : [],
          "nickname" : "",
@@ -654,7 +620,6 @@
       "model" : "account.account",
       "pk" : 35,
       "fields" : {
-         "tags" : [],
          "phone_number" : "5916032442",
          "orgs" : [],
          "nickname" : "",
@@ -676,7 +641,6 @@
          "name" : "Florence m Milosevic",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "0434080265",
          "user" : 36,
@@ -694,7 +658,6 @@
          "netid" : "llxk8",
          "original_id" : "5",
          "initials" : "",
-         "tags" : [],
          "user" : 37,
          "orgs" : [],
          "phone_number" : "1003714643",
@@ -717,7 +680,6 @@
          "orgs" : [],
          "user" : 38,
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "netid" : "29z2l",
          "initials" : "",
@@ -729,7 +691,6 @@
    {
       "fields" : {
          "theme" : "default",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "4872079774",
@@ -753,7 +714,6 @@
          "orgs" : [],
          "nickname" : "",
          "user" : 40,
-         "tags" : [],
          "initials" : "",
          "original_id" : "8",
          "netid" : "hqly0",
@@ -772,7 +732,6 @@
          "original_id" : "9",
          "netid" : "504co",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "6138224980",
          "nickname" : "",
@@ -797,8 +756,7 @@
          "orgs" : [],
          "user" : 42,
          "phone_number" : "4778283769",
-         "nickname" : "",
-         "tags" : []
+         "nickname" : ""
       },
       "model" : "account.account"
    },
@@ -808,7 +766,6 @@
          "netid" : "5gaz4",
          "original_id" : "1",
          "initials" : "",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "9271401969",
@@ -832,7 +789,6 @@
          "phone_number" : "3735787278",
          "nickname" : "",
          "user" : 44,
-         "tags" : [],
          "theme" : "default",
          "timezone" : "UTC",
          "orcid" : "",
@@ -850,7 +806,6 @@
          "netid" : "fhs15",
          "original_id" : "3",
          "initials" : "",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "0066204022",
          "user" : 45,
@@ -867,7 +822,6 @@
          "initials" : "",
          "netid" : "5gif1",
          "theme" : "default",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [
             1
@@ -887,7 +841,6 @@
          "name" : "Deborah e Macdonald",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [],
          "nickname" : "",
          "phone_number" : "6542702064",
@@ -913,8 +866,7 @@
          "phone_number" : "1371243609",
          "orgs" : [],
          "nickname" : "",
-         "user" : 48,
-         "tags" : []
+         "user" : 48
       },
       "pk" : 48
    },
@@ -925,7 +877,6 @@
          "name" : "Lucile q Betterton",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "5820836755",
          "nickname" : "",
@@ -947,7 +898,6 @@
          "orgs" : [],
          "user" : 50,
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "timezone" : "UTC",
          "orcid" : "",
@@ -963,7 +913,6 @@
          "name" : "Judith z Mcgill",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "2077010044",
          "user" : 51,
@@ -985,7 +934,6 @@
          "orgs" : [],
          "nickname" : "",
          "user" : 52,
-         "tags" : [],
          "theme" : "default",
          "netid" : "hki2t",
          "initials" : "",
@@ -999,7 +947,6 @@
       "pk" : 53,
       "fields" : {
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "8461906994",
          "orgs" : [],
          "user" : 53,
@@ -1026,8 +973,7 @@
          "phone_number" : "2952713595",
          "orgs" : [],
          "nickname" : "",
-         "user" : 54,
-         "tags" : []
+         "user" : 54
       },
       "pk" : 54,
       "model" : "account.account"
@@ -1038,7 +984,6 @@
          "netid" : "eds68",
          "initials" : "",
          "original_id" : "3",
-         "tags" : [],
          "phone_number" : "7824595209",
          "orgs" : [],
          "user" : 55,
@@ -1055,7 +1000,6 @@
       "pk" : 56,
       "fields" : {
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "2949159845",
          "orgs" : [],
          "user" : 56,
@@ -1085,8 +1029,7 @@
          "phone_number" : "1363653533",
          "orgs" : [],
          "user" : 57,
-         "nickname" : "",
-         "tags" : []
+         "nickname" : ""
       }
    },
    {
@@ -1101,7 +1044,6 @@
          "initials" : "",
          "netid" : "zso8j",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "7508114390",
          "nickname" : "",
@@ -1115,7 +1057,6 @@
          "name" : "Pam d Huslander",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "9762340757",
@@ -1138,7 +1079,6 @@
          "original_id" : "8",
          "netid" : "1yck6",
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "5586970443",
          "orgs" : [],
          "nickname" : "",
@@ -1156,7 +1096,6 @@
          "phone_number" : "8747696983",
          "nickname" : "",
          "user" : 61,
-         "tags" : [],
          "theme" : "default",
          "timezone" : "UTC",
          "orcid" : "",
@@ -1177,7 +1116,6 @@
          "phone_number" : "2591131723",
          "nickname" : "",
          "user" : 62,
-         "tags" : [],
          "theme" : "default",
          "netid" : "fxqlp",
          "initials" : "",
@@ -1195,7 +1133,6 @@
          "netid" : "cj62g",
          "initials" : "",
          "original_id" : "1",
-         "tags" : [],
          "orgs" : [],
          "user" : 63,
          "phone_number" : "4317404177",
@@ -1213,7 +1150,6 @@
          "netid" : "2ibfm",
          "original_id" : "2",
          "initials" : "",
-         "tags" : [],
          "orgs" : [],
          "nickname" : "",
          "phone_number" : "5963966707",
@@ -1230,7 +1166,6 @@
          "name" : "Joan t Francis",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "phone_number" : "8211972510",
          "orgs" : [],
          "user" : 65,
@@ -1255,7 +1190,6 @@
          "phone_number" : "1475376259",
          "user" : 66,
          "nickname" : "",
-         "tags" : [],
          "theme" : "default"
       },
       "pk" : 66
@@ -1273,7 +1207,6 @@
          "orgs" : [],
          "phone_number" : "0962517508",
          "nickname" : "",
-         "tags" : [],
          "original_id" : "5",
          "initials" : "",
          "netid" : "lk69m"
@@ -1285,7 +1218,6 @@
          "nickname" : "",
          "phone_number" : "4564878647",
          "user" : 68,
-         "tags" : [],
          "theme" : "default",
          "netid" : "bsd4d",
          "original_id" : "6",
@@ -1306,7 +1238,6 @@
          "orcid" : "",
          "timezone" : "UTC",
          "theme" : "default",
-         "tags" : [],
          "phone_number" : "0432505773",
          "orgs" : [],
          "user" : 69,
@@ -1323,7 +1254,6 @@
          "netid" : "mf29l",
          "original_id" : "8",
          "initials" : "",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "7354601550",
@@ -1348,7 +1278,6 @@
          "user" : 71,
          "phone_number" : "4058651597",
          "nickname" : "",
-         "tags" : [],
          "orcid" : "",
          "timezone" : "UTC",
          "name" : "Kimberly i Parker",
@@ -1363,7 +1292,6 @@
          "initials" : "",
          "netid" : "27toe",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "5647938538",
          "user" : 72,
@@ -1382,7 +1310,6 @@
          "orgs" : [],
          "phone_number" : "4533006283",
          "nickname" : "",
-         "tags" : [],
          "initials" : "",
          "original_id" : "1",
          "netid" : "xkd1e",
@@ -1404,7 +1331,6 @@
          "orgs" : [],
          "phone_number" : "3316289010",
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "netid" : "wf0gv",
          "original_id" : "2",
@@ -1422,7 +1348,6 @@
          "netid" : "441wy",
          "original_id" : "3",
          "initials" : "",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "2284570755",
@@ -1439,7 +1364,6 @@
          "orcid" : "",
          "timezone" : "UTC",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "nickname" : "",
          "phone_number" : "3062701912",
@@ -1455,7 +1379,6 @@
       "pk" : 77,
       "fields" : {
          "theme" : "default",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "7891455714",
@@ -1482,7 +1405,6 @@
          "user" : 78,
          "phone_number" : "5909638155",
          "nickname" : "",
-         "tags" : [],
          "theme" : "default"
       },
       "pk" : 78,
@@ -1494,7 +1416,6 @@
          "user" : 79,
          "phone_number" : "0258849804",
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "netid" : "bru5b",
          "initials" : "",
@@ -1513,7 +1434,6 @@
          "name" : "Frances j Rhoades",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "6778743983",
          "nickname" : "",
@@ -1537,7 +1457,6 @@
          "orgs" : [],
          "phone_number" : "1022169408",
          "user" : 81,
-         "tags" : [],
          "initials" : "",
          "original_id" : "9",
          "netid" : "3s2g2"
@@ -1548,7 +1467,6 @@
    {
       "pk" : 82,
       "fields" : {
-         "tags" : [],
          "phone_number" : "6602669481",
          "orgs" : [],
          "user" : 82,
@@ -1581,7 +1499,6 @@
          "user" : 83,
          "phone_number" : "3322763000",
          "nickname" : "",
-         "tags" : [],
          "theme" : "default"
       }
    },
@@ -1597,7 +1514,6 @@
          "original_id" : "2",
          "netid" : "euwdw",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "7522275973",
          "nickname" : "",
@@ -1614,7 +1530,6 @@
          "netid" : "66t7m",
          "original_id" : "3",
          "initials" : "",
-         "tags" : [],
          "phone_number" : "6560151781",
          "orgs" : [
             1
@@ -1632,7 +1547,6 @@
          "name" : "Loretta y Gonzalez",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [],
          "phone_number" : "8975296661",
          "user" : 86,
@@ -1652,7 +1566,6 @@
          "name" : "Marie f Switzer",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [
             1
          ],
@@ -1676,7 +1589,6 @@
          "phone_number" : "7804923188",
          "nickname" : "",
          "user" : 88,
-         "tags" : [],
          "orcid" : "",
          "timezone" : "UTC",
          "name" : "Danielle q Moffat",
@@ -1692,7 +1604,6 @@
          "orcid" : "",
          "timezone" : "UTC",
          "theme" : "default",
-         "tags" : [],
          "nickname" : "",
          "orgs" : [],
          "phone_number" : "7118813282",
@@ -1712,7 +1623,6 @@
          "netid" : "cmfo3",
          "initials" : "",
          "original_id" : "8",
-         "tags" : [],
          "user" : 90,
          "orgs" : [],
          "phone_number" : "4486481560",
@@ -1729,7 +1639,6 @@
          "original_id" : "9",
          "netid" : "xbugz",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "nickname" : "",
          "phone_number" : "2162426260",
@@ -1747,7 +1656,6 @@
          "initials" : "",
          "netid" : "s0pt8",
          "theme" : "default",
-         "tags" : [],
          "orgs" : [],
          "user" : 92,
          "phone_number" : "0636126312",
@@ -1770,7 +1678,6 @@
          "netid" : "8kc6f",
          "initials" : "",
          "original_id" : "1",
-         "tags" : [],
          "user" : 93,
          "orgs" : [],
          "phone_number" : "8710374543",
@@ -1795,8 +1702,7 @@
             1
          ],
          "user" : 94,
-         "nickname" : "",
-         "tags" : []
+         "nickname" : ""
       },
       "model" : "account.account"
    },
@@ -1809,7 +1715,6 @@
          ],
          "user" : 95,
          "nickname" : "",
-         "tags" : [],
          "theme" : "default",
          "netid" : "cptz",
          "initials" : "CT",
@@ -1832,7 +1737,6 @@
          "netid" : "d7s75",
          "original_id" : "4",
          "initials" : "",
-         "tags" : [],
          "orgs" : [
             1
          ],
@@ -1851,7 +1755,6 @@
          ],
          "nickname" : "",
          "user" : 97,
-         "tags" : [],
          "theme" : "default",
          "netid" : "sykbw",
          "original_id" : "5",
@@ -1873,7 +1776,6 @@
          "netid" : "siuhv",
          "initials" : "",
          "original_id" : "6",
-         "tags" : [],
          "orgs" : [
             1
          ],
@@ -1898,14 +1800,12 @@
          "orgs" : [],
          "phone_number" : "7054882042",
          "nickname" : "",
-         "tags" : [],
          "theme" : "default"
       },
       "pk" : 99
    },
    {
       "fields" : {
-         "tags" : [],
          "phone_number" : "0390665797",
          "orgs" : [
             1
@@ -1930,7 +1830,6 @@
          "name" : "Elaine v Gouty",
          "timezone" : "UTC",
          "orcid" : "",
-         "tags" : [],
          "orgs" : [
             1
          ],
