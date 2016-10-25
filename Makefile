@@ -14,12 +14,15 @@ fixtures/%.json:
 	python manage.py dumpdata $(notdir $(basename $@)) | json_pp > fixtures/$(notdir $(basename $@)).json
 
 dj_clean_migrations: ## Remove migrations
-	rm -f base/migrations/0*
-	rm -f directory/migrations/0*
-	rm -f lims/migrations/0*
-	rm -f project/migrations/0*
-	rm -f search/migrations/0*
-	rm -f web/migrations/0*
+	rm -f \
+		account/migrations/0*py* \
+		bioproject/migrations/0*py* \
+		directory/migrations/0*py* \
+		lims/migrations/0*py*
+
+dj_sync: ## Make migrations
+	python manage.py makemigrations
+	python manage.py migrate
 
 dj_load_fixtures: ## Load all fixture data
 	cd fixtures && python ../manage.py loaddata *
@@ -27,7 +30,6 @@ dj_load_fixtures: ## Load all fixture data
 dj_run: ## Run the server
 	python manage.py migrate
 	python manage.py runserver
-
 
 pg_launch: ## launch postgres container
 	@docker run -d -p 5432:5432 -v $(shell pwd)/.pgdata:/var/lib/postgresql/data/ mdillon/postgis
