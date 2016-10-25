@@ -151,17 +151,6 @@ class Bacteria(models.Model):
         return reverse_lazy('lims:bacteria-detail', args=[self.id])
 
 
-class Phage(models.Model):
-    primary_name = models.CharField(max_length=64, unique=True)
-    historical_names = models.TextField() # JSON encoded list of old names
-    lysate = models.OneToOneField(Lysate)
-    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
-    host_lims = models.ManyToManyField(Bacteria, blank=True)
-    owner = models.ForeignKey(Account, blank=True, null=True)
-    source = models.ForeignKey(Organisation, blank=True, null=True)
-    assembly = models.ForeignKey(Assembly, blank=True, null=True)
-
-
 class Lysate(models.Model):
     # HAS_CPT_HASHID
     oldid = models.CharField(max_length=64, blank=True)
@@ -304,3 +293,14 @@ class Assembly(models.Model):
 
     def __unicode__(self):
         return 'Assembly %s' % self.id
+
+
+class Phage(models.Model):
+    primary_name = models.CharField(max_length=64, unique=True)
+    historical_names = models.TextField() # JSON encoded list of old names
+    lysate = models.OneToOneField(Lysate)
+    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
+    host_lims = models.ManyToManyField(Bacteria, blank=True)
+    owner = models.ForeignKey(Account, blank=True, null=True)
+    source = models.ForeignKey(Organisation, blank=True, null=True)
+    assembly = models.ForeignKey(Assembly, blank=True, null=True)

@@ -11,7 +11,7 @@ class StorageLocationAdmin(admin.ModelAdmin):
 
 class AssemblyAdmin(admin.ModelAdmin):
     queryset = Assembly.objects.all()
-    list_display = ('notes', 'sequencing_run', 'galaxy_dataset', 'id', 'dna_prep',)
+    list_display = ('notes', 'sequencing_run', 'galaxy_dataset', 'id')
 
 class TubeTypeAdmin(admin.ModelAdmin):
     queryset = TubeType.objects.all()
@@ -63,11 +63,11 @@ class EnvironmentalSampleAdmin(admin.ModelAdmin):
 
 class LysateAdmin(admin.ModelAdmin):
     queryset = Lysate.objects.all()
-    list_display = ('isolation', 'tube', 'source', 'phage', 'owner', 'id', 'oldid',)
+    list_display = ('id', 'oldid', 'isolation', 'tube')
 
 class BacteriaAdmin(admin.ModelAdmin):
     queryset = Bacteria.objects.all()
-    list_display = ('strain', 'genus', 'species', 'id',)
+    list_display = ('id', 'strain', 'genus', 'species')
 
 admin.site.register(Box, BoxAdmin)
 admin.site.register(StorageLocation, StorageLocationAdmin)
