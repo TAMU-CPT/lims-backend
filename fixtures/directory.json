@@ -1,0 +1,26 @@
+[
+   {
+      "fields" : {
+         "emails" : "cpt@tamu.edu",
+         "fax_number" : "123-456-9999",
+         "name" : "Center for Phage Technology",
+         "website" : "https://cpt.tamu.edu/",
+         "street_address" : "2128 TAMU\r\nCollege Station, Texas, 77840\r\nUnited States of America",
+         "phone_number" : "123-456-7890"
+      },
+      "model" : "directory.organisation",
+      "pk" : 1
+   },
+   {
+      "fields" : {
+         "street_address" : "",
+         "website" : "",
+         "phone_number" : "1234567890",
+         "fax_number" : "0321654321",
+         "emails" : "asdfasdfjkhwjklehf",
+         "name" : "TAMU Bioinformatics Group"
+      },
+      "model" : "directory.organisation",
+      "pk" : 2
+   }
+]
