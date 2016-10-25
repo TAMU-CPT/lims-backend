@@ -1,11 +1,29 @@
 from rest_framework import viewsets
 
-from account.serializers import AccountSerializer, EmailConfirmationSerializer, SignupCodeResultSerializer, SignupCodeSerializer, EmailAddressSerializer, AccountDeletionSerializer
+from account.serializers import AccountSerializer, EmailConfirmationSerializer, SignupCodeResultSerializer, SignupCodeSerializer, EmailAddressSerializer, AccountDeletionSerializer, AccountSerializerLight
 from account.models import Account, EmailConfirmation, SignupCodeResult, SignupCode, EmailAddress, AccountDeletion
+import django_filters
+
+
+class AccountFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(name="name", lookup_type="contains")
+    email = django_filters.CharFilter(name="email", lookup_type="contains")
+
+    class Meta:
+        model = Account
+        fields = ['name', 'id', 'email']
+
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
-    serializer_class = AccountSerializer
+    filter_class = AccountFilter
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return AccountSerializerLight
+
+        return AccountSerializer
+
 
 class EmailConfirmationViewSet(viewsets.ModelViewSet):
     queryset = EmailConfirmation.objects.all()

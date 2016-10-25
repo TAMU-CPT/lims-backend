@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from django.db.models import Q
 
 from lims.serializers import BoxSerializer, StorageLocationSerializer, AssemblySerializer, TubeTypeSerializer, ExperimentalResultSerializer, SequencingRunSerializer, TubeSerializer, SampleTypeSerializer, ExperimentSerializer, PhageSerializer, PhageDNAPrepSerializer, SequencingRunPoolSerializer, SequencingRunPoolItemSerializer, ContainerTypeSerializer, EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer
 from lims.models import Box, StorageLocation, Assembly, TubeType, ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, EnvironmentalSample, Lysate, Bacteria
@@ -40,8 +41,19 @@ class ExperimentViewSet(viewsets.ModelViewSet):
     serializer_class = ExperimentSerializer
 
 class PhageViewSet(viewsets.ModelViewSet):
-    queryset = Phage.objects.all()
+    # queryset = Phage.objects.all()
     serializer_class = PhageSerializer
+
+    def get_queryset(self):
+        qs = Phage.objects.all()
+        name = self.request.query_params.get('name', None)
+        if name is not None:
+            qs = qs.filter(
+                Q(primary_name__icontains=name) |
+                Q(historical_names__icontains=name)
+            )
+        return qs
+
 
 class PhageDNAPrepViewSet(viewsets.ModelViewSet):
     queryset = PhageDNAPrep.objects.all()

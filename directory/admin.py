@@ -7,7 +7,7 @@ class PersonTagAdmin(admin.ModelAdmin):
 
 class OrganisationAdmin(admin.ModelAdmin):
     queryset = Organisation.objects.all()
-    list_display = ('phone_number', 'website', 'name', 'fax_number', 'id', 'emails', 'street_address',)
+    list_display = ('id', 'phone_number', 'website', 'name', 'fax_number', 'emails', 'street_address',)
 
 admin.site.register(PersonTag, PersonTagAdmin)
 admin.site.register(Organisation, OrganisationAdmin)

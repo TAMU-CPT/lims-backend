@@ -15,3 +15,4 @@ pinax-announcements==2.0.3
 psycopg2
 pytz==2016.4
 six
+django-filter

@@ -155,6 +155,7 @@ class Phage(models.Model):
     primary_name = models.CharField(max_length=64, unique=True)
     historical_names = models.TextField() # JSON encoded list of old names
 
+
 class Lysate(models.Model):
     # HAS_CPT_HASHID
     phage = models.OneToOneField(Phage)

@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Account, EmailConfirmation, SignupCodeResult, SignupCode, EmailAddress, AccountDeletion, AnonymousAccount
+from .models import Account, EmailConfirmation, SignupCodeResult, SignupCode, EmailAddress, AccountDeletion
 
 class AccountAdmin(admin.ModelAdmin):
     queryset = Account.objects.all()
-    list_display = ('phone_number', 'name', 'language', 'netid', 'theme', 'original_id', 'user', 'orcid', 'timezone', 'nickname', 'id', 'initials',)
+    list_display = ('id', 'phone_number', 'name', 'language', 'netid', 'theme', 'original_id', 'user', 'orcid', 'timezone', 'nickname', 'initials',)
 
 class EmailConfirmationAdmin(admin.ModelAdmin):
     queryset = EmailConfirmation.objects.all()
