@@ -271,8 +271,7 @@ class SequencingRunPool(models.Model):
 
 class SequencingRunPoolItem(models.Model):
     pool = models.ForeignKey(SequencingRunPool)
-    phage = models.ForeignKey(PhageDNAPrep)
-    dna_conc = models.FloatField(help_text='ng/µL')
+    dna_conc = models.ManyToManyField(ExperimentalResult, blank=True)
 
     def volumeInMix(self, desiredSize):
         if self.pool.poolSize() > 0:

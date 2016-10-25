@@ -51,7 +51,7 @@ class SequencingRunPoolAdmin(admin.ModelAdmin):
 
 class SequencingRunPoolItemAdmin(admin.ModelAdmin):
     queryset = SequencingRunPoolItem.objects.all()
-    list_display = ('dna_conc', 'phage', 'id', 'pool',)
+    list_display = ('id', 'pool',)
 
 class ContainerTypeAdmin(admin.ModelAdmin):
     queryset = ContainerType.objects.all()
