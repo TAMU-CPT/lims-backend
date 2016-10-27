@@ -186,18 +186,25 @@
       "fields" : {
          "notes" : "some notes",
          "galaxy_dataset" : "https://example.com",
-         "sequencing_run" : 1
+         "sequencing_run_pool_item" : 1
       },
       "model" : "lims.assembly"
+   },
+   {
+	"pk": "91b163ef-8199-47de-9bab-8f911eab7574",
+	"model": "lims.environmentalsamplecollection",
+	"fields": {
+         "env_sample" : [
+            1
+         ]
+	}
    },
    {
       "pk" : 1,
       "fields" : {
          "historical_names" : "feck, asdf, fdsa",
          "assembly" : "3dbe7552-8eb0-42c8-9613-4fc724989ece",
-         "env_sample" : [
-            1
-         ],
+		 "env_sample_collection": "91b163ef-8199-47de-9bab-8f911eab7574",
          "host_lims" : [
             1
          ],

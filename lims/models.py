@@ -295,10 +295,15 @@ class Assembly(models.Model):
         return 'Assembly %s' % self.id
 
 
+class EnvironmentalSampleCollection(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
+
+
 class Phage(models.Model):
     primary_name = models.CharField(max_length=64, unique=True)
     historical_names = models.TextField() # JSON encoded list of old names
-    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
+    env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)

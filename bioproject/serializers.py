@@ -24,9 +24,11 @@ class BioprojectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Bioproject
-        fields = ('name', 'sample', 'editingrolegroup_set',
-                  'editingroleuser_set', 'date', 'id', 'description',)
+        fields = ('id', 'name', 'description',
+                  # read only
+                  'sample', 'editingrolegroup_set', 'editingroleuser_set', 'date')
+        read_only = ('sample', 'date', 'editingrolegroup_set', 'editingroleuser_set')
 
-    def create(self, validated_data):
-        print(validated_data)
-        return None
+    def update(self, instance, validated_data):
+        print validated_data
+        return validated_data
