@@ -37,7 +37,17 @@ pg_launch: ## launch postgres container
 pg_kill: ## kill postgres container
 	@docker ps | grep postgis | awk '{print $$1}' | xargs docker kill
 
-pg_logs: ## Tail the logs from psotgres
+pg_logs: ## Tail the logs from postgres
 	@docker ps | grep postgis | awk '{print $$1}' | xargs docker logs -f
+
+pg_rm: ## Wipe out postgres database
+	sudo rm -rf .pgdata
+
+restart:
+	$(MAKE) pg_kill
+	$(MAKE) pg_rm
+	$(MAKE) pg_launch
+	sleep 5
+	$(MAKE) dj_sync
 
 .PHONY: help fixtures bootstrap clean_migrations load_fixtures pg_launch pg_kill pg_logs
