@@ -34,6 +34,14 @@ class BioprojectSerializer(serializers.HyperlinkedModelSerializer):
         # print 'asdf'
         # return data
 
+    def create(self, validated_data):
+        bp = Bioproject.objects.create(
+            name=validated_data['name'],
+            description=validated_data['description'],
+        )
+        bp.save()
+        return bp
+
     def update(self, instance, validated_data):
         new_samples = []
         for sample in validated_data['sample']:
