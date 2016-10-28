@@ -5,13 +5,13 @@ help:
 
 bootstrap: ## Migrate and load fixures
 	python manage.py migrate
-	$(MAKE) dj_load_fixtures
+	$(MAKE) dj_fixtures
 
 dj_fixtures:  ## Load fixtures for base set of apps
-	python manage.py loaddata 00_auth.json
-	python manage.py loaddata 00_directory.json
+	python manage.py loaddata fixtures/00_auth.json
+	python manage.py loaddata fixtures/00_directory.json
 	python manage.py shell < fixtures/drop.py
-	python manage.py loaddata 01_account.json
+	python manage.py loaddata fixtures/01_account.json
 
 dj_clean_migrations: ## Remove migrations
 	rm -f \
