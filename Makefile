@@ -5,13 +5,13 @@ help:
 
 bootstrap: ## Migrate and load fixures
 	python manage.py migrate
-	python manage.py createsuperuser
 	$(MAKE) dj_load_fixtures
 
-dj_fixtures: fixtures/base.app.json  ## Load fixtures for base set of apps
-
-fixtures/%.json:
-	python manage.py dumpdata $(notdir $(basename $@)) | json_pp > fixtures/$(notdir $(basename $@)).json
+dj_fixtures:  ## Load fixtures for base set of apps
+	python manage.py loaddata 00_auth.json
+	python manage.py loaddata 00_directory.json
+	python manage.py shell < fixtures/drop.py
+	python manage.py loaddata 01_account.json
 
 dj_clean_migrations: ## Remove migrations
 	rm -f \
@@ -23,9 +23,6 @@ dj_clean_migrations: ## Remove migrations
 dj_sync: ## Make migrations
 	python manage.py makemigrations
 	python manage.py migrate
-
-dj_load_fixtures: ## Load all fixture data
-	cd fixtures && python ../manage.py loaddata *
 
 dj_run: ## Run the server
 	python manage.py migrate
@@ -50,4 +47,4 @@ restart:
 	sleep 5
 	$(MAKE) dj_sync
 
-.PHONY: help fixtures bootstrap clean_migrations load_fixtures pg_launch pg_kill pg_logs
+.PHONY: help fixtures bootstrap clean_migrations pg_launch pg_kill pg_logs

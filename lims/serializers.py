@@ -152,16 +152,34 @@ class EnvironmentalSampleCollectionSerializer(serializers.ModelSerializer):
         fields = ('id', 'env_sample')
 
 class PhageSerializerDetail(serializers.ModelSerializer):
-    lysate = LysateSerializerDetail()
-    env_sample_collection = EnvironmentalSampleCollectionSerializer()
+    env_sample_collection = EnvironmentalSampleCollectionSerializer(required=False, allow_null=True)
     host_lims = BacteriaSerializer(many=True)
     # owner =
     # source =
-    assembly = AssemblySerializer()
+    assembly = AssemblySerializer(required=False, allow_null=True)
 
     class Meta:
         model = Phage
         fields = (
-            'historical_names', 'primary_name', 'id', 'lysate',
-            'env_sample_collection', 'host_lims', 'owner', 'source', 'assembly',
+            'historical_names', 'primary_name', 'id', 'env_sample_collection',
+            'host_lims', 'owner', 'source', 'assembly',
         )
+
+    def update(self, instance, validated_data):
+        host_lims = validated_data['host_lims']
+        host_lims_new = []
+        for host in host_lims:
+            host_obj, created = Bacteria.objects.get_or_create(**host)
+            host['id'] = host_obj.id
+            host_lims_new.append(host_obj)
+        validated_data['host_lims'] = host_lims_new
+
+        for prop in ('historical_names', 'primary_name',
+                     'env_sample_collection', 'host_lims', 'source',
+                     'assembly'):
+            x = validated_data.get(prop, getattr(instance, prop))
+            print 'Setattr %s %s = %s' % (instance, prop, x)
+            setattr(instance, prop, x)
+
+        instance.save()
+        return validated_data
