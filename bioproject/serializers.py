@@ -2,6 +2,7 @@ from rest_framework import serializers
 from bioproject.models import EditingRoleUser, EditingRoleGroup, Bioproject
 from directory.serializers import GrouplessUserSerializer, GroupSerializer
 from lims.serializers import PhageSerializerList
+from lims.models import Phage
 
 class EditingRoleUserSerializer(serializers.HyperlinkedModelSerializer):
     user = GrouplessUserSerializer()
@@ -20,7 +21,7 @@ class EditingRoleGroupSerializer(serializers.HyperlinkedModelSerializer):
 class BioprojectSerializer(serializers.HyperlinkedModelSerializer):
     editingrolegroup_set = EditingRoleGroupSerializer(many=True, read_only=True)
     editingroleuser_set = EditingRoleUserSerializer(many=True, read_only=True)
-    sample = PhageSerializerList(many=True, read_only=True)
+    sample = PhageSerializerList(many=True)
 
     class Meta:
         model = Bioproject
@@ -29,6 +30,26 @@ class BioprojectSerializer(serializers.HyperlinkedModelSerializer):
                   'sample', 'editingrolegroup_set', 'editingroleuser_set', 'date')
         read_only = ('sample', 'date', 'editingrolegroup_set', 'editingroleuser_set')
 
+    # def to_internal_value(self, data):
+        # print 'asdf'
+        # return data
+
     def update(self, instance, validated_data):
-        print validated_data
+        new_samples = []
+        for sample in validated_data['sample']:
+            try:
+                phage = Phage.objects.get(id=sample['id'])
+            except Phage.DoesNotExist:
+                phage = Phage.objects.create(
+                    primary_name=sample['primary_name'],
+                    historical_names=sample['historical_names'],
+                )
+                # Overwrite the ID because the validated data is sent back to
+                # the end user
+                sample['id'] = phage.id
+
+            new_samples.append(phage)
+
+        # Set the samples
+        instance.sample = new_samples
         return validated_data

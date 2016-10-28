@@ -161,10 +161,7 @@ class Lysate(models.Model):
     tube = models.OneToOneField(Tube)
 
     def __unicode__(self):
-        if self.phage.env_sample.count() == 1:
-            return smart_unicode(u'Lysate from {}'.format(self.phage.env_sample.get()))
-        else:
-            return smart_unicode(u'Lysate from {} samples'.format(self.phage.env_sample.count()))
+        return smart_unicode(u'Lysate from {}'.format(self.phage.env_sample_collection))
 
     def get_absolute_url(self):
         return reverse_lazy('lims:lysate-detail', args=[self.id])
@@ -301,9 +298,9 @@ class EnvironmentalSampleCollection(models.Model):
 
 
 class Phage(models.Model):
-    primary_name = models.CharField(max_length=64, unique=True)
-    historical_names = models.TextField() # JSON encoded list of old names
-    env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True)
+    primary_name = models.CharField(max_length=64)
+    historical_names = models.TextField(blank=True) # JSON encoded list of old names
+    env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)

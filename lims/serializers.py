@@ -137,6 +137,7 @@ class LysateSerializerDetail(serializers.ModelSerializer):
         fields = ('isolation', 'tube', 'phage', 'id', 'oldid')
 
 class PhageSerializerList(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=False)
 
     class Meta:
         model = Phage

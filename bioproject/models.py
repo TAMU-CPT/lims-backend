@@ -31,13 +31,6 @@ class Bioproject(models.Model):
     def __str__(self):
         return self.name
 
-    def perform_create(self, serializer):
-        owner = self.request.user
-        serializer.save(owner=owner)
-
-    def perform_update(self, serializer):
-        print(serializer)
-
 
 class EditingRoleUser(models.Model):
     user = models.ForeignKey(User)

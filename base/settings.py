@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'etc',
     'rest_framework',
     'corsheaders',
-
     # Internal Apps
     'directory',
     'bioproject',
