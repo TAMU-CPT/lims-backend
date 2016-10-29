@@ -6,8 +6,8 @@ import django_filters
 
 
 class AccountFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(name="name", lookup_type="contains")
-    email = django_filters.CharFilter(name="email", lookup_type="contains")
+    name = django_filters.CharFilter(name="name", lookup_type="icontains")
+    email = django_filters.CharFilter(name="email", lookup_type="icontains")
 
     class Meta:
         model = Account

@@ -3,21 +3,33 @@ from account.serializers import AccountSerializerLight
 from rest_framework import serializers
 from directory.models import Organisation
 
+from rest_framework.serializers import ValidationError
+from rest_framework.validators import UniqueValidator
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('id', 'name')
+
+    def to_internal_value(self, data):
+        # https://github.com/tomchristie/django-rest-framework/issues/2403#issuecomment-95528016
+        if 'id' in data and 'id' in self.fields:
+            try:
+                obj_id = self.fields['id'].to_internal_value(data['id'])
+            except ValidationError as exc:
+                raise ValidationError({'id': exc.detail})
+            for field in self.fields.values():
+                for validator in field.validators:
+                    if type(validator) == UniqueValidator:
+                        # Exclude id from queryset for checking uniqueness
+                        validator.queryset = validator.queryset.exclude(id=obj_id)
+        return super(GroupSerializer, self).to_internal_value(data)
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     groups = GroupSerializer(many=True)
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'groups', 'account')
-
-# class AccountSerializerLight(serializers.HyperlinkedModelSerializer):
-    # class Meta:
-        # model = Account
-        # fields
 
 
 class GrouplessUserSerializer(serializers.ModelSerializer):
@@ -28,12 +40,28 @@ class GrouplessUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'name')
 
     def get_name(self, obj):
-        return obj.account.name
+        try:
+            return obj.account.name
+        except:
+            try:
+                u = User.objects.get(username=obj['username'])
+                return u.account.name
+            except:
+                return 'temporarily-unknown-username'
 
-# class PersonTagSerializer(serializers.HyperlinkedModelSerializer):
-    # class Meta:
-        # model = PersonTag
-        # fields = ('id',)
+    def to_internal_value(self, data):
+        # https://github.com/tomchristie/django-rest-framework/issues/2403#issuecomment-95528016
+        if 'id' in data and 'id' in self.fields:
+            try:
+                obj_id = self.fields['id'].to_internal_value(data['id'])
+            except ValidationError as exc:
+                raise ValidationError({'id': exc.detail})
+            for field in self.fields.values():
+                for validator in field.validators:
+                    if type(validator) == UniqueValidator:
+                        # Exclude id from queryset for checking uniqueness
+                        validator.queryset = validator.queryset.exclude(id=obj_id)
+        return super(GrouplessUserSerializer, self).to_internal_value(data)
 
 class OrganisationSerializer(serializers.HyperlinkedModelSerializer):
     members = serializers.SerializerMethodField(read_only=True)

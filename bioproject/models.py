@@ -38,7 +38,7 @@ class EditingRoleUser(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User)
     bioproject = models.ForeignKey(Bioproject)
-    role = models.IntegerField(choices=ROLES)
+    role = models.IntegerField(choices=ROLES, default=0)
 
     def __str__(self):
         return '%s can %s %s' % (
@@ -52,7 +52,7 @@ class EditingRoleGroup(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     group = models.ForeignKey(Group)
     bioproject = models.ForeignKey(Bioproject)
-    role = models.IntegerField(choices=ROLES)
+    role = models.IntegerField(choices=ROLES, default=0)
 
     def __str__(self):
         return '%s can %s %s' % (

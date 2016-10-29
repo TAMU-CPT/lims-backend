@@ -46,6 +46,11 @@ INSTALLED_APPS = [
     'etc',
     'rest_framework',
     'corsheaders',
+
+
+    # Debugging
+    'debug_toolbar',
+
     # Internal Apps
     'directory',
     'bioproject',
@@ -53,6 +58,8 @@ INSTALLED_APPS = [
     'search',
     'lims',
 ]
+
+INTERNAL_IPS = ('127.0.0.1', )
 
 SITE_ID = 1
 
@@ -82,6 +89,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CORS_ORIGIN_WHITELIST = ('localhost:10000',)

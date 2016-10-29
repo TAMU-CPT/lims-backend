@@ -23,13 +23,17 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class AccountSerializerLight(serializers.ModelSerializer):
     email = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
 
     class Meta:
         model = Account
-        fields = ('id', 'name', 'netid', 'user', 'nickname', 'initials', 'email')
+        fields = ('id', 'name', 'netid', 'user', 'nickname', 'initials', 'email', 'username')
 
     def get_email(self, obj):
         return obj.netid + '@tamu.edu'
+
+    def get_username(self, obj):
+        return obj.user.username
 
 class EmailConfirmationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
