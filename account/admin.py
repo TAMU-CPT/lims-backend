@@ -7,19 +7,19 @@ class AccountAdmin(admin.ModelAdmin):
 
 class EmailConfirmationAdmin(admin.ModelAdmin):
     queryset = EmailConfirmation.objects.all()
-    list_display = ('created', 'objects', 'key', 'email_address', 'id', 'sent',)
+    list_display = ('id', 'created', 'objects', 'key', 'email_address', 'sent',)
 
 class SignupCodeResultAdmin(admin.ModelAdmin):
     queryset = SignupCodeResult.objects.all()
-    list_display = ('timestamp', 'signup_code', 'user', 'id',)
+    list_display = ('id', 'timestamp', 'signup_code', 'user', )
 
 class SignupCodeAdmin(admin.ModelAdmin):
     queryset = SignupCode.objects.all()
-    list_display = ('code', 'created', 'notes', 'expiry', 'use_count', 'id', 'max_uses', 'inviter', 'email', 'sent',)
+    list_display = ('id', 'code', 'created', 'notes', 'expiry', 'use_count', 'max_uses', 'inviter', 'email', 'sent',)
 
 class EmailAddressAdmin(admin.ModelAdmin):
     queryset = EmailAddress.objects.all()
-    list_display = ('verified', 'primary', 'email', 'objects', 'user', 'id',)
+    list_display = ('id', 'verified', 'primary', 'email', 'objects', 'user', )
 
 class AccountDeletionAdmin(admin.ModelAdmin):
     queryset = AccountDeletion.objects.all()

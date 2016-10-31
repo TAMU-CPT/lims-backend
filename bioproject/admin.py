@@ -7,11 +7,11 @@ class EditingRoleUserAdmin(admin.ModelAdmin):
 
 class EditingRoleGroupAdmin(admin.ModelAdmin):
     queryset = EditingRoleGroup.objects.all()
-    list_display = ('role', 'group', 'id', 'bioproject',)
+    list_display = ('id', 'role', 'group', 'bioproject',)
 
 class BioprojectAdmin(admin.ModelAdmin):
     queryset = Bioproject.objects.all()
-    list_display = ('name', 'date', 'id', 'description',)
+    list_display = ('id', 'name', 'date', 'description',)
 
 admin.site.register(EditingRoleUser, EditingRoleUserAdmin)
 admin.site.register(EditingRoleGroup, EditingRoleGroupAdmin)

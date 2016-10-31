@@ -1,7 +1,7 @@
 .PHONY: help
 
 help:
-	@egrep '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@egrep '^[a-zA-Z_.-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 dj_fixtures:  ## Load fixtures for base set of apps
 	python manage.py migrate
@@ -36,6 +36,9 @@ pg_logs: ## Tail the logs from postgres
 
 pg_rm: ## Wipe out postgres database
 	sudo rm -rf .pgdata
+
+models.png: account/models.py bioproject/models.py directory/models.py lims/models.py ## Build PNG file of database models
+	python manage.py graph_models -a -o models.png
 
 restart:
 	$(MAKE) pg_kill

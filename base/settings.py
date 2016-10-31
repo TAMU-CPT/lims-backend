@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     # Debugging
     'debug_toolbar',
+    'django_extensions',
 
     # Internal Apps
     'directory',
