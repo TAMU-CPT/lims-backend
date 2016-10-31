@@ -22,3 +22,7 @@ $ make dj_fixtures
 $ make dj_run
 # Actually run the server, finally
 ```
+
+## Database Schema
+
+![](./models.png)
