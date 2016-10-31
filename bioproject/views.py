@@ -14,3 +14,7 @@ class EditingRoleGroupViewSet(viewsets.ModelViewSet):
 class BioprojectViewSet(viewsets.ModelViewSet):
     queryset = Bioproject.objects.all()
     serializer_class = BioprojectSerializer
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(owner=self.request.user)

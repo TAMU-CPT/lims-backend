@@ -29,7 +29,7 @@ class Bioproject(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     # Can change project sharing
-    owner = models.ForeignKey('EditingRoleUser', related_name='owner')
+    owner = models.ForeignKey(User, related_name='owner')
     access_user = models.ManyToManyField(User, blank=True, through='EditingRoleUser')
     access_group = models.ManyToManyField(Group, blank=True, through='EditingRoleGroup')
 

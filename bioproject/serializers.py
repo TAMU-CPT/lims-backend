@@ -55,12 +55,14 @@ class EditingRoleGroupSerializer(serializers.ModelSerializer):
 class BioprojectSerializer(serializers.ModelSerializer):
     editingrolegroup_set = EditingRoleGroupSerializer(many=True)
     editingroleuser_set = EditingRoleUserSerializer(many=True)
+    owner = EditingRoleUserSerializer(read_only=True)
     sample = PhageSerializerList(many=True)
 
     class Meta:
         model = Bioproject
         fields = ('id', 'name', 'description', 'sample',
-                  'editingrolegroup_set', 'editingroleuser_set', 'date')
+                  'editingrolegroup_set', 'editingroleuser_set', 'date',
+                  'owner')
         read_only = ('date')
 
     # def to_internal_value(self, data):
@@ -77,6 +79,7 @@ class BioprojectSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         new_samples = []
+        print 'hiiiiii'
 
         # To handle roles first we need the full set of roles (so we know which
         # ones to delete eventually)
