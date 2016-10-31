@@ -301,7 +301,7 @@ class Phage(models.Model):
     primary_name = models.CharField(max_length=64)
     historical_names = models.TextField(blank=True, null=True) # JSON encoded list of old names
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
-    host_lims = models.ManyToManyField(Bacteria, blank=True, null=True)
+    host_lims = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
     assembly = models.ForeignKey(Assembly, blank=True, null=True)
