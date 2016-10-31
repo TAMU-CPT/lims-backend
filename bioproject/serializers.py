@@ -55,7 +55,7 @@ class EditingRoleGroupSerializer(serializers.ModelSerializer):
 class BioprojectSerializer(serializers.ModelSerializer):
     editingrolegroup_set = EditingRoleGroupSerializer(many=True)
     editingroleuser_set = EditingRoleUserSerializer(many=True)
-    owner = EditingRoleUserSerializer(read_only=True)
+    owner = GrouplessUserSerializer(partial=True)
     sample = PhageSerializerList(many=True)
 
     class Meta:
@@ -73,13 +73,13 @@ class BioprojectSerializer(serializers.ModelSerializer):
         bp = Bioproject.objects.create(
             name=validated_data['name'],
             description=validated_data['description'],
+            owner=validated_data['owner'],
         )
         bp.save()
         return bp
 
     def update(self, instance, validated_data):
         new_samples = []
-        print 'hiiiiii'
 
         # To handle roles first we need the full set of roles (so we know which
         # ones to delete eventually)

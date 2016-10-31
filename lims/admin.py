@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Box, StorageLocation, Assembly, TubeType, ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, EnvironmentalSample, Lysate, Bacteria
+from .models import Box, StorageLocation, Assembly, TubeType, \
+    ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, \
+    PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, \
+    EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
 
 class BoxAdmin(admin.ModelAdmin):
     queryset = Box.objects.all()
@@ -69,6 +72,10 @@ class BacteriaAdmin(admin.ModelAdmin):
     queryset = Bacteria.objects.all()
     list_display = ('id', 'strain', 'genus', 'species')
 
+class EnvironmentalSampleCollectionAdmin(admin.ModelAdmin):
+    queryset = EnvironmentalSampleCollection.objects.all()
+    list_display = ('id',)
+
 admin.site.register(Box, BoxAdmin)
 admin.site.register(StorageLocation, StorageLocationAdmin)
 admin.site.register(Assembly, AssemblyAdmin)
@@ -86,3 +93,4 @@ admin.site.register(ContainerType, ContainerTypeAdmin)
 admin.site.register(EnvironmentalSample, EnvironmentalSampleAdmin)
 admin.site.register(Lysate, LysateAdmin)
 admin.site.register(Bacteria, BacteriaAdmin)
+admin.site.register(EnvironmentalSampleCollection, EnvironmentalSampleCollectionAdmin)

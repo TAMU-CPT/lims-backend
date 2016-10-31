@@ -17,4 +17,7 @@ class BioprojectViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            serializer.save(owner=self.request.user)
+            serializer.save(
+                owner=self.request.user,
+                owner_id=self.request.user.id,
+            )
