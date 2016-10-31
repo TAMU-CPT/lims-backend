@@ -3,11 +3,8 @@
 help:
 	@egrep '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-bootstrap: ## Migrate and load fixures
-	python manage.py migrate
-	$(MAKE) dj_fixtures
-
 dj_fixtures:  ## Load fixtures for base set of apps
+	python manage.py migrate
 	python manage.py loaddata fixtures/00_auth.json
 	python manage.py loaddata fixtures/00_directory.json
 	python manage.py shell < fixtures/drop.py
