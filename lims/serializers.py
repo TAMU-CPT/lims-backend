@@ -154,15 +154,14 @@ class EnvironmentalSampleCollectionSerializer(serializers.ModelSerializer):
 class PhageSerializerDetail(serializers.ModelSerializer):
     env_sample_collection = EnvironmentalSampleCollectionSerializer(required=False, allow_null=True)
     host_lims = BacteriaSerializer(many=True)
-    # owner =
-    # source =
     assembly = AssemblySerializer(required=False, allow_null=True)
+    phagednaprep = PhageDNAPrepSerializer(required=False, allow_null=True)
 
     class Meta:
         model = Phage
         fields = (
             'historical_names', 'primary_name', 'id', 'env_sample_collection',
-            'host_lims', 'owner', 'source', 'assembly',
+            'host_lims', 'owner', 'source', 'assembly', 'phagednaprep'
         )
 
     def update(self, instance, validated_data):
