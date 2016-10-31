@@ -9,13 +9,15 @@ from django.contrib.auth.models import User, Group
 ROLES = (
     (0, 'Viewer'),
     (1, 'Editor'),
-    (2, 'Administrator')
+    (2, 'Administrator'),
+    (3, 'Owner'),
 )
 
 ROLES_VERBS = {
     0: 'view',
     1: 'edit',
     2: 'administer',
+    3: 'owns',
 }
 
 
@@ -27,6 +29,7 @@ class Bioproject(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     # Can change project sharing
+    owner = models.ForeignKey('EditingRoleUser', related_name='owner')
     access_user = models.ManyToManyField(User, blank=True, through='EditingRoleUser')
     access_group = models.ManyToManyField(Group, blank=True, through='EditingRoleGroup')
 
