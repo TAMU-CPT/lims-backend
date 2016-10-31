@@ -194,6 +194,7 @@ class ExperimentalResult(models.Model):
 class PhageDNAPrep(models.Model):
     # HAS_CPT_HASHID
     lysate = models.OneToOneField(Lysate, blank=True, null=True)
+    phage = models.OneToOneField('Phage')
 
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
 
@@ -280,6 +281,9 @@ class SequencingRunPoolItem(models.Model):
 
 
 class Assembly(models.Model):
+    """
+    This represents a single assembly run of a single genome's sequencing data
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sequencing_run_pool_item = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
     galaxy_dataset = models.URLField()
