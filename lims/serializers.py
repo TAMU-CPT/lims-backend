@@ -135,10 +135,17 @@ class ContainerTypeSerializer(serializers.ModelSerializer):
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
     tube = TubeSerializer()
     sample_type = SampleTypeSerializer()
+    location_xy = serializers.SerializerMethodField()
 
     class Meta:
         model = EnvironmentalSample
-        fields = ('description', 'tube', 'sample_type', 'collection', 'id', 'location',)
+        fields = ('description', 'tube', 'sample_type', 'collection', 'id', 'location', 'location_xy')
+
+    def get_location_xy(self, obj):
+        # print obj.location.json
+        # print obj.location.geojson
+        # print obj.location.coords
+        return obj.location.coords
 
 
 class LysateSerializer(serializers.ModelSerializer):
@@ -199,9 +206,11 @@ class PhageSerializerDetail(serializers.ModelSerializer):
             host_lims_new.append(host_obj)
         validated_data['host_lims'] = host_lims_new
 
-        for prop in ('historical_names', 'primary_name',
-                     'env_sample_collection', 'host_lims', 'source',
-                     'assembly'):
+        env_sample_collection_new = []
+        # for env_sample in validated_data['env_sample_collection']['env_sample']:
+            # print env_sample
+
+        for prop in ('historical_names', 'primary_name', 'host_lims', 'source', 'assembly'):
             x = validated_data.get(prop, getattr(instance, prop))
             print 'Setattr %s %s = %s' % (instance, prop, x)
             setattr(instance, prop, x)
