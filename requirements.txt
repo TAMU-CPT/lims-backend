@@ -10,6 +10,8 @@ djangorestframework-jwt
 djangorestframework==3.5.0
 etc
 git+ssh://git@github.tamu.edu/cpt/hashids-py.git
+django-debug-toolbar
+django_extensions
 psycopg2
 pytz==2016.4
 six

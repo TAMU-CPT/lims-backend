@@ -8,9 +8,12 @@ Consists of:
 
 ## Development Setup
 
+You will need to have GDAL stuff available. (On debian, `apt-get install gdal-bin`)
+
 Docker is a pre-requisite for this.
 
 ```
+$ pip install -r requirements.txt
 $ make pg_launch
 # should print some ID number, you can ignore this
 $ make pg_logs
