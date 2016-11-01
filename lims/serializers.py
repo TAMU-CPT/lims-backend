@@ -185,7 +185,7 @@ class EnvironmentalSampleCollectionSerializer(serializers.ModelSerializer):
 
 
 class PhageSerializerDetail(serializers.ModelSerializer):
-    env_sample_collection = EnvironmentalSampleCollectionSerializer(required=False, allow_null=True)
+    env_sample_collection = EnvironmentalSampleCollectionSerializer(required=False, allow_null=True, partial=True)
     host_lims = BacteriaSerializer(many=True)
     assembly = AssemblySerializer(required=False, allow_null=True)
     phagednaprep = PhageDNAPrepSerializer(required=False, allow_null=True)
@@ -198,6 +198,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
         )
 
     def update(self, instance, validated_data):
+        import pprint; pprint.pprint(validated_data)
         host_lims = validated_data['host_lims']
         host_lims_new = []
         for host in host_lims:
