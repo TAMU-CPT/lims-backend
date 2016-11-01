@@ -10,8 +10,6 @@ djangorestframework-jwt
 djangorestframework==3.5.0
 etc
 git+ssh://git@github.tamu.edu/cpt/hashids-py.git
-pinax
-pinax-announcements==2.0.3
 psycopg2
 pytz==2016.4
 six
