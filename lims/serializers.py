@@ -3,6 +3,29 @@ from lims.models import Box, StorageLocation, Assembly, TubeType, \
     ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
+from rest_framework.serializers import ValidationError
+from rest_framework.validators import UniqueValidator
+
+
+class NestableSerializer(serializers.ModelSerializer):
+    """
+    Use this when "This field must be unique" on child models.
+    """
+
+    def to_internal_value(self, data):
+        # https://github.com/tomchristie/django-rest-framework/issues/2403#issuecomment-95528016
+        if 'id' in data and 'id' in self.fields:
+            try:
+                obj_id = self.fields['id'].to_internal_value(data['id'])
+            except ValidationError as exc:
+                raise ValidationError({'id': exc.detail})
+            for field in self.fields.values():
+                for validator in field.validators:
+                    if type(validator) == UniqueValidator:
+                        # Exclude id from queryset for checking uniqueness
+                        validator.queryset = validator.queryset.exclude(id=obj_id)
+        return super(NestableSerializer, self).to_internal_value(data)
+
 
 
 class SeqRunExperimentSerializer(serializers.ModelSerializer):
@@ -133,6 +156,7 @@ class ContainerTypeSerializer(serializers.ModelSerializer):
 
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=False)
     tube = TubeSerializer()
     sample_type = SampleTypeSerializer()
     location_xy = serializers.SerializerMethodField()
@@ -146,6 +170,14 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
         # print obj.location.geojson
         # print obj.location.coords
         return obj.location.coords
+
+    def create(self, validated_data):
+        print 'ess, create', validated_data
+
+    def update(self, instance, validated_data):
+        print instance
+        print validated_data
+        return instance
 
 
 class LysateSerializer(serializers.ModelSerializer):
@@ -176,16 +208,36 @@ class PhageSerializerList(serializers.ModelSerializer):
         fields = ('historical_names', 'primary_name', 'id')
 
 
-class EnvironmentalSampleCollectionSerializer(serializers.ModelSerializer):
-    env_sample = EnvironmentalSampleSerializer(many=True, read_only=True)
+class EnvironmentalSampleCollectionSerializer(NestableSerializer):
+    id = serializers.UUIDField(read_only=False)
+    env_sample = EnvironmentalSampleSerializer(many=True)
 
     class Meta:
         model = EnvironmentalSampleCollection
         fields = ('id', 'env_sample')
 
+    def update(self, instance, validated_data):
+
+        for sample in validated_data['env_sample']:
+            es = EnvironmentalSampleSerializer(data=sample)
+            #
+            print es.is_valid()
+            # es.is_valid(raise_exception=True)
+            print es['id'].value
+
+
+            # print sample
+            # print es
+            # print dir(es)
+            # print es.object
+            # print dir(es)
+        # print instance
+        # print validated_data
+        return instance
+
 
 class PhageSerializerDetail(serializers.ModelSerializer):
-    env_sample_collection = EnvironmentalSampleCollectionSerializer(required=False, allow_null=True, partial=True)
+    env_sample_collection = EnvironmentalSampleCollectionSerializer(read_only=False)
     host_lims = BacteriaSerializer(many=True)
     assembly = AssemblySerializer(required=False, allow_null=True)
     phagednaprep = PhageDNAPrepSerializer(required=False, allow_null=True)

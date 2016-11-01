@@ -6,11 +6,12 @@ from lims.serializers import BoxSerializer, StorageLocationSerializer, \
     ExperimentSerializer, PhageSerializerList, PhageSerializerDetail, \
     PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
     SequencingRunPoolItemSerializer, ContainerTypeSerializer, \
-    EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer
+    EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer, \
+    EnvironmentalSampleCollectionSerializer
 from lims.models import Box, StorageLocation, Assembly, TubeType, \
     ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, \
-    EnvironmentalSample, Lysate, Bacteria
+    EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
 
 
 class BoxViewSet(viewsets.ModelViewSet):
@@ -99,6 +100,11 @@ class ContainerTypeViewSet(viewsets.ModelViewSet):
 class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSample.objects.all()
     serializer_class = EnvironmentalSampleSerializer
+
+
+class EnvironmentalSampleCollectionViewSet(viewsets.ModelViewSet):
+    queryset = EnvironmentalSampleCollection.objects.all()
+    serializer_class = EnvironmentalSampleCollectionSerializer
 
 
 class LysateViewSet(viewsets.ModelViewSet):
