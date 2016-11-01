@@ -125,7 +125,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'postgres',
         'USER': 'postgres',
-       'HOST': 'localhost',
+        'HOST': 'localhost',
     }
 }
 

@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
 import re
 import cgi
 import cptids
 from account.models import Account
+
 
 def guessAtMeaning(term):
     try:

@@ -17,11 +17,13 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     # filter_fields = ('name', 'id')
     filter_class = GroupFilter
     serializer_class = GroupSerializer
+
 
 class OrganisationViewSet(viewsets.ModelViewSet):
     queryset = Organisation.objects.all()

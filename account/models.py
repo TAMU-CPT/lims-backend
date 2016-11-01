@@ -32,8 +32,6 @@ from account.signals import signup_code_sent, signup_code_used
 from directory.models import Organisation
 
 
-
-
 @python_2_unicode_compatible
 class Account(models.Model):
 

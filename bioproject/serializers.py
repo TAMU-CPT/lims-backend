@@ -32,6 +32,7 @@ class EditingRoleUserSerializer(serializers.ModelSerializer):
                         validator.queryset = validator.queryset.exclude(id=obj_id)
         return super(EditingRoleUserSerializer, self).to_internal_value(data)
 
+
 class EditingRoleGroupSerializer(serializers.ModelSerializer):
     group = GroupSerializer(partial=True)
 
@@ -51,6 +52,7 @@ class EditingRoleGroupSerializer(serializers.ModelSerializer):
                         # Exclude id from queryset for checking uniqueness
                         validator.queryset = validator.queryset.exclude(id=obj_id)
         return super(EditingRoleGroupSerializer, self).to_internal_value(data)
+
 
 class BioprojectSerializer(serializers.ModelSerializer):
     editingrolegroup_set = EditingRoleGroupSerializer(many=True)

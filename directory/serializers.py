@@ -6,6 +6,7 @@ from directory.models import Organisation
 from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueValidator
 
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
@@ -25,8 +26,10 @@ class GroupSerializer(serializers.ModelSerializer):
                         validator.queryset = validator.queryset.exclude(id=obj_id)
         return super(GroupSerializer, self).to_internal_value(data)
 
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     groups = GroupSerializer(many=True)
+
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'groups', 'account')
@@ -63,8 +66,10 @@ class GrouplessUserSerializer(serializers.ModelSerializer):
                         validator.queryset = validator.queryset.exclude(id=obj_id)
         return super(GrouplessUserSerializer, self).to_internal_value(data)
 
+
 class OrganisationSerializer(serializers.HyperlinkedModelSerializer):
     members = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Organisation
         fields = ('id', 'phone_number', 'website', 'name', 'fax_number', 'emails', 'street_address', 'account_set', 'members')
@@ -72,6 +77,7 @@ class OrganisationSerializer(serializers.HyperlinkedModelSerializer):
     def get_members(self, obj):
         for idx, account in enumerate(obj.account_set.all()):
             yield AccountSerializerLight(account).data
+
 
 class OrganisationSerializerList(serializers.HyperlinkedModelSerializer):
     members = serializers.SerializerMethodField(read_only=True)

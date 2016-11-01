@@ -22,6 +22,7 @@ EXP_RESULT_TYPES = (
     (3, 'ImageURL')
 )
 
+
 class ContainerType(models.Model):
     name = models.CharField(max_length=32, unique=True)
 
@@ -85,8 +86,6 @@ class Box(models.Model):
 
 
 class Tube(models.Model):
-    # DOES NOT HAVE CPT_HASHID. Inherits the hashid of whoever is
-    #m referring to it.
     # Human readable name that gets written on it
     name = models.CharField(max_length=64)
     box = models.ForeignKey(Box)
@@ -187,8 +186,9 @@ class ExperimentalResult(models.Model):
 
     def __unicode__(self):
         return smart_unicode(u'{} - {}'.format(
-                self.experiment.short_name,
-                self.result))
+            self.experiment.short_name,
+            self.result
+        ))
 
 
 class PhageDNAPrep(models.Model):
@@ -303,7 +303,7 @@ class EnvironmentalSampleCollection(models.Model):
 
 class Phage(models.Model):
     primary_name = models.CharField(max_length=64)
-    historical_names = models.TextField(blank=True, null=True) # JSON encoded list of old names
+    historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
     host_lims = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)

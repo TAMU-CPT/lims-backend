@@ -1,22 +1,13 @@
-from django.core.management.base import BaseCommand, CommandError
-from account.models import Account, EmailAddress
+from django.core.management.base import BaseCommand
+from account.models import EmailAddress
 from django.contrib.auth.models import User
+
 
 class Command(BaseCommand):
     help = 'Load person table'
 
     def add_arguments(self, parser):
         parser.add_argument('file', type=file)
-
-    # def personTagMemo(self, tagName):
-        # if not hasattr(self, '_tags'):
-            # self._tags = {}
-
-        # pt = PersonTag.objects.get_or_create(name=tagName)
-
-        # self._tags[tagName] = pt[0]
-
-        # return self._tags[tagName]
 
     def handle(self, *args, **options):
         fn = options['file']
@@ -46,8 +37,7 @@ class Command(BaseCommand):
             )
             pu = pu[0]
             print pu
-
-            import pprint; pprint.pprint(md)
+            print md
             p = pu.account
             data = dict(
                 timezone='UTC',
@@ -76,18 +66,4 @@ class Command(BaseCommand):
                         primary=True
                     )
                     ea.save()
-
-
             p.save()
-
-            # pts = []
-
-            # for t in md['tags'].strip().split(';'):
-                # if len(t.strip()) == 0:
-                    # continue
-
-                # # pt = self.personTagMemo(t.strip())
-                # # pts.append(pt)
-
-            # p.tags = pts
-            # p.save()
