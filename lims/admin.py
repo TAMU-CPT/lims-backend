@@ -32,7 +32,7 @@ class ExperimentalResultAdmin(admin.ModelAdmin):
 
 class SequencingRunAdmin(admin.ModelAdmin):
     queryset = SequencingRun.objects.all()
-    list_display = ('id', 'methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'name',)
+    list_display = ('id', 'date', 'name')
 
 
 class TubeAdmin(admin.ModelAdmin):

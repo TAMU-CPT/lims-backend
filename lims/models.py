@@ -223,6 +223,7 @@ class SequencingRun(models.Model):
     methods = models.ForeignKey(Experiment)
     bioanalyzer_qc = models.TextField()
     run_prep_spreadsheet = models.URLField()
+    owner = models.ForeignKey(Account)
 
     def __unicode__(self):
         return smart_unicode(u'{} on {}'.format(self.name, self.date))

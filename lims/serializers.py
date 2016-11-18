@@ -53,7 +53,7 @@ class SequencingRunSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SequencingRun
-        fields = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'id', 'name',)
+        fields = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'id', 'name', 'owner')
 
 
 class SequencingRunPoolSerializer(serializers.ModelSerializer):
