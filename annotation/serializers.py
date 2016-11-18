@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import AnnotationRecord
-from lims.serializers import PhageSerializer
+from lims.serializers import PhageSerializerList
 
 
 class AnnotationRecordSerializer(serializers.HyperlinkedModelSerializer):
-    phage = PhageSerializer()
+    phage = PhageSerializerList()
 
     class Meta:
         model = AnnotationRecord
