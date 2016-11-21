@@ -5,6 +5,7 @@ from lims.models import Box, StorageLocation, Assembly, TubeType, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
 from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueValidator
+from account.serializers import AccountSerializerLight
 
 
 class NestableSerializer(serializers.ModelSerializer):
@@ -49,7 +50,9 @@ class SeqRunExperimentalResultDetailSerializer(serializers.ModelSerializer):
 
 
 class SequencingRunSerializer(serializers.ModelSerializer):
-    methods = SeqRunExperimentSerializer()
+    # TODO
+    methods = SeqRunExperimentSerializer(read_only=True)
+    owner = AccountSerializerLight(read_only=True)
 
     class Meta:
         model = SequencingRun
@@ -110,7 +113,7 @@ class AssemblySerializer(serializers.ModelSerializer):
 class ExperimentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experiment
-        fields = ('full_name', 'id', 'short_name', 'methods',)
+        fields = ('full_name', 'id', 'short_name', 'methods', 'category')
 
 
 class ExperimentalResultSerializer(serializers.ModelSerializer):
@@ -250,7 +253,6 @@ class PhageSerializerDetail(serializers.ModelSerializer):
         )
 
     def update(self, instance, validated_data):
-        import pprint; pprint.pprint(validated_data)
         host_lims = validated_data['host_lims']
         host_lims_new = []
         for host in host_lims:

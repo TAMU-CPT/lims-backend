@@ -171,6 +171,7 @@ class Experiment(models.Model):
     short_name = models.CharField(max_length=32)
     full_name = models.TextField()
     methods = models.TextField()
+    category = models.TextField(blank=True)
 
     def __unicode__(self):
         return smart_unicode(self.short_name)
@@ -223,7 +224,7 @@ class SequencingRun(models.Model):
     methods = models.ForeignKey(Experiment)
     bioanalyzer_qc = models.TextField()
     run_prep_spreadsheet = models.URLField()
-    owner = models.ForeignKey(Account)
+    owner = models.ForeignKey(Account, blank=True, null=True)
 
     def __unicode__(self):
         return smart_unicode(u'{} on {}'.format(self.name, self.date))

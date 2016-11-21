@@ -57,6 +57,7 @@ class SampleTypeViewSet(viewsets.ModelViewSet):
 class ExperimentViewSet(viewsets.ModelViewSet):
     queryset = Experiment.objects.all()
     serializer_class = ExperimentSerializer
+    filter_fields = ('full_name', 'id', 'short_name', 'category')
 
 
 class PhageViewSet(viewsets.ModelViewSet):
