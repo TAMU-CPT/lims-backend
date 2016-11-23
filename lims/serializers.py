@@ -218,7 +218,7 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
 
     class Meta:
         model = EnvironmentalSampleCollection
-        fields = ('id', 'env_sample')
+        fields = ('id', 'env_sample', 'description')
 
     def update(self, instance, validated_data):
 

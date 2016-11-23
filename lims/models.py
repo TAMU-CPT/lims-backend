@@ -302,6 +302,7 @@ class Assembly(models.Model):
 
 class EnvironmentalSampleCollection(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    description = models.TextField(blank=True)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
 
 
