@@ -126,6 +126,8 @@ class EnvironmentalSample(models.Model):
     # Tube Storage
     tube = models.OneToOneField(Tube)
 
+    collected_by = models.ForeignKey(Account, blank=True, null=True)
+
     def __unicode__(self):
         return smart_unicode(u'{} sample from {}'.format(self.sample_type, self.collection))
 

@@ -163,10 +163,11 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
     tube = TubeSerializer()
     sample_type = SampleTypeSerializer()
     location_xy = serializers.SerializerMethodField()
+    collected_by = AccountSerializerLight(read_only=True)
 
     class Meta:
         model = EnvironmentalSample
-        fields = ('description', 'tube', 'sample_type', 'collection', 'id', 'location', 'location_xy')
+        fields = ('description', 'tube', 'sample_type', 'collection', 'id', 'location', 'location_xy', 'collected_by')
 
     def get_location_xy(self, obj):
         # print obj.location.json
