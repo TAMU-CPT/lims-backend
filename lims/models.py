@@ -21,21 +21,10 @@ EXP_RESULT_TYPES = (
     (2, 'FloatArray'),
     (3, 'ImageURL')
 )
-
-
-class ContainerType(models.Model):
-    name = models.CharField(max_length=32, unique=True)
-
-    def __unicode__(self):
-        return smart_unicode(self.name)
-
-
-class TubeType(models.Model):
-    name = models.CharField(max_length=32)
-
-    def __unicode__(self):
-        return smart_unicode(self.name)
-
+STORAGE_TYPES = (
+    (0, 'Fridge'),
+    (1, 'Freezer')
+)
 
 class SampleType(models.Model):
     name = models.CharField(max_length=32)
@@ -44,76 +33,14 @@ class SampleType(models.Model):
         return smart_unicode(self.name)
 
 
-class StorageLocation(models.Model):
-    # HAS_CPT_HASHID
-    # Human readable name that gets written on it
-    name = models.CharField(max_length=64)
-    # Human readable location
-    location = models.CharField(max_length=64)
-    # Type of container
-    container_type = models.ForeignKey(ContainerType)
-
-    def __unicode__(self):
-        return smart_unicode(u'{} in {}'.format(self.name, self.location))
-
-    def get_absolute_url(self):
-        return reverse_lazy('lims:storage-location-detail', args=[self.id])
-
-
-class Box(models.Model):
-    # HAS_CPT_HASHID
-    # Human readable name that gets written on it
-    name = models.CharField(max_length=64, help_text="The name which is written on the outside of the box.")
-    location = models.ForeignKey(StorageLocation)
-
-    def __unicode__(self):
-        return smart_unicode(u'{} in {}'.format(self.name, self.location))
-
-    class Meta:
-        verbose_name_plural = "boxes"
-
-    def getEnvironmentalTubes(self):
-        return self.tube_set.all().exclude(environmentalsample__isnull=True)
-
-    def getLysateTubes(self):
-        return self.tube_set.all().exclude(lysate__isnull=True)
-
-    def getPhageDNAPrepTubes(self):
-        return self.tube_set.all().exclude(phagednaprep__isnull=True)
-
-    def get_absolute_url(self):
-        return reverse_lazy('lims:box-detail', args=[self.location.id, self.id])
-
-
-class Tube(models.Model):
-    # Human readable name that gets written on it
-    name = models.CharField(max_length=64)
-    box = models.ForeignKey(Box)
-    type = models.ForeignKey(TubeType)
-
-    def __unicode__(self):
-        return smart_unicode(u'{} in {}'.format(self.name, self.box))
-
-    def getType(self):
-        rType = None
-        if self.environmentalsample is not None:
-            rType = 'envsample'
-        elif self.phagednaprep is not None:
-            if rType is not None:
-                raise Exception("More than one sample stored in tube")
-            else:
-                rType = 'dnaprep'
-        elif self.lystate is not None:
-            if rType is not None:
-                raise Exception("More than one sample stored in tube")
-            else:
-                rType = 'lysate'
-
-        return rType
-
-    def get_absolute_url(self):
-        return reverse_lazy('lims:box-detail', args=[self.box.location.id, self.box.id])
-
+class Storage(models.Model):
+    room = models.CharField(max_length=32) # e.g. '315'
+    type = models.IntegerField(choices=STORAGE_TYPES)
+    name = models.CharField(max_length=64) # e.g. '315 F5' (or whatever the label says)
+    shelf = models.CharField(max_length=32, blank=True, null=True)
+    box = models.CharField(max_length=64, blank=True, null=True) # label on box, if there is one
+    tube = models.CharField(max_length=64) # label on tube
+    tube_type = models.CharField(max_length=64) # e.g. 'pcr tube'
 
 class EnvironmentalSample(models.Model):
     description = models.TextField(blank=True)
@@ -123,8 +50,7 @@ class EnvironmentalSample(models.Model):
     location = gis_models.PointField()
     sample_type = models.ForeignKey(SampleType)
 
-    # Tube Storage
-    tube = models.OneToOneField(Tube)
+    storage = models.OneToOneField(Storage)
 
     collected_by = models.ForeignKey(Account, blank=True, null=True)
 
@@ -133,7 +59,6 @@ class EnvironmentalSample(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('lims:envsample-detail', args=[self.id])
-
 
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
@@ -158,8 +83,7 @@ class Lysate(models.Model):
     isolation = models.DateTimeField(null=True, blank=True)
     phage = models.OneToOneField('Phage')
 
-    # Tube Storage
-    tube = models.OneToOneField(Tube)
+    storage = models.OneToOneField(Storage)
 
     def __unicode__(self):
         return smart_unicode(u'Lysate from {}'.format(self.phage.env_sample_collection))
@@ -207,8 +131,7 @@ class PhageDNAPrep(models.Model):
     # Nanodrop, pico green, other?
     experiments = models.ManyToManyField(ExperimentalResult, blank=True)
 
-    # Tube Storage
-    tube = models.OneToOneField(Tube)
+    storage = models.OneToOneField(Storage)
 
     def __unicode__(self):
         return u'Prep of %s with %s morphology' % (self.lysate, smart_unicode(self.get_morphology_display()))

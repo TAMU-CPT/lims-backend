@@ -8,8 +8,6 @@ router = routers.DefaultRouter()
 
 router.register(r'assemblys', views.AssemblyViewSet)
 router.register(r'bacterias', views.BacteriaViewSet)
-router.register(r'boxs', views.BoxViewSet)
-router.register(r'containertypes', views.ContainerTypeViewSet)
 router.register(r'environmentalsamplecollection', views.EnvironmentalSampleCollectionViewSet)
 router.register(r'environmentalsamples', views.EnvironmentalSampleViewSet)
 router.register(r'experimentalresults', views.ExperimentalResultViewSet)
@@ -21,9 +19,7 @@ router.register(r'sampletypes', views.SampleTypeViewSet)
 router.register(r'sequencingrunpoolitems', views.SequencingRunPoolItemViewSet)
 router.register(r'sequencingrunpools', views.SequencingRunPoolViewSet)
 router.register(r'sequencingruns', views.SequencingRunViewSet)
-router.register(r'storagelocations', views.StorageLocationViewSet)
-router.register(r'tubes', views.TubeViewSet)
-router.register(r'tubetypes', views.TubeTypeViewSet)
+router.register(r'storage', views.StorageViewSet)
 
 urlpatterns = [
     url(r'', include(router.urls)),

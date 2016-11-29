@@ -1,9 +1,7 @@
 from django.core.management.base import BaseCommand
 from random import randint
-from lims.models import EnvironmentalSample, Tube, Box, TubeType, SampleType
+from lims.models import EnvironmentalSample, Tube, TubeType, SampleType
 import datetime
-
-
 
 class Command(BaseCommand):
     help = 'Generate some env samples'
@@ -12,7 +10,6 @@ class Command(BaseCommand):
         for i in range(10):
             t, _ = Tube.objects.get_or_create(
                 name="p%s" % randint(1,1000),
-                box=Box.objects.get(),
                 type=TubeType.objects.get(),
             )
 
@@ -31,5 +28,3 @@ class Command(BaseCommand):
             )
             e = EnvironmentalSample(**d)
             e.save()
-
-
