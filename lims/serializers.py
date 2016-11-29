@@ -176,11 +176,11 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
         return obj.location.coords
 
     def create(self, validated_data):
-        print 'ess, create', validated_data
+        print('ess, create', validated_data)
 
     def update(self, instance, validated_data):
-        print instance
-        print validated_data
+        print(instance)
+        print(validated_data)
         return instance
 
 
@@ -225,18 +225,9 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
         for sample in validated_data['env_sample']:
             es = EnvironmentalSampleSerializer(data=sample)
             #
-            print es.is_valid()
+            print(es.is_valid())
             # es.is_valid(raise_exception=True)
-            print es['id'].value
-
-
-            # print sample
-            # print es
-            # print dir(es)
-            # print es.object
-            # print dir(es)
-        # print instance
-        # print validated_data
+            print(es['id'].value)
         return instance
 
 
@@ -268,7 +259,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
 
         for prop in ('historical_names', 'primary_name', 'host_lims', 'source', 'assembly'):
             x = validated_data.get(prop, getattr(instance, prop))
-            print 'Setattr %s %s = %s' % (instance, prop, x)
+            print('Setattr %s %s = %s' % (instance, prop, x))
             setattr(instance, prop, x)
 
         instance.save()

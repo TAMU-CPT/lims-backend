@@ -109,7 +109,7 @@ class BioprojectSerializer(serializers.ModelSerializer):
                 user=User.objects.get(id=user_id),
             )
             logging.info("Revoking %s permission for %s on %s", tmp.role, tmp.user, tmp.bioproject)
-            print "Revoking %s permission for %s on %s" % (tmp.role, tmp.user, tmp.bioproject)
+            print("Revoking %s permission for %s on %s" % (tmp.role, tmp.user, tmp.bioproject))
             tmp.delete()
 
         for group in validated_data['editingrolegroup_set']:
@@ -132,7 +132,7 @@ class BioprojectSerializer(serializers.ModelSerializer):
                 group=Group.objects.get(id=group_id),
             )
             logging.info("Revoking %s permission for %s on %s", tmp.role, tmp.group, tmp.bioproject)
-            print "Revoking %s permission for %s on %s" % (tmp.role, tmp.group, tmp.bioproject)
+            print("Revoking %s permission for %s on %s" % (tmp.role, tmp.group, tmp.bioproject))
             tmp.delete()
 
         for sample in validated_data['sample']:
