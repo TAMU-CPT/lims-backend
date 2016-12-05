@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+import django_filters
 from django.db.models import Q
 from lims.serializers import StorageSerializer, \
     AssemblySerializer, ExperimentalResultSerializer, \
@@ -14,8 +15,17 @@ from lims.models import Storage, Assembly, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
 
 
+class StorageFilter(django_filters.FilterSet):
+    room = django_filters.CharFilter(name="room", lookup_type="contains")
+
+    class Meta:
+        model = Storage
+        fields = ['room', 'id']
+
+
 class StorageViewSet(viewsets.ModelViewSet):
     queryset = Storage.objects.all()
+    filter_class = StorageFilter
     serializer_class = StorageSerializer
 
 
