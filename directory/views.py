@@ -6,7 +6,7 @@ import django_filters
 
 
 class GroupFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(name="name", lookup_type="contains")
+    name = django_filters.CharFilter(name="name", lookup_expr="contains")
 
     class Meta:
         model = Group
