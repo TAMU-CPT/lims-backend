@@ -40,7 +40,6 @@ class Storage(models.Model):
     shelf = models.CharField(max_length=32, blank=True, null=True)
     box = models.CharField(max_length=64, blank=True, null=True) # label on box, if there is one
     tube = models.CharField(max_length=64) # label on tube
-    tube_type = models.CharField(max_length=64) # e.g. 'pcr tube'
 
 
 class EnvironmentalSample(models.Model):
