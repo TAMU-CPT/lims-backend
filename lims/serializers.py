@@ -78,7 +78,7 @@ class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
 class StorageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Storage
-        fields = ('id', 'room', 'type', 'name', 'shelf', 'box', 'tube', 'tube_type',)
+        fields = ('id', 'room', 'type', 'name', 'shelf', 'box', 'tube',)
 
 class AssemblySerializer(serializers.ModelSerializer):
     sequencing_run_pool_item = SequencingRunPoolItemSerializer()
