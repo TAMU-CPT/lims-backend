@@ -17,3 +17,4 @@ world
 static/bower_components
 .venv
 venv
+.pgdata/
