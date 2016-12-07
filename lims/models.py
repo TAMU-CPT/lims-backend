@@ -33,6 +33,7 @@ class SampleType(models.Model):
 
 
 class Storage(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     room = models.CharField(max_length=32) # e.g. '315'
     type = models.IntegerField(choices=STORAGE_TYPES)
     name = models.CharField(max_length=64) # e.g. '315 F5' (or whatever the label says)
