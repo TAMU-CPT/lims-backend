@@ -36,8 +36,8 @@ class Command(BaseCommand):
                 email=md['email'].strip(),
             )
             pu = pu[0]
-            print pu
-            print md
+            print(pu)
+            print(md)
             p = pu.account
             data = dict(
                 timezone='UTC',

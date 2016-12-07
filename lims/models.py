@@ -6,7 +6,6 @@ from directory.models import Organisation
 from account.models import Account
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.gis.db import models as gis_models
-from django.utils.encoding import smart_unicode
 
 
 PHAGE_MORPHOLOGY = (
@@ -30,7 +29,7 @@ class SampleType(models.Model):
     name = models.CharField(max_length=32)
 
     def __unicode__(self):
-        return smart_unicode(self.name)
+        return self.name
 
 
 class Storage(models.Model):
@@ -41,6 +40,7 @@ class Storage(models.Model):
     box = models.CharField(max_length=64, blank=True, null=True) # label on box, if there is one
     tube = models.CharField(max_length=64) # label on tube
     tube_type = models.CharField(max_length=64) # e.g. 'pcr tube'
+
 
 class EnvironmentalSample(models.Model):
     description = models.TextField(blank=True)
@@ -55,7 +55,7 @@ class EnvironmentalSample(models.Model):
     collected_by = models.ForeignKey(Account, blank=True, null=True)
 
     def __unicode__(self):
-        return smart_unicode(u'{} sample from {}'.format(self.sample_type, self.collection))
+        return '{} sample from {}'.format(self.sample_type, self.collection)
 
     def get_absolute_url(self):
         return reverse_lazy('lims:envsample-detail', args=[self.id])
@@ -67,8 +67,8 @@ class Bacteria(models.Model):
 
     def __unicode__(self):
         if self.strain:
-            return smart_unicode(u'{}. {} spp {}'.format(self.genus[0], self.species, self.strain))
-        return smart_unicode(u'{}. {}'.format(self.genus[0], self.species))
+            return '{}. {} spp {}'.format(self.genus[0], self.species, self.strain)
+        return '{}. {}'.format(self.genus[0], self.species)
 
     class Meta:
         verbose_name_plural = "bacteria"
@@ -86,7 +86,7 @@ class Lysate(models.Model):
     storage = models.OneToOneField(Storage)
 
     def __unicode__(self):
-        return smart_unicode(u'Lysate from {}'.format(self.phage.env_sample_collection))
+        return 'Lysate from {}'.format(self.phage.env_sample_collection)
 
     def get_absolute_url(self):
         return reverse_lazy('lims:lysate-detail', args=[self.id])
@@ -100,7 +100,7 @@ class Experiment(models.Model):
     category = models.TextField(blank=True)
 
     def __unicode__(self):
-        return smart_unicode(self.short_name)
+        return self.short_name
 
 
 class ExperimentalResult(models.Model):
@@ -112,10 +112,10 @@ class ExperimentalResult(models.Model):
     # result_type = models.IntegerField(choices=EXP_RESULT_TYPES)
 
     def __unicode__(self):
-        return smart_unicode(u'{} - {}'.format(
+        return '{} - {}'.format(
             self.experiment.short_name,
             self.result
-        ))
+        )
 
 
 class PhageDNAPrep(models.Model):
@@ -134,7 +134,7 @@ class PhageDNAPrep(models.Model):
     storage = models.OneToOneField(Storage)
 
     def __unicode__(self):
-        return u'Prep of %s with %s morphology' % (self.lysate, smart_unicode(self.get_morphology_display()))
+        return u'Prep of %s with %s morphology' % (self.lysate, self.get_morphology_display())
 
     def get_absolute_url(self):
         return reverse_lazy('lims:phagedna-detail', args=[self.id])
@@ -152,7 +152,7 @@ class SequencingRun(models.Model):
     owner = models.ForeignKey(Account, blank=True, null=True)
 
     def __unicode__(self):
-        return smart_unicode(u'{} on {}'.format(self.name, self.date))
+        return '{} on {}'.format(self.name, self.date)
 
 
 class SequencingRunPool(models.Model):
@@ -164,7 +164,7 @@ class SequencingRunPool(models.Model):
         unique_together = (('pool', 'run'),)
 
     def __unicode__(self):
-        return smart_unicode(u'Run "{0.run.name}" Pool {0.pool}'.format(self))
+        return 'Run "{0.run.name}" Pool {0.pool}'.format(self)
 
     def numPhages(self):
         return self.sequencingrunpoolitem_set.count()
