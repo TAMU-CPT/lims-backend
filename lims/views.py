@@ -1,37 +1,37 @@
 from rest_framework import viewsets
+import django_filters
 from django.db.models import Q
-from lims.serializers import BoxSerializer, StorageLocationSerializer, \
-    AssemblySerializer, TubeTypeSerializer, ExperimentalResultSerializer, \
-    SequencingRunSerializer, TubeSerializer, SampleTypeSerializer, \
+from lims.serializers import StorageSerializer, \
+    AssemblySerializer, ExperimentalResultSerializer, \
+    SequencingRunSerializer, SampleTypeSerializer, \
     ExperimentSerializer, PhageSerializerList, PhageSerializerDetail, \
     PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
-    SequencingRunPoolItemSerializer, ContainerTypeSerializer, \
+    SequencingRunPoolItemSerializer, \
     EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer, \
     EnvironmentalSampleCollectionSerializer
-from lims.models import Box, StorageLocation, Assembly, TubeType, \
-    ExperimentalResult, SequencingRun, Tube, SampleType, Experiment, Phage, \
-    PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, ContainerType, \
+from lims.models import Storage, Assembly, \
+    ExperimentalResult, SequencingRun, SampleType, Experiment, Phage, \
+    PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
 
 
-class BoxViewSet(viewsets.ModelViewSet):
-    queryset = Box.objects.all()
-    serializer_class = BoxSerializer
+class StorageFilter(django_filters.FilterSet):
+    room = django_filters.CharFilter(name="room", lookup_expr="icontains")
+
+    class Meta:
+        model = Storage
+        fields = ['room', 'type', 'id']
 
 
-class StorageLocationViewSet(viewsets.ModelViewSet):
-    queryset = StorageLocation.objects.all()
-    serializer_class = StorageLocationSerializer
+class StorageViewSet(viewsets.ModelViewSet):
+    queryset = Storage.objects.all()
+    filter_class = StorageFilter
+    serializer_class = StorageSerializer
 
 
 class AssemblyViewSet(viewsets.ModelViewSet):
     queryset = Assembly.objects.all()
     serializer_class = AssemblySerializer
-
-
-class TubeTypeViewSet(viewsets.ModelViewSet):
-    queryset = TubeType.objects.all()
-    serializer_class = TubeTypeSerializer
 
 
 class ExperimentalResultViewSet(viewsets.ModelViewSet):
@@ -42,11 +42,6 @@ class ExperimentalResultViewSet(viewsets.ModelViewSet):
 class SequencingRunViewSet(viewsets.ModelViewSet):
     queryset = SequencingRun.objects.all()
     serializer_class = SequencingRunSerializer
-
-
-class TubeViewSet(viewsets.ModelViewSet):
-    queryset = Tube.objects.all()
-    serializer_class = TubeSerializer
 
 
 class SampleTypeViewSet(viewsets.ModelViewSet):
@@ -91,11 +86,6 @@ class SequencingRunPoolViewSet(viewsets.ModelViewSet):
 class SequencingRunPoolItemViewSet(viewsets.ModelViewSet):
     queryset = SequencingRunPoolItem.objects.all()
     serializer_class = SequencingRunPoolItemSerializer
-
-
-class ContainerTypeViewSet(viewsets.ModelViewSet):
-    queryset = ContainerType.objects.all()
-    serializer_class = ContainerTypeSerializer
 
 
 class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
