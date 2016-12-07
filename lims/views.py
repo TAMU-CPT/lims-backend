@@ -17,10 +17,12 @@ from lims.models import Storage, Assembly, \
 
 class StorageFilter(django_filters.FilterSet):
     room = django_filters.CharFilter(name="room", lookup_expr="icontains")
+    name = django_filters.CharFilter(name="name", lookup_expr="icontains")
+    box = django_filters.CharFilter(name="box", lookup_expr="icontains")
 
     class Meta:
         model = Storage
-        fields = ['room', 'type', 'id']
+        fields = ['id', 'room', 'type', 'name', 'shelf', 'box']
 
 
 class StorageViewSet(viewsets.ModelViewSet):
