@@ -13,6 +13,7 @@ dj_fixtures:  ## Load fixtures for base set of apps
 dj_clean_migrations: ## Remove migrations
 	rm -f \
 		account/migrations/0*py* \
+		annotation/migrations/0*py* \
 		bioproject/migrations/0*py* \
 		directory/migrations/0*py* \
 		lims/migrations/0*py*
