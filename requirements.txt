@@ -16,3 +16,4 @@ psycopg2
 pytz==2016.4
 six
 django-filter
+raven==5.32.0
