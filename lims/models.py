@@ -36,10 +36,10 @@ class Storage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     room = models.CharField(max_length=32) # e.g. '315'
     type = models.IntegerField(choices=STORAGE_TYPES)
-    name = models.CharField(max_length=64) # e.g. '315 F5' (or whatever the label says)
+    container_label = models.CharField(max_length=64) # e.g. '315 F5' (or whatever the fridge/freezer label says)
     shelf = models.CharField(max_length=32, blank=True, null=True)
     box = models.CharField(max_length=64, blank=True, null=True) # label on box, if there is one
-    tube = models.CharField(max_length=64) # label on tube
+    sample_label = models.CharField(max_length=64) # label on tube
 
 
 class EnvironmentalSample(models.Model):

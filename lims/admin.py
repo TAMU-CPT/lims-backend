@@ -7,7 +7,7 @@ from .models import Storage, Assembly, \
 
 class StorageAdmin(admin.ModelAdmin):
     queryset = Storage.objects.all()
-    list_display = ('id', 'room', 'type', 'name', 'shelf', 'box', 'tube',)
+    list_display = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label',)
 
 class AssemblyAdmin(admin.ModelAdmin):
     queryset = Assembly.objects.all()
