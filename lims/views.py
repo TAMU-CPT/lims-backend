@@ -19,10 +19,11 @@ class StorageFilter(django_filters.FilterSet):
     room = django_filters.CharFilter(name="room", lookup_expr="icontains")
     container_label = django_filters.CharFilter(name="container_label", lookup_expr="icontains")
     box = django_filters.CharFilter(name="box", lookup_expr="icontains")
+    sample_label = django_filters.CharFilter(name="sample_label", lookup_expr="icontains")
 
     class Meta:
         model = Storage
-        fields = ['id', 'room', 'type', 'container_label', 'shelf', 'box']
+        fields = ['id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label']
 
 
 class StorageViewSet(viewsets.ModelViewSet):
