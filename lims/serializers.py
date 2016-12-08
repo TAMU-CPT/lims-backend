@@ -157,7 +157,7 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
 class LysateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lysate
-        fields = ('isolation', 'storage', 'phage', 'id', 'oldid',)
+        fields = ('isolation', 'storage', 'id', 'oldid',)
 
 
 class BacteriaSerializer(serializers.ModelSerializer):
@@ -205,12 +205,13 @@ class PhageSerializerDetail(serializers.ModelSerializer):
     host_lims = BacteriaSerializer(many=True)
     assembly = AssemblySerializer(required=False, allow_null=True)
     phagednaprep = PhageDNAPrepSerializer(required=False, allow_null=True)
+    lysate = LysateSerializerDetail(required=False, allow_null=True)
 
     class Meta:
         model = Phage
         fields = (
             'historical_names', 'primary_name', 'id', 'env_sample_collection',
-            'host_lims', 'owner', 'source', 'assembly', 'phagednaprep'
+            'host_lims', 'owner', 'source', 'assembly', 'phagednaprep', 'lysate'
         )
 
     def update(self, instance, validated_data):
@@ -222,7 +223,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
             host_lims_new.append(host_obj)
         validated_data['host_lims'] = host_lims_new
 
-        env_sample_collection_new = []
+        # env_sample_collection_new = []
         # for env_sample in validated_data['env_sample_collection']['env_sample']:
             # print env_sample
 

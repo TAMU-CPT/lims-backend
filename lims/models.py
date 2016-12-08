@@ -81,8 +81,6 @@ class Lysate(models.Model):
     # HAS_CPT_HASHID
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
-    phage = models.OneToOneField('Phage')
-
     storage = models.OneToOneField(Storage)
 
     def __unicode__(self):
@@ -119,10 +117,6 @@ class ExperimentalResult(models.Model):
 
 
 class PhageDNAPrep(models.Model):
-    # HAS_CPT_HASHID
-    lysate = models.OneToOneField(Lysate, blank=True, null=True)
-    phage = models.OneToOneField('Phage')
-
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
 
     # These will point to OMERO eventually...
@@ -233,6 +227,8 @@ class Phage(models.Model):
     primary_name = models.CharField(max_length=64)
     historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
+    lysate = models.ForeignKey(Lysate, blank=True, null=True)
+    phagednaprep = models.ForeignKey(PhageDNAPrep, blank=True, null=True)
     host = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
