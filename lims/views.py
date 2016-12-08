@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 import django_filters
 from django.db.models import Q
 from lims.serializers import StorageSerializer, \
@@ -28,8 +28,10 @@ class StorageFilter(django_filters.FilterSet):
 
 class StorageViewSet(viewsets.ModelViewSet):
     queryset = Storage.objects.all()
-    filter_class = StorageFilter
     serializer_class = StorageSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    ordering_fields = ('__all__')
+    filter_class = StorageFilter
 
 
 class AssemblyViewSet(viewsets.ModelViewSet):
