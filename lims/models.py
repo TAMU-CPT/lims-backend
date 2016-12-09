@@ -78,13 +78,9 @@ class Bacteria(models.Model):
 
 
 class Lysate(models.Model):
-    # HAS_CPT_HASHID
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
     storage = models.OneToOneField(Storage)
-
-    def __unicode__(self):
-        return 'Lysate from {}'.format(self.phage.env_sample_collection)
 
     def get_absolute_url(self):
         return reverse_lazy('lims:lysate-detail', args=[self.id])

@@ -225,11 +225,11 @@ class PhageSerializerDetail(serializers.ModelSerializer):
 
 
 class LysateSerializerDetail(serializers.ModelSerializer):
-    phage = PhageSerializerDetail(read_only=False, allow_null=True)
+    phage_set = PhageSerializerDetail(read_only=False, allow_null=True, many=True)
 
     class Meta:
         model = Lysate
-        fields = ('isolation', 'storage', 'phage', 'id', 'oldid')
+        fields = ('isolation', 'storage', 'phage_set', 'id', 'oldid')
 
 
 class StorageSerializer(serializers.ModelSerializer):
