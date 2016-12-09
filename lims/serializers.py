@@ -161,13 +161,6 @@ class BacteriaSerializer(serializers.ModelSerializer):
         fields = ('strain', 'genus', 'species', 'id',)
 
 
-class LysateSerializerDetail(serializers.ModelSerializer):
-
-    class Meta:
-        model = Lysate
-        fields = ('isolation', 'storage', 'phage', 'id', 'oldid')
-
-
 class PhageSerializerList(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=False)
 
@@ -200,7 +193,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
     host_lims = BacteriaSerializer(many=True)
     assembly = AssemblySerializer(required=False, allow_null=True)
     phagednaprep = PhageDNAPrepSerializer(required=False, allow_null=True)
-    lysate = LysateSerializerDetail(required=False, allow_null=True)
+    lysate = LysateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = Phage
@@ -231,10 +224,18 @@ class PhageSerializerDetail(serializers.ModelSerializer):
         return validated_data
 
 
+class LysateSerializerDetail(serializers.ModelSerializer):
+    phage = PhageSerializerDetail(read_only=False, allow_null=True)
+
+    class Meta:
+        model = Lysate
+        fields = ('isolation', 'storage', 'phage', 'id', 'oldid')
+
+
 class StorageSerializer(serializers.ModelSerializer):
-    lysate = LysateSerializer(read_only=True, allow_null=True)
+    lysate = LysateSerializerDetail(read_only=True, allow_null=True)
     phagednaprep = PhageDNAPrepSerializer(read_only=True, allow_null=True)
+
     class Meta:
         model = Storage
-        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'lysate', 'phagednaprep',)
-
+        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'lysate', 'phagednaprep')
