@@ -75,11 +75,6 @@ class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
         model = SequencingRunPoolItem
         fields = ('id', 'pool',)
 
-class StorageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Storage
-        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label',)
-
 class AssemblySerializer(serializers.ModelSerializer):
     sequencing_run_pool_item = SequencingRunPoolItemSerializer()
 
@@ -234,3 +229,12 @@ class PhageSerializerDetail(serializers.ModelSerializer):
 
         instance.save()
         return validated_data
+
+
+class StorageSerializer(serializers.ModelSerializer):
+    lysate = LysateSerializer(read_only=True, allow_null=True)
+    phagednaprep = PhageDNAPrepSerializer(read_only=True, allow_null=True)
+    class Meta:
+        model = Storage
+        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'lysate', 'phagednaprep',)
+
