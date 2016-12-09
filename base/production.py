@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     'directory',
     'bioproject',
     'account',
-    'search',
     'lims',
     'annotation',
 ]

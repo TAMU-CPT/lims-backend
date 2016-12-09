@@ -9,7 +9,6 @@ django-tagulous
 djangorestframework-jwt
 djangorestframework==3.5.0
 etc
-git+ssh://git@github.tamu.edu/cpt/hashids-py.git
 django-debug-toolbar
 django_extensions
 psycopg2

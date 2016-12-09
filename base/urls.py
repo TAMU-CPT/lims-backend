@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^lims/', include('lims.urls')),
     url(r'^bioproject/', include('bioproject.urls')),
     url(r'^directory/', include('directory.urls')),
-    url(r'^search/', include('search.urls')),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^annotation/', include('annotation.urls')),
     url(r'^api-token-auth/', obtain_jwt_token),
