@@ -224,7 +224,7 @@ class Assembly(models.Model):
 class Phage(models.Model):
     primary_name = models.CharField(max_length=64)
     historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
-    lysate = models.ForeignKey(Lysate, blank=True, null=True)
+    lysate = models.OneToOneField(Lysate, blank=True, null=True)
     phagednaprep = models.ForeignKey(PhageDNAPrep, blank=True, null=True)
     host = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
