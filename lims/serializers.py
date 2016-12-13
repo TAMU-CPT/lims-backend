@@ -217,13 +217,13 @@ class PhageSerializerDetail(serializers.ModelSerializer):
 
 
 class LysateSerializerDetail(serializers.ModelSerializer):
-    phage_set = PhageSerializerList(read_only=False, allow_null=True, many=True)
+    phage = PhageSerializerList(read_only=False, allow_null=True)
     frontend_label = serializers.SerializerMethodField()
     env_sample_collection = EnvironmentalSampleCollectionSerializer(read_only=False)
 
     class Meta:
         model = Lysate
-        fields = ('isolation', 'storage', 'phage_set', 'id', 'oldid', 'frontend_label', 'host', 'env_sample_collection')
+        fields = ('frontend_label', 'isolation', 'storage', 'id', 'oldid', 'host', 'env_sample_collection', 'phage')
 
     def get_frontend_label(self, obj):
         return 'lysate'
@@ -236,7 +236,7 @@ class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
 
     class Meta:
         model = PhageDNAPrep
-        fields = ('morphology', 'experiments', 'storage', 'id', 'frontend_label')
+        fields = ('frontend_label', 'morphology', 'experiments', 'storage', 'id', 'assembly_set', 'phage_set')
 
     def get_frontend_label(self, obj):
         return 'phagednaprep'

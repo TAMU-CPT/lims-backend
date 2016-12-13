@@ -41,6 +41,8 @@ class Storage(models.Model):
     box = models.CharField(max_length=64, blank=True, null=True) # label on box, if there is one
     sample_label = models.CharField(max_length=64) # label on tube
 
+    def __unicode__(self):
+        return self.container_label
 
 class EnvironmentalSample(models.Model):
     description = models.TextField(blank=True)
