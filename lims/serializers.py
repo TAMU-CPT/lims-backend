@@ -228,6 +228,18 @@ class LysateSerializerDetail(serializers.ModelSerializer):
     def get_frontend_label(self, obj):
         return 'lysate'
 
+
+class BasicLysateSerializer(serializers.ModelSerializer):
+    frontend_label = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Lysate
+        fields = ('frontend_label', 'id')
+
+    def get_frontend_label(self, obj):
+        return 'lysate'
+
+
 class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
     experiments = ExperimentalResultDetailSerializer(many=True, read_only=True)
     assembly_set = AssemblySerializer(many=True, read_only=True)
@@ -237,6 +249,16 @@ class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
     class Meta:
         model = PhageDNAPrep
         fields = ('frontend_label', 'morphology', 'experiments', 'storage', 'id', 'assembly_set', 'phage_set')
+
+    def get_frontend_label(self, obj):
+        return 'phagednaprep'
+
+class BasicPhageDNAPrepSerializer(serializers.ModelSerializer):
+    frontend_label = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Lysate
+        fields = ('frontend_label', 'id')
 
     def get_frontend_label(self, obj):
         return 'phagednaprep'
@@ -251,14 +273,14 @@ class StorageSerializer(serializers.ModelSerializer):
     def get_sample_category(self, obj):
         try:
             lysate = obj.lysate
-            serializer = LysateSerializerDetail(lysate)
+            serializer = BasicLysateSerializer(lysate)
             return serializer.data
         except Lysate.DoesNotExist:
             pass
 
         try:
             phagednaprep = obj.phagednaprep
-            serializer = PhageDNAPrepSerializerDetail(phagednaprep)
+            serializer = BasicPhageDNAPrepSerializer(phagednaprep)
             return serializer.data
         except PhageDNAPrep.DoesNotExist:
             pass
