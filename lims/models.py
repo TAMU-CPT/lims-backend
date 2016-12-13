@@ -86,6 +86,7 @@ class Bacteria(models.Model):
 
 
 class Lysate(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
     storage = models.OneToOneField(Storage)
@@ -123,6 +124,7 @@ class ExperimentalResult(models.Model):
 
 
 class PhageDNAPrep(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
 
     # These will point to OMERO eventually...
