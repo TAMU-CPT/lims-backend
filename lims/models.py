@@ -132,10 +132,7 @@ class PhageDNAPrep(models.Model):
     storage = models.OneToOneField(Storage)
 
     def __unicode__(self):
-        return u'Prep of %s with %s morphology' % (self.lysate, self.get_morphology_display())
-
-    def get_absolute_url(self):
-        return reverse_lazy('lims:phagedna-detail', args=[self.id])
+        return u'%s morphology' % (self.get_morphology_display())
 
 
 class SequencingRun(models.Model):
