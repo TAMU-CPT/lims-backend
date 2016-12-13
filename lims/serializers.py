@@ -231,10 +231,11 @@ class LysateSerializerDetail(serializers.ModelSerializer):
 
 class BasicLysateSerializer(serializers.ModelSerializer):
     frontend_label = serializers.SerializerMethodField()
+    phage = PhageSerializerList(read_only=False, allow_null=True)
 
     class Meta:
         model = Lysate
-        fields = ('frontend_label', 'id')
+        fields = ('frontend_label', 'id', 'phage')
 
     def get_frontend_label(self, obj):
         return 'lysate'
@@ -253,15 +254,46 @@ class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
     def get_frontend_label(self, obj):
         return 'phagednaprep'
 
+
 class BasicPhageDNAPrepSerializer(serializers.ModelSerializer):
     frontend_label = serializers.SerializerMethodField()
+    phage_set = PhageSerializerList(read_only=False, allow_null=True, many=True)
 
     class Meta:
         model = Lysate
-        fields = ('frontend_label', 'id')
+        fields = ('frontend_label', 'id', 'phage_set')
 
     def get_frontend_label(self, obj):
         return 'phagednaprep'
+
+
+class BasicEnvironmentalSampleCollectionSerializer(NestableSerializer):
+    frontend_label = serializers.SerializerMethodField()
+    phage_set = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EnvironmentalSampleCollection
+        fields = ('frontend_label', 'id', 'phage_set')
+
+    def get_frontend_label(self, obj):
+        return 'environmentalsamplecollection'
+
+    def get_phage_set(self, obj):
+        try:
+            phages = []
+            lysate_set = obj.lysate_set
+            for lysate in lysate_set.all():
+                try:
+                    phage = lysate.phage
+                    phages.append(PhageSerializerList(phage).data)
+                except:
+                    pass
+            if len(phages) > 0:
+                return phages
+        except Lysate.DoesNotExist:
+            pass
+
+
 
 class StorageSerializer(serializers.ModelSerializer):
     sample_category = serializers.SerializerMethodField()
@@ -281,6 +313,13 @@ class StorageSerializer(serializers.ModelSerializer):
         try:
             phagednaprep = obj.phagednaprep
             serializer = BasicPhageDNAPrepSerializer(phagednaprep)
+            return serializer.data
+        except PhageDNAPrep.DoesNotExist:
+            pass
+
+        try:
+            envsample = obj.environmentalsamplecollection
+            serializer = BasicEnvironmentalSampleCollectionSerializer(envsample)
             return serializer.data
         except PhageDNAPrep.DoesNotExist:
             pass
