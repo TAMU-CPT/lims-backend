@@ -205,22 +205,6 @@ class SequencingRunPoolItem(models.Model):
         return volumeInMix * self.dna_conc
 
 
-class Assembly(models.Model):
-    """
-    This represents a single assembly run of a single genome's sequencing data
-    """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    sequencing_run_pool_item = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
-    galaxy_dataset = models.URLField()
-    notes = models.TextField(blank=True)
-
-    class Meta:
-        verbose_name_plural = "assemblies"
-
-    def __unicode__(self):
-        return 'Assembly %s' % self.id
-
-
 class Phage(models.Model):
     primary_name = models.CharField(max_length=64)
     historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
@@ -229,4 +213,20 @@ class Phage(models.Model):
     host = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
-    assembly = models.ForeignKey(Assembly, blank=True, null=True)
+
+
+class Assembly(models.Model):
+    """
+    This represents a single assembly run of a single genome's sequencing data
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sequencing_run_pool_item = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
+    galaxy_dataset = models.URLField()
+    notes = models.TextField(blank=True)
+    phage = models.ForeignKey(Phage, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "assemblies"
+
+    def __unicode__(self):
+        return 'Assembly %s' % self.id
