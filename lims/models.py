@@ -58,6 +58,14 @@ class EnvironmentalSample(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('lims:envsample-detail', args=[self.id])
 
+
+class EnvironmentalSampleCollection(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    description = models.TextField(blank=True)
+    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
+    storage = models.OneToOneField(Storage)
+
+
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
     species = models.CharField(max_length=64, blank=True)
@@ -79,6 +87,8 @@ class Lysate(models.Model):
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
     storage = models.OneToOneField(Storage)
+    host = models.ManyToManyField(Bacteria, blank=True)
+    env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse_lazy('lims:lysate-detail', args=[self.id])
@@ -211,18 +221,9 @@ class Assembly(models.Model):
         return 'Assembly %s' % self.id
 
 
-class EnvironmentalSampleCollection(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    description = models.TextField(blank=True)
-    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
-    storage = models.OneToOneField(Storage)
-
-
-
 class Phage(models.Model):
     primary_name = models.CharField(max_length=64)
     historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
-    env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
     lysate = models.ForeignKey(Lysate, blank=True, null=True)
     phagednaprep = models.ForeignKey(PhageDNAPrep, blank=True, null=True)
     host = models.ManyToManyField(Bacteria, blank=True)

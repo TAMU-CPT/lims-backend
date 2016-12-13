@@ -51,7 +51,7 @@ class EnvironmentalSampleAdmin(admin.ModelAdmin):
 
 class LysateAdmin(admin.ModelAdmin):
     queryset = Lysate.objects.all()
-    list_display = ('id', 'oldid', 'isolation', 'storage')
+    list_display = ('id', 'oldid', 'isolation', 'storage', 'host')
 
 class BacteriaAdmin(admin.ModelAdmin):
     queryset = Bacteria.objects.all()

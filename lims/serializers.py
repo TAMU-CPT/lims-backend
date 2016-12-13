@@ -140,12 +140,6 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
         return instance
 
 
-class LysateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lysate
-        fields = ('isolation', 'storage', 'id', 'oldid',)
-
-
 class BacteriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bacteria
@@ -179,8 +173,15 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
         return instance
 
 
-class PhageSerializerDetail(serializers.ModelSerializer):
+class LysateSerializer(serializers.ModelSerializer):
     env_sample_collection = EnvironmentalSampleCollectionSerializer(read_only=False)
+
+    class Meta:
+        model = Lysate
+        fields = ('isolation', 'storage', 'id', 'oldid', 'host', 'env_sample_collection')
+
+
+class PhageSerializerDetail(serializers.ModelSerializer):
     host = BacteriaSerializer(many=True)
     assembly = AssemblySerializer(required=False, allow_null=True)
     phagednaprep = PhageDNAPrepSerializer(required=False, allow_null=True)
@@ -189,7 +190,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
     class Meta:
         model = Phage
         fields = (
-            'historical_names', 'primary_name', 'id', 'env_sample_collection',
+            'historical_names', 'primary_name', 'id',
             'host', 'owner', 'source', 'assembly', 'phagednaprep', 'lysate'
         )
 
@@ -218,10 +219,11 @@ class PhageSerializerDetail(serializers.ModelSerializer):
 class LysateSerializerDetail(serializers.ModelSerializer):
     phage_set = PhageSerializerList(read_only=False, allow_null=True, many=True)
     frontend_label = serializers.SerializerMethodField()
+    env_sample_collection = EnvironmentalSampleCollectionSerializer(read_only=False)
 
     class Meta:
         model = Lysate
-        fields = ('isolation', 'storage', 'phage_set', 'id', 'oldid', 'frontend_label')
+        fields = ('isolation', 'storage', 'phage_set', 'id', 'oldid', 'frontend_label', 'host', 'env_sample_collection')
 
     def get_frontend_label(self, obj):
         return 'lysate'
