@@ -115,15 +115,6 @@ class PhageDNAPrepSerializer(serializers.ModelSerializer):
         fields = ('morphology', 'id', 'storage', 'experiments')
 
 
-class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
-    experiments = ExperimentalResultDetailSerializer(many=True, read_only=True)
-    assembly_set = AssemblySerializer(many=True, read_only=True)
-
-    class Meta:
-        model = PhageDNAPrep
-        fields = ('morphology', 'experiments', 'storage', 'id')
-
-
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=False)
     sample_type = SampleTypeSerializer()
@@ -225,17 +216,47 @@ class PhageSerializerDetail(serializers.ModelSerializer):
 
 
 class LysateSerializerDetail(serializers.ModelSerializer):
-    phage_set = PhageSerializerDetail(read_only=False, allow_null=True, many=True)
+    phage_set = PhageSerializerList(read_only=False, allow_null=True, many=True)
+    frontend_label = serializers.SerializerMethodField()
 
     class Meta:
         model = Lysate
-        fields = ('isolation', 'storage', 'phage_set', 'id', 'oldid')
+        fields = ('isolation', 'storage', 'phage_set', 'id', 'oldid', 'frontend_label')
 
+    def get_frontend_label(self, obj):
+        return 'lysate'
+
+class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
+    experiments = ExperimentalResultDetailSerializer(many=True, read_only=True)
+    assembly_set = AssemblySerializer(many=True, read_only=True)
+    phage_set = PhageSerializerList(read_only=False, allow_null=True, many=True)
+    frontend_label = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PhageDNAPrep
+        fields = ('morphology', 'experiments', 'storage', 'id', 'frontend_label')
+
+    def get_frontend_label(self, obj):
+        return 'phagednaprep'
 
 class StorageSerializer(serializers.ModelSerializer):
-    lysate = LysateSerializerDetail(read_only=True, allow_null=True)
-    phagednaprep = PhageDNAPrepSerializer(read_only=True, allow_null=True)
+    sample_category = serializers.SerializerMethodField()
 
     class Meta:
         model = Storage
-        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'lysate', 'phagednaprep')
+        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category')
+
+    def get_sample_category(self, obj):
+        try:
+            lysate = obj.lysate
+            serializer = LysateSerializerDetail(lysate)
+            return serializer.data
+        except Lysate.DoesNotExist:
+            pass
+
+        try:
+            phagednaprep = obj.phagednaprep
+            serializer = PhageDNAPrepSerializerDetail(phagednaprep)
+            return serializer.data
+        except PhageDNAPrep.DoesNotExist:
+            pass
