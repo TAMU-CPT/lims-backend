@@ -231,14 +231,22 @@ class LysateSerializerDetail(serializers.ModelSerializer):
 
 class BasicLysateSerializer(serializers.ModelSerializer):
     frontend_label = serializers.SerializerMethodField()
-    phage = PhageSerializerList(read_only=False, allow_null=True)
+    # phage = PhageSerializerList(read_only=False, allow_null=True)
+    phage_set = serializers.SerializerMethodField()
 
     class Meta:
         model = Lysate
-        fields = ('frontend_label', 'id', 'phage')
+        fields = ('frontend_label', 'id', 'phage_set')
 
     def get_frontend_label(self, obj):
         return 'lysate'
+
+    def get_phage_set(self, obj):
+        try:
+            phage = obj.phage
+            return [PhageSerializerList(phage).data]
+        except Phage.DoesNotExist:
+            pass
 
 
 class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
@@ -292,7 +300,6 @@ class BasicEnvironmentalSampleCollectionSerializer(NestableSerializer):
                 return phages
         except Lysate.DoesNotExist:
             pass
-
 
 
 class StorageSerializer(serializers.ModelSerializer):
