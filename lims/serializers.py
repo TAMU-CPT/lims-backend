@@ -328,5 +328,5 @@ class StorageSerializer(serializers.ModelSerializer):
             envsample = obj.environmentalsamplecollection
             serializer = BasicEnvironmentalSampleCollectionSerializer(envsample)
             return serializer.data
-        except PhageDNAPrep.DoesNotExist:
+        except EnvironmentalSampleCollection.DoesNotExist:
             pass
