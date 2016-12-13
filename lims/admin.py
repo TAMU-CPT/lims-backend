@@ -47,7 +47,7 @@ class SequencingRunPoolItemAdmin(admin.ModelAdmin):
 
 class EnvironmentalSampleAdmin(admin.ModelAdmin):
     queryset = EnvironmentalSample.objects.all()
-    list_display = ('id', 'description', 'storage', 'sample_type', 'collection', 'location',)
+    list_display = ('id', 'description', 'sample_type', 'collection', 'location',)
 
 class LysateAdmin(admin.ModelAdmin):
     queryset = Lysate.objects.all()
@@ -59,7 +59,7 @@ class BacteriaAdmin(admin.ModelAdmin):
 
 class EnvironmentalSampleCollectionAdmin(admin.ModelAdmin):
     queryset = EnvironmentalSampleCollection.objects.all()
-    list_display = ('id',)
+    list_display = ('id', 'storage')
 
 admin.site.register(Assembly, AssemblyAdmin)
 admin.site.register(ExperimentalResult, ExperimentalResultAdmin)

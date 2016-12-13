@@ -50,8 +50,6 @@ class EnvironmentalSample(models.Model):
     location = gis_models.PointField()
     sample_type = models.ForeignKey(SampleType)
 
-    storage = models.OneToOneField(Storage)
-
     collected_by = models.ForeignKey(Account, blank=True, null=True)
 
     def __unicode__(self):
@@ -217,6 +215,8 @@ class EnvironmentalSampleCollection(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(blank=True)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
+    storage = models.OneToOneField(Storage)
+
 
 
 class Phage(models.Model):

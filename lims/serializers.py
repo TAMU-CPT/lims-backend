@@ -123,7 +123,7 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EnvironmentalSample
-        fields = ('description', 'storage', 'sample_type', 'collection', 'id', 'location', 'location_xy', 'collected_by')
+        fields = ('description', 'sample_type', 'collection', 'id', 'location', 'location_xy', 'collected_by')
 
     def get_location_xy(self, obj):
         # print obj.location.json
@@ -166,7 +166,7 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
 
     class Meta:
         model = EnvironmentalSampleCollection
-        fields = ('id', 'env_sample', 'description')
+        fields = ('id', 'env_sample', 'description', 'storage')
 
     def update(self, instance, validated_data):
 
