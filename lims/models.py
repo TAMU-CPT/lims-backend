@@ -87,7 +87,7 @@ class Lysate(models.Model):
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
     storage = models.OneToOneField(Storage)
-    host = models.ManyToManyField(Bacteria, blank=True)
+    host = models.ForeignKey(Bacteria, blank=True)
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
 
     def get_absolute_url(self):
