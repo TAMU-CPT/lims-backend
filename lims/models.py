@@ -45,6 +45,7 @@ class Storage(models.Model):
         self.what()
         return self.container_label
 
+    @property
     def what_type(self):
         try:
             lysate = self.lysate

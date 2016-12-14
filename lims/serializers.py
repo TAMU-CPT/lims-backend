@@ -310,14 +310,11 @@ class StorageSerializer(serializers.ModelSerializer):
         fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category')
 
     def get_sample_category(self, obj):
-        print '*********'
-        print obj.what_type()
-        print '*********'
-        if obj.what_type() == 'lysate':
+        if obj.what_type == 'lysate':
             return BasicLysateSerializer(obj.lysate).data
-        elif obj.what_type() == 'phagednaprep':
+        elif obj.what_type == 'phagednaprep':
             return BasicPhageDNAPrepSerializer(obj.phagednaprep).data
-        elif obj.what_type() == 'envsample':
+        elif obj.what_type == 'envsample':
             return BasicEnvironmentalSampleCollectionSerializer(obj.environmentalsamplecollection).data
         else:
             return
