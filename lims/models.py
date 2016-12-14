@@ -42,7 +42,6 @@ class Storage(models.Model):
     sample_label = models.CharField(max_length=64) # label on tube
 
     def __unicode__(self):
-        self.what()
         return self.container_label
 
     @property

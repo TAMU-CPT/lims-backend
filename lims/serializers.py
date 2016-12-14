@@ -284,7 +284,7 @@ class BasicEnvironmentalSampleCollectionSerializer(NestableSerializer):
         fields = ('frontend_label', 'id', 'phage_set')
 
     def get_frontend_label(self, obj):
-        return 'environmentalsamplecollection'
+        return 'envsample'
 
     def get_phage_set(self, obj):
         try:
