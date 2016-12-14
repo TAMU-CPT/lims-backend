@@ -45,7 +45,7 @@ class Storage(models.Model):
         return self.container_label
 
     @property
-    def what_type(self):
+    def what_category(self):
         try:
             lysate = self.lysate
             return 'lysate'

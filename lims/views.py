@@ -20,16 +20,16 @@ class StorageFilter(django_filters.FilterSet):
     container_label = django_filters.CharFilter(name="container_label", lookup_expr="icontains")
     box = django_filters.CharFilter(name="box", lookup_expr="icontains")
     sample_label = django_filters.CharFilter(name="sample_label", lookup_expr="icontains")
-    sample_type = django_filters.CharFilter(method="custom_method")
+    sample_category = django_filters.CharFilter(method="custom_method")
 
     class Meta:
         model = Storage
-        fields = ['id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_type']
+        fields = ['id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category']
 
     def custom_method(self, queryset, name, value):
         ids = []
         for q in queryset:
-            if q.what_type == value:
+            if q.what_category == value:
                 ids.append(q.id)
 
         return queryset.filter(pk__in=ids)
