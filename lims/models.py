@@ -42,7 +42,29 @@ class Storage(models.Model):
     sample_label = models.CharField(max_length=64) # label on tube
 
     def __unicode__(self):
+        self.what()
         return self.container_label
+
+    def what_type(self):
+        try:
+            lysate = self.lysate
+            return 'lysate'
+        except Lysate.DoesNotExist:
+            pass
+
+        try:
+            phagednaprep = self.phagednaprep
+            return 'phagednaprep'
+        except PhageDNAPrep.DoesNotExist:
+            pass
+
+        try:
+            envsample = self.environmentalsamplecollection
+            return 'envsample'
+        except EnvironmentalSampleCollection.DoesNotExist:
+            pass
+
+        return
 
 class EnvironmentalSample(models.Model):
     description = models.TextField(blank=True)
