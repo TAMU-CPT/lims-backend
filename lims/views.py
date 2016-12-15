@@ -22,11 +22,11 @@ class StorageFilter(django_filters.FilterSet):
     box = django_filters.CharFilter(name="box", lookup_expr="icontains")
     sample_label = django_filters.CharFilter(name="sample_label", lookup_expr="icontains")
     sample_category = django_filters.CharFilter(method="get_category")
-    phages = django_filters.CharFilter(method="get_phages")
+    phage = django_filters.CharFilter(method="get_phage")
 
     class Meta:
         model = Storage
-        fields = ['id', 'room', 'rooms', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category', 'phages']
+        fields = ['id', 'room', 'rooms', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category', 'phage']
 
     def get_rooms(self, queryset, name, value):
         return queryset.filter(room__in=value.split(','))
@@ -39,7 +39,7 @@ class StorageFilter(django_filters.FilterSet):
 
         return queryset.filter(pk__in=ids)
 
-    def get_phages(self, queryset, name, value):
+    def get_phage(self, queryset, name, value):
         ids = []
         for q in queryset:
             if q.what_category == 'lysate':
@@ -60,13 +60,11 @@ class StorageFilter(django_filters.FilterSet):
                     pass
 
             elif q.what_category == 'envsample':
-                print q.what_category
                 try:
                     lysate_set = q.environmentalsamplecollection.lysate_set
                     for lysate in lysate_set.all():
                         try:
                             p = lysate.phage
-                            print p.primary_name
                             if p.primary_name == value:
                                 ids.append(q.id)
                         except:
