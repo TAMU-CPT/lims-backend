@@ -20,13 +20,14 @@ class StorageFilter(django_filters.FilterSet):
     container_label = django_filters.CharFilter(name="container_label", lookup_expr="icontains")
     box = django_filters.CharFilter(name="box", lookup_expr="icontains")
     sample_label = django_filters.CharFilter(name="sample_label", lookup_expr="icontains")
-    sample_category = django_filters.CharFilter(method="custom_method")
+    sample_category = django_filters.CharFilter(method="get_category")
+    phages = django_filters.CharFilter(method="get_phages")
 
     class Meta:
         model = Storage
-        fields = ['id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category']
+        fields = ['id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category', 'phages']
 
-    def custom_method(self, queryset, name, value):
+    def get_category(self, queryset, name, value):
         ids = []
         for q in queryset:
             if q.what_category == value:
@@ -34,6 +35,14 @@ class StorageFilter(django_filters.FilterSet):
 
         return queryset.filter(pk__in=ids)
 
+    def get_phages(self, queryset, name, value):
+        # ids = []
+        # for q in queryset:
+            # if q.what_category == value:
+                # ids.append(q.id)
+
+        # return queryset.filter(pk__in=ids)
+        return queryset
 
 
 class StorageViewSet(viewsets.ModelViewSet):
