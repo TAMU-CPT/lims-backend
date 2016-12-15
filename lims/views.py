@@ -17,6 +17,7 @@ from lims.models import Storage, Assembly, \
 
 class StorageFilter(django_filters.FilterSet):
     room = django_filters.CharFilter(name="room", lookup_expr="icontains")
+    rooms = django_filters.CharFilter(method="get_rooms")
     container_label = django_filters.CharFilter(name="container_label", lookup_expr="icontains")
     box = django_filters.CharFilter(name="box", lookup_expr="icontains")
     sample_label = django_filters.CharFilter(name="sample_label", lookup_expr="icontains")
@@ -25,7 +26,10 @@ class StorageFilter(django_filters.FilterSet):
 
     class Meta:
         model = Storage
-        fields = ['id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category', 'phages']
+        fields = ['id', 'room', 'rooms', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category', 'phages']
+
+    def get_rooms(self, queryset, name, value):
+        return queryset.filter(room__in=value.split(','))
 
     def get_category(self, queryset, name, value):
         ids = []
@@ -36,7 +40,6 @@ class StorageFilter(django_filters.FilterSet):
         return queryset.filter(pk__in=ids)
 
     def get_phages(self, queryset, name, value):
-        print '*******'
         ids = []
         for q in queryset:
             if q.what_category == 'lysate':
@@ -70,8 +73,6 @@ class StorageFilter(django_filters.FilterSet):
                             pass
                 except:
                     pass
-
-        print '*******'
 
         return queryset.filter(pk__in=ids)
 
