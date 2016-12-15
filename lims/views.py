@@ -36,13 +36,44 @@ class StorageFilter(django_filters.FilterSet):
         return queryset.filter(pk__in=ids)
 
     def get_phages(self, queryset, name, value):
-        # ids = []
-        # for q in queryset:
-            # if q.what_category == value:
-                # ids.append(q.id)
+        print '*******'
+        ids = []
+        for q in queryset:
+            if q.what_category == 'lysate':
+                try:
+                    p = q.lysate.phage
+                    if p.primary_name == value:
+                        ids.append(q.id)
+                except:
+                    pass
 
-        # return queryset.filter(pk__in=ids)
-        return queryset
+            elif q.what_category == 'phagednaprep':
+                try:
+                    ps = q.phagednaprep.phage_set
+                    for p in ps.all():
+                        if p.primary_name == value:
+                            ids.append(q.id)
+                except:
+                    pass
+
+            elif q.what_category == 'envsample':
+                print q.what_category
+                try:
+                    lysate_set = q.environmentalsamplecollection.lysate_set
+                    for lysate in lysate_set.all():
+                        try:
+                            p = lysate.phage
+                            print p.primary_name
+                            if p.primary_name == value:
+                                ids.append(q.id)
+                        except:
+                            pass
+                except:
+                    pass
+
+        print '*******'
+
+        return queryset.filter(pk__in=ids)
 
 
 class StorageViewSet(viewsets.ModelViewSet):
