@@ -19,6 +19,7 @@ class StorageFilter(django_filters.FilterSet):
     room = django_filters.CharFilter(name="room", lookup_expr="icontains")
     rooms = django_filters.CharFilter(method="get_rooms")
     container_label = django_filters.CharFilter(name="container_label", lookup_expr="icontains")
+    container_labels = django_filters.CharFilter(method="get_container_labels")
     box = django_filters.CharFilter(name="box", lookup_expr="icontains")
     sample_label = django_filters.CharFilter(name="sample_label", lookup_expr="icontains")
     sample_category = django_filters.CharFilter(method="get_category")
@@ -26,10 +27,13 @@ class StorageFilter(django_filters.FilterSet):
 
     class Meta:
         model = Storage
-        fields = ['id', 'room', 'rooms', 'type', 'container_label', 'shelf', 'box', 'sample_label', 'sample_category', 'phage']
+        fields = ['id', 'room', 'rooms', 'type', 'container_label', 'container_labels', 'shelf', 'box', 'sample_label', 'sample_category', 'phage']
 
     def get_rooms(self, queryset, name, value):
         return queryset.filter(room__in=value.split(','))
+
+    def get_container_labels(self, queryset, name, value):
+        return queryset.filter(container_label__in=value.split(','))
 
     def get_category(self, queryset, name, value):
         ids = []
