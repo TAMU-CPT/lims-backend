@@ -1,5 +1,7 @@
 from rest_framework import viewsets, filters
 import django_filters
+import django_filters.rest_framework
+
 from django.db.models import Q
 from lims.serializers import StorageSerializer, \
     AssemblySerializer, ExperimentalResultSerializer, \
@@ -202,6 +204,9 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
 class EnvironmentalSampleCollectionViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSampleCollection.objects.all()
     serializer_class = EnvironmentalSampleCollectionSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter,)
+    filter_fields = ('true_collection', )
+    ordering_fields = ('__all__')
 
 
 class LysateViewSet(viewsets.ModelViewSet):
