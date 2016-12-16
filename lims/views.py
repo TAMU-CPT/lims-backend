@@ -158,6 +158,8 @@ class PhageViewSet(viewsets.ModelViewSet):
             return PhageSerializerList
         return PhageSerializerDetail
 
+    paginate_by = None
+
 
 class PhageDNAPrepViewSet(viewsets.ModelViewSet):
     queryset = PhageDNAPrep.objects.all()
