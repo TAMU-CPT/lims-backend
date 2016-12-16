@@ -75,6 +75,7 @@ class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
         model = SequencingRunPoolItem
         fields = ('id', 'pool',)
 
+
 class AssemblySerializer(serializers.ModelSerializer):
     sequencing_run_pool_item = SequencingRunPoolItemSerializer()
 
@@ -116,28 +117,20 @@ class PhageDNAPrepSerializer(serializers.ModelSerializer):
 
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=False)
-    sample_type = SampleTypeSerializer()
+    id = serializers.IntegerField(read_only=True)
+    sample_type = SampleTypeSerializer(read_only=True)
     location_xy = serializers.SerializerMethodField()
     collected_by = AccountSerializerLight(read_only=True)
 
     class Meta:
         model = EnvironmentalSample
-        fields = ('description', 'sample_type', 'collection', 'id', 'location', 'location_xy', 'collected_by')
+        fields = ('id', 'description', 'sample_type', 'collection', 'location_xy', 'collected_by')
 
     def get_location_xy(self, obj):
         # print obj.location.json
         # print obj.location.geojson
         # print obj.location.coords
         return obj.location.coords
-
-    def create(self, validated_data):
-        print('ess, create', validated_data)
-
-    def update(self, instance, validated_data):
-        print(instance)
-        print(validated_data)
-        return instance
 
 
 class BacteriaSerializer(serializers.ModelSerializer):

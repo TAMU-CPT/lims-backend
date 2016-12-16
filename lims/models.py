@@ -66,11 +66,10 @@ class Storage(models.Model):
 
         return
 
+
 class EnvironmentalSample(models.Model):
     description = models.TextField(blank=True)
-    # HAS_CPT_HASHID
     collection = models.DateTimeField()
-    # location = models.
     location = gis_models.PointField()
     sample_type = models.ForeignKey(SampleType)
 
@@ -236,6 +235,7 @@ class Phage(models.Model):
     host = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
+    # notes = models.TextField(blank=True)
 
 
 class Assembly(models.Model):
