@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import Storage, Assembly, \
     ExperimentalResult, SequencingRun, SampleType, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
-    EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
+    EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection, \
+    EnvironmentalSampleRelation
 
 
 class StorageAdmin(admin.ModelAdmin):
@@ -61,6 +62,10 @@ class EnvironmentalSampleCollectionAdmin(admin.ModelAdmin):
     queryset = EnvironmentalSampleCollection.objects.all()
     list_display = ('id', 'storage')
 
+class EnvironmentalSampleRelationAdmin(admin.ModelAdmin):
+    queryset = EnvironmentalSampleRelation.objects.all()
+    list_display = ('id', 'es', 'esc', 'true_collection')
+
 admin.site.register(Assembly, AssemblyAdmin)
 admin.site.register(ExperimentalResult, ExperimentalResultAdmin)
 admin.site.register(SequencingRun, SequencingRunAdmin)
@@ -75,3 +80,4 @@ admin.site.register(EnvironmentalSample, EnvironmentalSampleAdmin)
 admin.site.register(Lysate, LysateAdmin)
 admin.site.register(Bacteria, BacteriaAdmin)
 admin.site.register(EnvironmentalSampleCollection, EnvironmentalSampleCollectionAdmin)
+admin.site.register(EnvironmentalSampleRelation, EnvironmentalSampleRelationAdmin)

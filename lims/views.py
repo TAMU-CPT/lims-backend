@@ -188,8 +188,9 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
         if loc is None:
             raise Exception("Must provide location")
 
-        assert isinstance(loc['lat'], float)
-        assert isinstance(loc['lng'], float)
+        loc['lat'] = float(loc['lat'])
+        loc['lng'] = float(loc['lng'])
+
         assert -90 <= loc['lat'] <= 90
         assert -180 <= loc['lng'] <= 180
 
@@ -205,7 +206,7 @@ class EnvironmentalSampleCollectionViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSampleCollection.objects.all()
     serializer_class = EnvironmentalSampleCollectionSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter,)
-    filter_fields = ('true_collection', )
+    # filter_fields = ('true_collection', )
     ordering_fields = ('__all__')
 
 

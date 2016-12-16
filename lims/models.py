@@ -48,19 +48,19 @@ class Storage(models.Model):
     @property
     def what_category(self):
         try:
-            lysate = self.lysate
+            lysate = self.lysate # noqa
             return 'lysate'
         except Lysate.DoesNotExist:
             pass
 
         try:
-            phagednaprep = self.phagednaprep
+            phagednaprep = self.phagednaprep # noqa
             return 'phagednaprep'
         except PhageDNAPrep.DoesNotExist:
             pass
 
         try:
-            envsample = self.environmentalsamplecollection
+            envsample = self.environmentalsamplecollection # noqa
             return 'envsample'
         except EnvironmentalSampleCollection.DoesNotExist:
             pass
@@ -79,30 +79,20 @@ class EnvironmentalSample(models.Model):
     def __unicode__(self):
         return '{} sample from {}'.format(self.sample_type, self.collection)
 
-    def get_absolute_url(self):
-        return reverse_lazy('lims:envsample-detail', args=[self.id])
-
-    @property
-    def in_mixed(self):
-        """
-        If it is part of more than one EnvironmentalSampleCollection, this will return true.
-        """
-        return self.environmentalsamplecollection_set.count() > 1
-
-    @property
-    def default_collection(self):
-        """
-        The default auto-created collection of the environmental sample.
-
-        There should only ever be one of these.
-        """
-        return self.environmentalsamplecollection_set.get(true_collection=False)
 
 class EnvironmentalSampleCollection(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(blank=True)
-    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
+    env_sample = models.ManyToManyField(EnvironmentalSample, blank=True, through='EnvironmentalSampleRelation')
     storage = models.OneToOneField(Storage, blank=True, null=True)
+
+    def __unicode__(self):
+        return str(self.id)
+
+
+class EnvironmentalSampleRelation(models.Model):
+    es = models.ForeignKey(EnvironmentalSample)
+    esc = models.ForeignKey(EnvironmentalSampleCollection)
     true_collection = models.BooleanField(default=False, help_text="Whether or not this is a 'true' collection of multiple phages, or simply the default collection instance auto-created for an environmental sample")
 
 
@@ -280,8 +270,11 @@ def create_default_envsamplecollection(sender, instance, created, **kwargs):
         return
 
     esc = EnvironmentalSampleCollection.objects.create()
-    esc.env_sample = [instance]
-    esc.save()
+    EnvironmentalSampleRelation.objects.create(
+        es=instance,
+        esc=esc,
+        true_collection=False,
+    )
 
 signals.post_save.connect(
     create_default_envsamplecollection,
