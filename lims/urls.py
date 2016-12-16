@@ -20,6 +20,7 @@ router.register(r'sequencingrunpoolitems', views.SequencingRunPoolItemViewSet)
 router.register(r'sequencingrunpools', views.SequencingRunPoolViewSet)
 router.register(r'sequencingruns', views.SequencingRunViewSet)
 router.register(r'storage/rooms', views.RoomStorageViewSet)
+router.register(r'storage/container_labels', views.ContainerLabelStorageViewSet)
 router.register(r'storage', views.StorageViewSet)
 
 urlpatterns = [

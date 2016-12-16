@@ -319,7 +319,14 @@ class StorageSerializer(serializers.ModelSerializer):
         else:
             return
 
+
 class RoomStorageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Storage
         fields = ('room',)
+
+
+class ContainerLabelStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = ('container_label',)
