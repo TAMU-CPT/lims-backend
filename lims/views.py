@@ -180,6 +180,24 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSample.objects.all()
     serializer_class = EnvironmentalSampleSerializer
 
+    def perform_create(self, serializer):
+        # Fetch location or crash if none
+        loc = self.request.data.get('location', None)
+        if loc is None:
+            raise Exception("Must provide location")
+
+        assert isinstance(loc['lat'], float)
+        assert isinstance(loc['lng'], float)
+        assert -90 <= loc['lat'] <= 90
+        assert -180 <= loc['lng'] <= 180
+
+        # Make changes
+        serializer.save(
+            location="SRID=4326;POINT (%s %s)" % (loc['lat'], loc['lng']),
+            collected_by=self.request.user.account,
+            sample_type=SampleType.objects.get_or_create(name=self.request.data.get('sampletype', 'Unknown'))[0],
+        )
+
 
 class EnvironmentalSampleCollectionViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSampleCollection.objects.all()
