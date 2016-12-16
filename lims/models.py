@@ -6,6 +6,7 @@ from directory.models import Organisation
 from account.models import Account
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.gis.db import models as gis_models
+from django.db.models import signals
 
 
 PHAGE_MORPHOLOGY = (
@@ -86,7 +87,7 @@ class EnvironmentalSampleCollection(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.TextField(blank=True)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
-    storage = models.OneToOneField(Storage)
+    storage = models.OneToOneField(Storage, blank=True, null=True)
 
 
 class Bacteria(models.Model):
@@ -110,7 +111,7 @@ class Lysate(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(null=True, blank=True)
-    storage = models.OneToOneField(Storage)
+    storage = models.OneToOneField(Storage, blank=True, null=True)
     host = models.ForeignKey(Bacteria, blank=True)
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
 
@@ -154,7 +155,7 @@ class PhageDNAPrep(models.Model):
     # Nanodrop, pico green, other?
     experiments = models.ManyToManyField(ExperimentalResult, blank=True)
 
-    storage = models.OneToOneField(Storage)
+    storage = models.OneToOneField(Storage, blank=True, null=True)
 
     def __unicode__(self):
         return u'%s morphology' % (self.get_morphology_display())
@@ -253,3 +254,21 @@ class Assembly(models.Model):
 
     def __unicode__(self):
         return 'Assembly %s' % self.id
+
+
+
+
+def create_default_envsamplecollection(sender, instance, created, **kwargs):
+    """Create EnvironmentalSampleCollection for every new EnvironmentalSample."""
+    if not created:
+        return
+
+    esc = EnvironmentalSampleCollection.objects.create()
+    esc.env_sample = [instance]
+    esc.save()
+
+signals.post_save.connect(
+    create_default_envsamplecollection,
+    sender=EnvironmentalSample, weak=False,
+    dispatch_uid='models.create_default_envsamplecollection'
+)
