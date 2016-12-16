@@ -1,4 +1,4 @@
-
+import hashlib
 from rest_framework import serializers
 from account.models import Account, EmailConfirmation, SignupCodeResult, SignupCode, EmailAddress, AccountDeletion, AnonymousAccount
 from directory.models import Organisation
@@ -23,14 +23,22 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class AccountSerializerLight(serializers.ModelSerializer):
     email = serializers.SerializerMethodField()
+    email_h = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
 
     class Meta:
         model = Account
-        fields = ('id', 'name', 'netid', 'user', 'nickname', 'initials', 'email', 'username')
+        fields = ('id', 'name', 'email_h', 'username', 'email')
 
     def get_email(self, obj):
         return obj.netid + '@tamu.edu'
+
+    def get_email_h(self, obj):
+        e = obj.primaryEmail()
+        if e:
+            return hashlib.md5(e.email).hexdigest()
+        else:
+            return None
 
     def get_username(self, obj):
         return obj.user.username

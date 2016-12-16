@@ -19,7 +19,6 @@ class SignupCodeAdmin(admin.ModelAdmin):
 
 class EmailAddressAdmin(admin.ModelAdmin):
     queryset = EmailAddress.objects.all()
-    list_display = ('id', 'verified', 'primary', 'email', 'objects', 'user', )
 
 class AccountDeletionAdmin(admin.ModelAdmin):
     queryset = AccountDeletion.objects.all()
