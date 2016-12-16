@@ -191,7 +191,7 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
 
         # Make changes
         serializer.save(
-            location="SRID=4326;POINT (%s %s)" % (loc['lat'], loc['lng']),
+            location="SRID=4326;POINT (%s %s)" % (loc['lng'], loc['lat']),
             collected_by=self.request.user.account,
             sample_type=SampleType.objects.get_or_create(name=self.request.data.get('sampletype', 'Unknown'))[0],
         )
