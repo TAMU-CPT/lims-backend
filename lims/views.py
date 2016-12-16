@@ -8,7 +8,7 @@ from lims.serializers import StorageSerializer, \
     PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
     SequencingRunPoolItemSerializer, \
     EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer, \
-    EnvironmentalSampleCollectionSerializer
+    EnvironmentalSampleCollectionSerializer, RoomStorageSerializer
 from lims.models import Storage, Assembly, \
     ExperimentalResult, SequencingRun, SampleType, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
@@ -85,6 +85,15 @@ class StorageViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     ordering_fields = ('__all__')
     filter_class = StorageFilter
+
+
+class RoomStorageViewSet(viewsets.ModelViewSet):
+    queryset = Storage.objects.values('room').distinct()
+    serializer_class = RoomStorageSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    ordering_fields = ('__all__')
+    filter_class = StorageFilter
+    paginate_by = None
 
 
 class AssemblyViewSet(viewsets.ModelViewSet):
