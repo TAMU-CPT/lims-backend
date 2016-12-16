@@ -74,7 +74,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 5
 }
 
 JWT_AUTH = {

@@ -311,3 +311,21 @@ class StorageSerializer(serializers.ModelSerializer):
             return BasicEnvironmentalSampleCollectionSerializer(obj.environmentalsamplecollection).data
         else:
             return
+
+
+class RoomStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = ('room',)
+
+
+class ContainerLabelStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = ('container_label',)
+
+
+class BoxStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = ('box',)
