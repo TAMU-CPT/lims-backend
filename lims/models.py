@@ -82,6 +82,21 @@ class EnvironmentalSample(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('lims:envsample-detail', args=[self.id])
 
+    @property
+    def in_mixed(self):
+        """
+        If it is part of more than one EnvironmentalSampleCollection, this will return true.
+        """
+        return self.environmentalsamplecollection_set.length()
+
+    @property
+    def default_collection(self):
+        """
+        The default auto-created collection of the environmental sample.
+
+        There should only ever be one of these.
+        """
+        return self.environmentalsamplecollection_set.get(true_collection=False)
 
 class EnvironmentalSampleCollection(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
