@@ -87,7 +87,7 @@ class EnvironmentalSample(models.Model):
         """
         If it is part of more than one EnvironmentalSampleCollection, this will return true.
         """
-        return self.environmentalsamplecollection_set.length()
+        return self.environmentalsamplecollection_set.count() > 1
 
     @property
     def default_collection(self):
