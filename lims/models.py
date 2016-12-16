@@ -88,6 +88,7 @@ class EnvironmentalSampleCollection(models.Model):
     description = models.TextField(blank=True)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True)
     storage = models.OneToOneField(Storage, blank=True, null=True)
+    true_collection = models.BooleanField(default=False, help_text="Whether or not this is a 'true' collection of multiple phages, or simply the default collection instance auto-created for an environmental sample")
 
 
 class Bacteria(models.Model):
