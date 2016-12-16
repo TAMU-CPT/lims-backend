@@ -330,3 +330,9 @@ class ContainerLabelStorageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Storage
         fields = ('container_label',)
+
+
+class BoxStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = ('box',)
