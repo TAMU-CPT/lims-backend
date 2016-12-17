@@ -75,6 +75,15 @@ class EnvironmentalSample(models.Model):
 
 
 class EnvironmentalSampleCollection(models.Model):
+    """Collection of EnvironmentalSample objects.
+    """
+    # https://docs.djangoproject.com/en/1.10/ref/models/fields/#django.db.models.ForeignKey
+    #
+    # A database index is automatically created on the ForeignKey. You can
+    # disable this by setting db_index to False. You may want to avoid the
+    # overhead of an index if you are creating a foreign key for consistency
+    # rather than joins, or if you will be creating an alternative index like a
+    # partial or multiple column index.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     description = models.TextField(blank=True)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True, through='EnvironmentalSampleRelation')
