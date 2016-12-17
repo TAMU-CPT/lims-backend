@@ -133,11 +133,12 @@ class BacteriaSerializer(serializers.ModelSerializer):
 
 
 class PhageSerializerList(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=False)
+    id = serializers.IntegerField(read_only=True)
+    owner = AccountSerializerLight(read_only=True)
 
     class Meta:
         model = Phage
-        fields = ('historical_names', 'primary_name', 'id')
+        fields = ('historical_names', 'primary_name', 'id', 'owner')
 
 
 class EnvironmentalSampleCollectionSerializer(NestableSerializer):
