@@ -7,6 +7,7 @@ from lims import views
 #
 # Especially when a user list is displayed, DRF becomes painfully slow because
 # it runs a select() query for each and every user.
+# xref https://bradmontgomery.net/blog/disabling-forms-django-rest-frameworks-browsable-api/
 from rest_framework.renderers import BrowsableAPIRenderer
 def disable(*args, **kwargs):
     return False
