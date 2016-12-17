@@ -202,11 +202,34 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
         )
 
 
+class EnvironmentalSampleCollectionFilter(django_filters.FilterSet):
+    custom = django_filters.CharFilter(method="get_custom")
+
+    class Meta:
+        model = EnvironmentalSampleCollection
+        fields = ['id', 'custom']
+
+    def get_custom(self, queryset, name, value):
+        # Here we wish to choose the union of:
+        #
+        # - those which are true collection (i.e. envsamplecollections with multiple samples)
+        # - everything not in a true collection (i.e. ESCs which are solely in a single (default) ESC)
+        #
+        interesting_ids = [x.id for x in EnvironmentalSampleCollection.objects.all().filter(true_collection=True)]
+
+        for x in EnvironmentalSample.objects.all():
+            if x.environmentalsamplerelation_set.count() == 1:
+                print('es', x)
+                interesting_ids.append(x.environmentalsamplerelation_set.first().esc.id)
+
+        return queryset.filter(id__in=interesting_ids)
+
+
 class EnvironmentalSampleCollectionViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSampleCollection.objects.all()
     serializer_class = EnvironmentalSampleCollectionSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter,)
-    # filter_fields = ('true_collection', )
+    filter_class = EnvironmentalSampleCollectionFilter
     ordering_fields = ('__all__')
 
 

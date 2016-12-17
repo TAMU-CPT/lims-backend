@@ -149,14 +149,18 @@ class PhageSerializerList(serializers.ModelSerializer):
 
 class EnvironmentalSampleCollectionSerializer(NestableSerializer):
     id = serializers.UUIDField(read_only=False)
+    true_collection = serializers.SerializerMethodField(read_only=True)
     env_sample = EnvironmentalSampleSerializer(many=True)
 
     class Meta:
         model = EnvironmentalSampleCollection
-        fields = ('id', 'env_sample', 'description', 'storage')
+        fields = ('id', 'env_sample', 'description', 'storage', 'env_sample', 'true_collection')
+
+    def get_true_collection(self, obj):
+        esr = obj.environmentalsamplerelation_set.first()
+        return esr.true_collection
 
     def update(self, instance, validated_data):
-
         for sample in validated_data['env_sample']:
             es = EnvironmentalSampleSerializer(data=sample)
             #

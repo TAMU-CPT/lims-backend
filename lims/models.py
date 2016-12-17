@@ -85,6 +85,9 @@ class EnvironmentalSampleCollection(models.Model):
     description = models.TextField(blank=True)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True, through='EnvironmentalSampleRelation')
     storage = models.OneToOneField(Storage, blank=True, null=True)
+    # This field is duplicated because filtering on the EnvSampRelat is haaard.
+    # This must be manually set during creation. Yes, this is sub-optimal.
+    true_collection = models.BooleanField(default=False, help_text="Whether or not this is a 'true' collection of multiple phages, or simply the default collection instance auto-created for an environmental sample")
 
     def __unicode__(self):
         return str(self.id)
