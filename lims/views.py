@@ -2,7 +2,7 @@ from rest_framework import viewsets, filters
 import django_filters
 import django_filters.rest_framework
 
-from django.db.models import Q
+from django.db.models import Q, Count
 from lims.serializers import StorageSerializer, \
     AssemblySerializer, ExperimentalResultSerializer, \
     SequencingRunSerializer, SampleTypeSerializer, \
@@ -216,11 +216,8 @@ class EnvironmentalSampleCollectionFilter(django_filters.FilterSet):
         # - everything not in a true collection (i.e. ESCs which are solely in a single (default) ESC)
         #
         interesting_ids = [x.id for x in EnvironmentalSampleCollection.objects.all().filter(true_collection=True)]
-
-        for x in EnvironmentalSample.objects.all():
-            if x.environmentalsamplerelation_set.count() == 1:
-                print('es', x)
-                interesting_ids.append(x.environmentalsamplerelation_set.first().esc.id)
+        for x in EnvironmentalSample.objects.annotate(esr_count=Count('environmentalsamplerelation')).filter(esr_count=1):
+            interesting_ids.append(x.environmentalsamplerelation_set.first().esc.id)
 
         return queryset.filter(id__in=interesting_ids)
 

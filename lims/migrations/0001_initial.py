@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='EnvironmentalSample',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('description', models.TextField(blank=True)),
                 ('collection', models.DateTimeField()),
                 ('location', django.contrib.gis.db.models.fields.PointField(srid=4326)),
@@ -54,8 +54,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='EnvironmentalSampleCollection',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('id', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('description', models.TextField(blank=True)),
+                ('true_collection', models.BooleanField(default=False, help_text="Whether or not this is a 'true' collection of multiple phages, or simply the default collection instance auto-created for an environmental sample")),
             ],
         ),
         migrations.CreateModel(

@@ -69,6 +69,7 @@ class Storage(models.Model):
 
 
 class EnvironmentalSample(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     description = models.TextField(blank=True)
     collection = models.DateTimeField()
     location = gis_models.PointField()
@@ -81,7 +82,7 @@ class EnvironmentalSample(models.Model):
 
 
 class EnvironmentalSampleCollection(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     description = models.TextField(blank=True)
     env_sample = models.ManyToManyField(EnvironmentalSample, blank=True, through='EnvironmentalSampleRelation')
     storage = models.OneToOneField(Storage, blank=True, null=True)
@@ -94,8 +95,8 @@ class EnvironmentalSampleCollection(models.Model):
 
 
 class EnvironmentalSampleRelation(models.Model):
-    es = models.ForeignKey(EnvironmentalSample)
-    esc = models.ForeignKey(EnvironmentalSampleCollection)
+    es = models.ForeignKey(EnvironmentalSample, db_index=True)
+    esc = models.ForeignKey(EnvironmentalSampleCollection, db_index=True)
     true_collection = models.BooleanField(default=False, help_text="Whether or not this is a 'true' collection of multiple phages, or simply the default collection instance auto-created for an environmental sample")
 
 
