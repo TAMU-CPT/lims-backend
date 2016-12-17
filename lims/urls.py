@@ -3,6 +3,16 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from lims import views
 
+# Disable Forms in Browseable API.
+#
+# Especially when a user list is displayed, DRF becomes painfully slow because
+# it runs a select() query for each and every user.
+from rest_framework.renderers import BrowsableAPIRenderer
+def disable(*args, **kwargs):
+    return False
+BrowsableAPIRenderer.show_form_for_method = disable
+
+
 router = routers.DefaultRouter()
 
 
