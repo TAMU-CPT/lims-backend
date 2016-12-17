@@ -5,7 +5,7 @@ import django_filters.rest_framework
 from django.db.models import Q, Count
 from lims.serializers import StorageSerializer, \
     AssemblySerializer, ExperimentalResultSerializer, \
-    SequencingRunSerializer, SampleTypeSerializer, \
+    SequencingRunSerializer, \
     ExperimentSerializer, PhageSerializerList, PhageSerializerDetail, \
     PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
     SequencingRunPoolItemSerializer, \
@@ -13,7 +13,7 @@ from lims.serializers import StorageSerializer, \
     EnvironmentalSampleCollectionSerializer, RoomStorageSerializer, \
     ContainerLabelStorageSerializer, BoxStorageSerializer
 from lims.models import Storage, Assembly, \
-    ExperimentalResult, SequencingRun, SampleType, Experiment, Phage, \
+    ExperimentalResult, SequencingRun, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
 
@@ -132,10 +132,6 @@ class SequencingRunViewSet(viewsets.ModelViewSet):
     serializer_class = SequencingRunSerializer
 
 
-class SampleTypeViewSet(viewsets.ModelViewSet):
-    queryset = SampleType.objects.all()
-    serializer_class = SampleTypeSerializer
-
 
 class ExperimentViewSet(viewsets.ModelViewSet):
     queryset = Experiment.objects.all()
@@ -198,7 +194,7 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
         serializer.save(
             location="SRID=4326;POINT (%s %s)" % (loc['lng'], loc['lat']),
             collected_by=self.request.user.account,
-            sample_type=SampleType.objects.get_or_create(name=self.request.data.get('sampletype', 'Unknown'))[0],
+            sample_type=self.request.data.get('sampletype', 'Unknown'),
         )
 
 

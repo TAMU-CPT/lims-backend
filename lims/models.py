@@ -26,13 +26,6 @@ STORAGE_TYPES = (
     (1, 'Freezer')
 )
 
-class SampleType(models.Model):
-    name = models.CharField(max_length=32)
-
-    def __unicode__(self):
-        return self.name
-
-
 class Storage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     room = models.CharField(max_length=32) # e.g. '315'
@@ -73,7 +66,7 @@ class EnvironmentalSample(models.Model):
     description = models.TextField(blank=True)
     collection = models.DateTimeField()
     location = gis_models.PointField()
-    sample_type = models.ForeignKey(SampleType)
+    sample_type = models.CharField(max_length=32)
 
     collected_by = models.ForeignKey(Account, blank=True, null=True)
 

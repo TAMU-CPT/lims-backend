@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from random import randint, choice
-from lims.models import EnvironmentalSample, SampleType, EnvironmentalSampleRelation, EnvironmentalSampleCollection
+from lims.models import EnvironmentalSample, EnvironmentalSampleRelation, EnvironmentalSampleCollection
 from account.models import Account
 import datetime
 
@@ -21,7 +21,7 @@ class Command(BaseCommand):
                     minute=randint(0,60)
                 ),
                 location="SRID=4326;POINT (%s %s)" % (randint(-30,30), randint(-30,30)),
-                sample_type=SampleType.objects.get_or_create(name=choice(['water', 'dirt', 'ice', 'sewage']))[0],
+                sample_type=choice(['water', 'dirt', 'ice', 'sewage']),
                 collected_by=choice(users),
             )
             e = EnvironmentalSample(**d)

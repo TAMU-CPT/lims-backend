@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from lims.models import Storage, Assembly, \
-    ExperimentalResult, SequencingRun, SampleType, Experiment, Phage, \
+    ExperimentalResult, SequencingRun, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
 from rest_framework.serializers import ValidationError
@@ -104,12 +104,6 @@ class ExperimentalResultDetailSerializer(serializers.ModelSerializer):
         fields = ('date', 'experiment', 'id', 'run_by', 'result',)
 
 
-class SampleTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SampleType
-        fields = ('name', 'id',)
-
-
 class PhageDNAPrepSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhageDNAPrep
@@ -118,7 +112,6 @@ class PhageDNAPrepSerializer(serializers.ModelSerializer):
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    sample_type = SampleTypeSerializer(read_only=True)
     location_xy = serializers.SerializerMethodField()
     collected_by = AccountSerializerLight(read_only=True)
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Storage, Assembly, \
-    ExperimentalResult, SequencingRun, SampleType, Experiment, Phage, \
+    ExperimentalResult, SequencingRun, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection, \
     EnvironmentalSampleRelation
@@ -21,10 +21,6 @@ class ExperimentalResultAdmin(admin.ModelAdmin):
 class SequencingRunAdmin(admin.ModelAdmin):
     queryset = SequencingRun.objects.all()
     list_display = ('id', 'date', 'name')
-
-class SampleTypeAdmin(admin.ModelAdmin):
-    queryset = SampleType.objects.all()
-    list_display = ('id', 'name', )
 
 class ExperimentAdmin(admin.ModelAdmin):
     queryset = Experiment.objects.all()
@@ -69,7 +65,6 @@ class EnvironmentalSampleRelationAdmin(admin.ModelAdmin):
 admin.site.register(Assembly, AssemblyAdmin)
 admin.site.register(ExperimentalResult, ExperimentalResultAdmin)
 admin.site.register(SequencingRun, SequencingRunAdmin)
-admin.site.register(SampleType, SampleTypeAdmin)
 admin.site.register(Storage, StorageAdmin)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Phage, PhageAdmin)
