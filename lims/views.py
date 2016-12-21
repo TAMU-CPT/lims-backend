@@ -200,10 +200,11 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
 
 class EnvironmentalSampleCollectionFilter(django_filters.FilterSet):
     custom = django_filters.CharFilter(method="get_custom")
+    true_collection = django_filters.BooleanFilter(name="true_collection")
 
     class Meta:
         model = EnvironmentalSampleCollection
-        fields = ['id', 'custom']
+        fields = ['id', 'custom', 'true_collection']
 
     def get_custom(self, queryset, name, value):
         # Here we wish to choose the union of:
