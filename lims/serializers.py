@@ -111,7 +111,7 @@ class PhageDNAPrepSerializer(serializers.ModelSerializer):
 
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
+    # id = serializers.IntegerField(read_only=True)
     location_xy = serializers.SerializerMethodField()
     collected_by = AccountSerializerLight(read_only=True)
 
