@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 import uuid
 from django.db import models
-from lims.models import Phage
+from lims.models import Phage, EnvironmentalSampleCollection
 from django.contrib.auth.models import User, Group
 # Create your models here.
 
@@ -25,7 +25,8 @@ class Bioproject(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=32)
     description = models.TextField(blank=True)
-    sample = models.ManyToManyField(Phage, blank=True)
+    sample_phage = models.ManyToManyField(Phage, blank=True)
+    sample_env = models.ManyToManyField(EnvironmentalSampleCollection, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
     # Can change project sharing

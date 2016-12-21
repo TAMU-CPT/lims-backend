@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from bioproject.models import EditingRoleUser, EditingRoleGroup, Bioproject
 from directory.serializers import GrouplessUserSerializer, GroupSerializer
-from lims.serializers import PhageSerializerList
+from lims.serializers import PhageSerializerList, EnvironmentalSampleCollectionSerializer
 from lims.models import Phage
 from django.contrib.auth.models import User, Group
 
@@ -58,11 +58,12 @@ class BioprojectSerializer(serializers.ModelSerializer):
     editingrolegroup_set = EditingRoleGroupSerializer(many=True)
     editingroleuser_set = EditingRoleUserSerializer(many=True)
     owner = GrouplessUserSerializer(partial=True)
-    sample = PhageSerializerList(many=True)
+    sample_phage = PhageSerializerList(many=True)
+    sample_env = EnvironmentalSampleCollectionSerializer(many=True)
 
     class Meta:
         model = Bioproject
-        fields = ('id', 'name', 'description', 'sample',
+        fields = ('id', 'name', 'description', 'sample_phage', 'sample_env',
                   'editingrolegroup_set', 'editingroleuser_set', 'date',
                   'owner')
         read_only = ('date')
@@ -135,7 +136,7 @@ class BioprojectSerializer(serializers.ModelSerializer):
             print("Revoking %s permission for %s on %s" % (tmp.role, tmp.group, tmp.bioproject))
             tmp.delete()
 
-        for sample in validated_data['sample']:
+        for sample in validated_data['sample_phage']:
             try:
                 phage = Phage.objects.get(id=sample['id'])
             except Phage.DoesNotExist:
