@@ -163,6 +163,32 @@ class ExperimentalResult(models.Model):
         )
 
 
+class Phage(models.Model):
+    primary_name = models.CharField(max_length=64)
+    historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
+    lysate = models.OneToOneField(Lysate, blank=True, null=True)
+    host = models.ManyToManyField(Bacteria, blank=True)
+    owner = models.ForeignKey(Account, blank=True, null=True)
+    source = models.ForeignKey(Organisation, blank=True, null=True)
+    # notes = models.TextField(blank=True)
+
+
+class PhageDNAPrep(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
+
+    # These will point to OMERO eventually...
+    # tem_image = models.URLField()
+    # gel_image = models.URLField()
+    # Nanodrop, pico green, other?
+    experiments = models.ManyToManyField(ExperimentalResult, blank=True)
+    phage = models.ForeignKey(Phage, blank=True, null=True)
+    storage = models.OneToOneField(Storage, blank=True, null=True)
+
+    def __unicode__(self):
+        return u'%s morphology' % (self.get_morphology_display())
+
+
 class SequencingRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     galaxy_history = models.URLField()
@@ -228,32 +254,6 @@ class SequencingRunPoolItem(models.Model):
 
     def ngDnaInMix(self, volumeInMix):
         return volumeInMix * self.dna_conc
-
-
-class Phage(models.Model):
-    primary_name = models.CharField(max_length=64)
-    historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
-    lysate = models.OneToOneField(Lysate, blank=True, null=True)
-    host = models.ManyToManyField(Bacteria, blank=True)
-    owner = models.ForeignKey(Account, blank=True, null=True)
-    source = models.ForeignKey(Organisation, blank=True, null=True)
-    # notes = models.TextField(blank=True)
-
-
-class PhageDNAPrep(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
-
-    # These will point to OMERO eventually...
-    # tem_image = models.URLField()
-    # gel_image = models.URLField()
-    # Nanodrop, pico green, other?
-    experiments = models.ManyToManyField(ExperimentalResult, blank=True)
-    phage = models.ForeignKey(Phage, blank=True, null=True)
-    storage = models.OneToOneField(Storage, blank=True, null=True)
-
-    def __unicode__(self):
-        return u'%s morphology' % (self.get_morphology_display())
 
 
 class Assembly(models.Model):
