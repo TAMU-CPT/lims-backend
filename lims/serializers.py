@@ -175,7 +175,7 @@ class PhageSerializerList(serializers.ModelSerializer):
 
     class Meta:
         model = Phage
-        fields = ('historical_names', 'primary_name', 'id', 'owner', 'morphology')
+        fields = ('historical_names', 'primary_name', 'id', 'owner', 'morphology', 'phagednaprep_set')
 
 
 class EnvironmentalSampleCollectionSerializer(NestableSerializer):
@@ -228,14 +228,14 @@ class LysateSerializer(serializers.ModelSerializer):
 class PhageSerializerDetail(serializers.ModelSerializer):
     host = BacteriaSerializer(many=True)
     assembly = AssemblySerializer(required=False, allow_null=True)
-    phagednaprep = PhageDNAPrepSerializer(required=False, allow_null=True)
+    phagednaprep_set = PhageDNAPrepSerializer(required=False, many=True)
     lysate = LysateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = Phage
         fields = (
-            'historical_names', 'primary_name', 'id',
-            'host', 'owner', 'source', 'assembly', 'phagednaprep', 'lysate'
+            'historical_names', 'primary_name', 'id', 'phagednaprep_set',
+            'host', 'owner', 'source', 'assembly', 'lysate'
         )
 
     def update(self, instance, validated_data):

@@ -26,6 +26,7 @@ STORAGE_TYPES = (
     (1, 'Freezer')
 )
 
+
 class Storage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     room = models.CharField(max_length=32) # e.g. '315'
@@ -181,6 +182,8 @@ class PhageDNAPrep(models.Model):
     experiments = models.ManyToManyField(ExperimentalResult, blank=True)
     phage = models.ForeignKey(Phage, blank=True, null=True)
     storage = models.OneToOneField(Storage, blank=True, null=True)
+    added = models.DateTimeField(auto_now_add=True, null=True)
+
 
 
 class SequencingRun(models.Model):
