@@ -164,6 +164,13 @@ class PhageDNAPrepViewSet(viewsets.ModelViewSet):
     queryset = PhageDNAPrep.objects.all()
     serializer_class = PhageDNAPrepSerializer
 
+    def perform_create(self, serializer):
+        try:
+            serializer.save()
+        except IntegrityError as ie:
+            if 'storage_id' in str(ie):
+                raise ValidationError('Duplicate storage')
+
 
 class SequencingRunPoolViewSet(viewsets.ModelViewSet):
     queryset = SequencingRunPool.objects.all()
