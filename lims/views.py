@@ -2,6 +2,8 @@ from rest_framework import viewsets, filters
 import django_filters
 import django_filters.rest_framework
 
+from rest_framework.exceptions import ValidationError
+from django.db import IntegrityError
 from django.db.models import Q, Count
 from lims.serializers import StorageSerializer, \
     AssemblySerializer, ExperimentalResultSerializer, \
@@ -132,7 +134,6 @@ class SequencingRunViewSet(viewsets.ModelViewSet):
     serializer_class = SequencingRunSerializer
 
 
-
 class ExperimentViewSet(viewsets.ModelViewSet):
     queryset = Experiment.objects.all()
     serializer_class = ExperimentSerializer
@@ -231,7 +232,34 @@ class LysateViewSet(viewsets.ModelViewSet):
     queryset = Lysate.objects.all()
     serializer_class = LysateSerializer
 
+    def perform_create(self, serializer):
+        try:
+            serializer.save()
+        except IntegrityError as ie:
+            if 'storage_id' in str(ie):
+                raise ValidationError('Duplicate storage')
+
+
+class BacteriaFilter(django_filters.FilterSet):
+    genus = django_filters.CharFilter(name="genus", lookup_expr="icontains")
+    species = django_filters.CharFilter(name="species", lookup_expr="icontains")
+    full = django_filters.CharFilter(method="get_full")
+
+    class Meta:
+        model = Bacteria
+        fields = ['id', 'genus', 'species', 'strain']
+
+    def get_full(self, queryset, name, value):
+        return queryset.filter(
+            Q(genus__icontains=value) |
+            Q(species__icontains=value) |
+            Q(strain__icontains=value)
+        )
+
 
 class BacteriaViewSet(viewsets.ModelViewSet):
     queryset = Bacteria.objects.all()
     serializer_class = BacteriaSerializer
+    ordering_fields = ('__all__')
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter,)
+    filter_class = BacteriaFilter

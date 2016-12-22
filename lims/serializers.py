@@ -117,7 +117,7 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EnvironmentalSample
-        fields = ('id', 'description', 'sample_type', 'collection', 'location_xy', 'collected_by')
+        fields = ('id', 'description', 'sample_type', 'collection', 'location_xy', 'collected_by', 'default_collection_id')
 
     def get_location_xy(self, obj):
         # print obj.location.json
@@ -129,7 +129,26 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
 class BacteriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bacteria
-        fields = ('strain', 'genus', 'species', 'id',)
+        fields = ('strain', 'genus', 'species', 'id', 'full')
+
+    def to_internal_value(self, data):
+        if isinstance(data, dict):
+            # find a bacteria with specified genus / species
+            if 'id' in data:
+                return Bacteria.objects.get(id=data['id'])
+        elif type(data) in (unicode, str):
+            parts = data.split()
+            if len(parts) == 2:
+                genus, species = parts
+                bacteria, _ = Bacteria.objects.get_or_create(genus=genus, species=species)
+                return bacteria
+
+            elif len(parts) == 3:
+                genus, species, strain = parts
+                bacteria, _ = Bacteria.objects.get_or_create(genus=genus, species=species, strain=strain)
+                return bacteria
+
+        raise Exception("Unknown Bacteria")
 
 
 class PhageSerializerList(serializers.ModelSerializer):
@@ -163,13 +182,45 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
             print(es['id'].value)
         return instance
 
+    def to_internal_value(self, data):
+        if type(data) in (unicode, str):
+            return EnvironmentalSampleCollection.objects.get(id=data)
+
+        return super(EnvironmentalSampleCollectionSerializer, self).to_internal_value(data)
+
+class LiteStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label')
+
+    def to_internal_value(self, data):
+        storage, _ = Storage.objects.get_or_create(
+            room=data['room'],
+            type=data['type'],
+            container_label=data['container_label'],
+            shelf=data['shelf'],
+            box=data['box'],
+            sample_label=data['sample_label'],
+        )
+        return storage
+
+
+class LitePhageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Phage
+        fields = ('id', 'primary_name')
+
 
 class LysateSerializer(serializers.ModelSerializer):
-    env_sample_collection = EnvironmentalSampleCollectionSerializer(read_only=False)
+    env_sample_collection = EnvironmentalSampleCollectionSerializer()
+    host = BacteriaSerializer()
+    storage = LiteStorageSerializer()
+    phage = LitePhageSerializer(read_only=True)
 
     class Meta:
         model = Lysate
-        fields = ('isolation', 'storage', 'id', 'oldid', 'host', 'env_sample_collection')
+        fields = ('isolation', 'storage', 'id', 'oldid', 'host', 'env_sample_collection', 'phage')
 
 
 class PhageSerializerDetail(serializers.ModelSerializer):

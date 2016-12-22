@@ -73,6 +73,14 @@ class EnvironmentalSample(models.Model):
     def __unicode__(self):
         return '{} sample from {}'.format(self.sample_type, self.collection)
 
+    @property
+    def default_collection(self):
+        return self.environmentalsamplerelation_set.filter(true_collection=False).get().esc
+
+    @property
+    def default_collection_id(self):
+        return self.default_collection.id
+
 
 class EnvironmentalSampleCollection(models.Model):
     """Collection of EnvironmentalSample objects.
@@ -109,20 +117,18 @@ class Bacteria(models.Model):
 
     def __unicode__(self):
         if self.strain:
-            return '{}. {} spp {}'.format(self.genus[0], self.species, self.strain)
-        return '{}. {}'.format(self.genus[0], self.species)
+            return '{} {} {}'.format(self.genus, self.species, self.strain)
+        return '{} {}'.format(self.genus, self.species)
 
-    class Meta:
-        verbose_name_plural = "bacteria"
-
-    def get_absolute_url(self):
-        return reverse_lazy('lims:bacteria-detail', args=[self.id])
+    @property
+    def full(self):
+        return str(self)
 
 
 class Lysate(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     oldid = models.CharField(max_length=64, blank=True)
-    isolation = models.DateTimeField(null=True, blank=True)
+    isolation = models.DateTimeField(auto_now_add=True, null=True)
     storage = models.OneToOneField(Storage, blank=True, null=True)
     host = models.ForeignKey(Bacteria, blank=True)
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
@@ -282,8 +288,24 @@ def create_default_envsamplecollection(sender, instance, created, **kwargs):
         true_collection=False,
     )
 
+
+def create_default_phage_for_lysate(sender, instance, created, **kwargs):
+    """Create default Phage for every new Lysate"""
+    phage = Phage.objects.create(
+        primary_name="<Unnamed>",
+        lysate=instance,
+    )
+    phage.save()
+
+
 signals.post_save.connect(
     create_default_envsamplecollection,
     sender=EnvironmentalSample, weak=False,
     dispatch_uid='models.create_default_envsamplecollection'
+)
+
+signals.post_save.connect(
+    create_default_phage_for_lysate,
+    sender=Lysate, weak=False,
+    dispatch_uid='models.create_default_phage_for_lysate'
 )
