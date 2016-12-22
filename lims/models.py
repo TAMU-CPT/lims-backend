@@ -36,7 +36,7 @@ class Storage(models.Model):
     sample_label = models.CharField(max_length=64) # label on tube
 
     def __unicode__(self):
-        return self.container_label
+        return '%s/%s/%s/%s/%s/%s' % (self.room, self.type, self.container_label, self.shelf, self.box, self.sample_label)
 
     @property
     def what_category(self):
