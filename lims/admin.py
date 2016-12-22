@@ -32,7 +32,7 @@ class PhageAdmin(admin.ModelAdmin):
 
 class PhageDNAPrepAdmin(admin.ModelAdmin):
     queryset = PhageDNAPrep.objects.all()
-    list_display = ('id', 'morphology', 'storage', )
+    list_display = ('id', 'storage', )
 
 class SequencingRunPoolAdmin(admin.ModelAdmin):
     queryset = SequencingRunPool.objects.all()

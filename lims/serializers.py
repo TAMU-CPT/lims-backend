@@ -125,7 +125,7 @@ class PhageDNAPrepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PhageDNAPrep
-        fields = ('morphology', 'id', 'storage', 'experiments')
+        fields = ('id', 'storage', 'experiments', 'phage')
 
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
@@ -175,7 +175,7 @@ class PhageSerializerList(serializers.ModelSerializer):
 
     class Meta:
         model = Phage
-        fields = ('historical_names', 'primary_name', 'id', 'owner')
+        fields = ('historical_names', 'primary_name', 'id', 'owner', 'morphology')
 
 
 class EnvironmentalSampleCollectionSerializer(NestableSerializer):

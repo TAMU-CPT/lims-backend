@@ -170,12 +170,12 @@ class Phage(models.Model):
     host = models.ManyToManyField(Bacteria, blank=True)
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
+    morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY, default=0)
     # notes = models.TextField(blank=True)
 
 
 class PhageDNAPrep(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY)
 
     # These will point to OMERO eventually...
     # tem_image = models.URLField()
@@ -184,9 +184,6 @@ class PhageDNAPrep(models.Model):
     experiments = models.ManyToManyField(ExperimentalResult, blank=True)
     phage = models.ForeignKey(Phage, blank=True, null=True)
     storage = models.OneToOneField(Storage, blank=True, null=True)
-
-    def __unicode__(self):
-        return u'%s morphology' % (self.get_morphology_display())
 
 
 class SequencingRun(models.Model):
