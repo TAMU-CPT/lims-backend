@@ -246,6 +246,7 @@ class SequencingRunPool(models.Model):
 class SequencingRunPoolItem(models.Model):
     pool = models.ForeignKey(SequencingRunPool)
     dna_conc = models.ForeignKey(ExperimentalResult, blank=True)
+    dna_prep = models.OneToOneField(PhageDNAPrep, null=True)
 
     def volumeInMix(self, desiredSize):
         if self.pool.poolSize() > 0:
@@ -271,8 +272,6 @@ class Assembly(models.Model):
 
     def __unicode__(self):
         return 'Assembly %s' % self.id
-
-
 
 
 def create_default_envsamplecollection(sender, instance, created, **kwargs):
