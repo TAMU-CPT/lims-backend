@@ -133,9 +133,6 @@ class Lysate(models.Model):
     host = models.ForeignKey(Bacteria, blank=True)
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
 
-    def get_absolute_url(self):
-        return reverse_lazy('lims:lysate-detail', args=[self.id])
-
 
 class Experiment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
