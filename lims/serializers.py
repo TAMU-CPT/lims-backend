@@ -28,6 +28,22 @@ class NestableSerializer(serializers.ModelSerializer):
         return super(NestableSerializer, self).to_internal_value(data)
 
 
+class LiteStorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label')
+
+    def to_internal_value(self, data):
+        storage, _ = Storage.objects.get_or_create(
+            room=data['room'],
+            type=data['type'],
+            container_label=data['container_label'],
+            shelf=data['shelf'],
+            box=data['box'],
+            sample_label=data['sample_label'],
+        )
+        return storage
+
 
 class SeqRunExperimentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,6 +121,8 @@ class ExperimentalResultDetailSerializer(serializers.ModelSerializer):
 
 
 class PhageDNAPrepSerializer(serializers.ModelSerializer):
+    storage = LiteStorageSerializer()
+
     class Meta:
         model = PhageDNAPrep
         fields = ('morphology', 'id', 'storage', 'experiments')
@@ -136,7 +154,7 @@ class BacteriaSerializer(serializers.ModelSerializer):
             # find a bacteria with specified genus / species
             if 'id' in data:
                 return Bacteria.objects.get(id=data['id'])
-        elif type(data) in (unicode, str):
+        else:
             parts = data.split()
             if len(parts) == 2:
                 genus, species = parts
@@ -183,26 +201,10 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
         return instance
 
     def to_internal_value(self, data):
-        if type(data) in (unicode, str):
+        if isinstance(data, str):
             return EnvironmentalSampleCollection.objects.get(id=data)
 
         return super(EnvironmentalSampleCollectionSerializer, self).to_internal_value(data)
-
-class LiteStorageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Storage
-        fields = ('id', 'room', 'type', 'container_label', 'shelf', 'box', 'sample_label')
-
-    def to_internal_value(self, data):
-        storage, _ = Storage.objects.get_or_create(
-            room=data['room'],
-            type=data['type'],
-            container_label=data['container_label'],
-            shelf=data['shelf'],
-            box=data['box'],
-            sample_label=data['sample_label'],
-        )
-        return storage
 
 
 class LitePhageSerializer(serializers.ModelSerializer):
@@ -360,6 +362,24 @@ class StorageSerializer(serializers.ModelSerializer):
             return BasicEnvironmentalSampleCollectionSerializer(obj.environmentalsamplecollection).data
         else:
             return
+
+    def to_internal_value(self, data):
+        print('asdf')
+        if isinstance(data, dict):
+            if 'id' in dict:
+                raise Exception("Please double check me!")
+
+            storage, _ = Storage.objects.get_or_create(
+                room=data['room'],
+                type=data['type'],
+                container_label=data['container_label'],
+                shelf=data['shelf'],
+                box=data['box'],
+                sample_label=data['sample_label'],
+            )
+            return storage
+
+        raise Exception("Please double check me!")
 
 
 class RoomStorageSerializer(serializers.ModelSerializer):
