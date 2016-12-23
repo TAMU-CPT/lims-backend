@@ -5,7 +5,6 @@ django-cors-headers
 django-datetime-widget
 django-etc
 django-markdown-deux==1.0.5
-django-tagulous
 djangorestframework-jwt
 djangorestframework==3.5.0
 etc
