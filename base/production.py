@@ -1,5 +1,6 @@
+from base.base_settings import *  # noqa
+
 import os
-import datetime
 import random
 import string
 

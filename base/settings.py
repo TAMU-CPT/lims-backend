@@ -1,4 +1,4 @@
-from base.base_settings import *
+from base.base_settings import *  # noqa
 
 DEBUG = True
 ALLOWED_HOSTS = []
