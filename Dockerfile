@@ -8,9 +8,6 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # Set current working directory to /app
 WORKDIR /app/
 
-ENV DJANGO_SETTINGS_MODULE=guanine.production \
-	DJANGO_WSGI_MODULE=guanine.wsgi
-
 # Fix permissions on folder while still root, and collect static files for use
 # if need be.
 RUN chown -R django /app && \
