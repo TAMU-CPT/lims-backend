@@ -228,6 +228,11 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
         return instance
 
     def to_internal_value(self, data):
+        # Sometimes this seems to be unicode data
+        if isinstance(data, dict):
+            return super(EnvironmentalSampleCollectionSerializer, self).to_internal_value(data)
+
+        data = data.encode('ascii')
         if isinstance(data, str):
             return EnvironmentalSampleCollection.objects.get(id=data)
 
