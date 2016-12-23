@@ -1,5 +1,7 @@
 # https://github.com/TAMU-CPT/docker-recipes/blob/master/django/Dockerfile.inherit
-FROM quay.io/tamu_cpt/django
+FROM quay.io/tamu_cpt/django:edge
+# GeoDjango
+RUN apk add gdal py-gdal gdal-dev postgis
 
 # Add our project to the /app/ folder
 ADD . /app/
@@ -8,8 +10,6 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # Set current working directory to /app
 WORKDIR /app/
 
-# GeoDjango
-RUN apt-get install binutils libproj-dev gdal-bin python-gdal
 # Fix permissions on folder while still root, and collect static files for use
 # if need be.
 RUN chown -R django /app && \
