@@ -1,7 +1,5 @@
 # https://github.com/TAMU-CPT/docker-recipes/blob/master/django/Dockerfile.inherit
-FROM quay.io/tamu_cpt/django:edge
-# GeoDjango
-RUN apk add gdal py-gdal gdal-dev postgis
+FROM quay.io/tamu_cpt/django:gis
 
 # Add our project to the /app/ folder
 ADD . /app/
