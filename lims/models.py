@@ -25,6 +25,14 @@ STORAGE_TYPES = (
     (0, 'Fridge'),
     (1, 'Freezer')
 )
+PHAGE_STATE_ENVSAMPLE = 1 << 0
+PHAGE_STATE_LYSATE = 1 << 1
+PHAGE_STATE_DNAPREP = 1 << 2
+PHAGE_STATE_SEQUENCING = 1 << 3
+PHAGE_STATE_ASSEMBLY = 1 << 4
+PHAGE_STATE_ANNOTATION = 1 << 5
+PHAGE_STATE_NCBI = 1 << 6
+PHAGE_STATE_PUBLICATION = 1 << 7
 
 
 class Storage(models.Model):
@@ -169,7 +177,45 @@ class Phage(models.Model):
     owner = models.ForeignKey(Account, blank=True, null=True)
     source = models.ForeignKey(Organisation, blank=True, null=True)
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY, default=0)
+    image = models.URLField(blank=True)
+    ncbi_id = models.CharField(max_length=32, null=True, blank=True)
     # notes = models.TextField(blank=True)
+
+    def status(self):
+        value = {}
+        dnapreps = self.phagednaprep_set.all()
+        if self.lysate:
+            # value |= PHAGE_STATE_ENVSAMPLE | PHAGE_STATE_LYSATE
+            value['env'] = True
+            value['lysate'] = True
+        if len(dnapreps) > 0:
+            # value |= PHAGE_STATE_DNAPREP
+            value['dnaprep'] = True
+
+        for prep in dnapreps:
+            try:
+                if prep.sequencingrunpoolitem:
+                    value['seq'] = True
+                    # value |= PHAGE_STATE_SEQUENCING
+                    break
+            except SequencingRunPoolItem.DoesNotExist:
+                pass
+
+        assemblies = self.assembly_set.all()
+        if len(assemblies) > 0:
+            value['assembly'] = True
+            # value |= PHAGE_STATE_ASSEMBLY
+        if any([a.annotationrecord for a in assemblies]):
+            value['annot'] = True
+            # value |= PHAGE_STATE_ANNOTATION
+        if self.ncbi_id:
+            value['ncbi'] = True
+            # value |= PHAGE_STATE_NCBI
+        if self.publication_set.count() > 0:
+            value['pub'] = True
+            # value |= PHAGE_STATE_PUBLICATION
+
+        return value
 
 
 class PhageDNAPrep(models.Model):
@@ -185,17 +231,17 @@ class PhageDNAPrep(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True)
 
 
-
 class SequencingRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    galaxy_history = models.URLField()
+    galaxy_library = models.URLField(blank=True, help_text="Galaxy Library URL")
     name = models.TextField()
-    date = models.DateField()
+    date = models.DateField(auto_now_add=True, null=True)
     # Illumina, miseq, etc need to be in experiments
-    methods = models.ForeignKey(Experiment)
-    bioanalyzer_qc = models.TextField()
-    run_prep_spreadsheet = models.URLField()
-    owner = models.ForeignKey(Account, blank=True, null=True)
+    methods = models.ForeignKey(Experiment, null=True)
+    bioanalyzer_qc = models.TextField(blank=True)
+    run_prep_spreadsheet = models.URLField(blank=True)
+    owner = models.ForeignKey(Account)
+    finalized = models.BooleanField(default=False, help_text="Once this is set, this model becomes read-only (except to people with access to django admin).")
 
     def __unicode__(self):
         return '{} on {}'.format(self.name, self.date)
@@ -241,9 +287,10 @@ class SequencingRunPool(models.Model):
 
 
 class SequencingRunPoolItem(models.Model):
-    pool = models.ForeignKey(SequencingRunPool)
-    dna_conc = models.ForeignKey(ExperimentalResult, blank=True)
-    dna_prep = models.OneToOneField(PhageDNAPrep, null=True)
+    # Allow null to support "requested" samples for sequencing
+    pool = models.ForeignKey(SequencingRunPool, null=True, blank=True)
+    dna_conc = models.ForeignKey(ExperimentalResult, null=True, blank=True)
+    dna_prep = models.OneToOneField(PhageDNAPrep)
 
     def volumeInMix(self, desiredSize):
         if self.pool.poolSize() > 0:
@@ -259,6 +306,7 @@ class Assembly(models.Model):
     This represents a single assembly run of a single genome's sequencing data
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sequence_id = models.CharField(max_length=64, null=True)
     sequencing_run_pool_item = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
     galaxy_dataset = models.URLField()
     notes = models.TextField(blank=True)
@@ -269,6 +317,21 @@ class Assembly(models.Model):
 
     def __unicode__(self):
         return 'Assembly %s' % self.id
+
+
+class AnnotationRecord(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    assembly = models.ForeignKey(Assembly)
+    phage = models.ForeignKey(Phage)
+
+    chado_id = models.IntegerField(blank=True)
+    apollo_id = models.IntegerField(blank=True)
+
+
+class Publication(models.Model):
+    phages = models.ManyToManyField(Phage)
+    genomea_id = models.CharField(max_length=32)
+    doi = models.CharField(max_length=32)
 
 
 def create_default_envsamplecollection(sender, instance, created, **kwargs):

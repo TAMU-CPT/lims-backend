@@ -7,7 +7,8 @@ from django.db import IntegrityError
 from django.db.models import Q, Count
 from lims.serializers import StorageSerializer, \
     AssemblySerializer, ExperimentalResultSerializer, \
-    SequencingRunSerializer, \
+    SequencingRunSerializerDetail, \
+    SequencingRunSerializerList, \
     ExperimentSerializer, PhageSerializerList, PhageSerializerDetail, \
     PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
     SequencingRunPoolItemSerializer, \
@@ -131,7 +132,17 @@ class ExperimentalResultViewSet(viewsets.ModelViewSet):
 
 class SequencingRunViewSet(viewsets.ModelViewSet):
     queryset = SequencingRun.objects.all()
-    serializer_class = SequencingRunSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return SequencingRunSerializerList
+        return SequencingRunSerializerDetail
+
+
+    def perform_create(self, serializer):
+        serializer.save(
+            owner=self.request.user.account
+        )
 
 
 class ExperimentViewSet(viewsets.ModelViewSet):
@@ -177,9 +188,24 @@ class SequencingRunPoolViewSet(viewsets.ModelViewSet):
     serializer_class = SequencingRunPoolSerializer
 
 
+class SRPIFilter(django_filters.FilterSet):
+    no_pool = django_filters.CharFilter(method="get_no_pool")
+
+    class Meta:
+        model = SequencingRunPoolItem
+        fields = ['id', 'no_pool']
+
+    def get_no_pool(self, qs, name, value):
+        return qs.filter(pool=None)
+
+
 class SequencingRunPoolItemViewSet(viewsets.ModelViewSet):
     queryset = SequencingRunPoolItem.objects.all()
     serializer_class = SequencingRunPoolItemSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter,)
+    filter_class = SRPIFilter
+    # TODO:
+    # paginate_by = None
 
 
 class EnvironmentalSampleViewSet(viewsets.ModelViewSet):

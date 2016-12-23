@@ -45,6 +45,26 @@ class LiteStorageSerializer(serializers.ModelSerializer):
         return storage
 
 
+class LitePhageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Phage
+        fields = ('id', 'primary_name', 'historical_names', 'image')
+
+class LitePhageSerializer2(serializers.ModelSerializer):
+
+    class Meta:
+        model = Phage
+        fields = ('id', 'primary_name', 'historical_names', 'image', 'status')
+
+class PhageDNAPrepSerializer(serializers.ModelSerializer):
+    storage = LiteStorageSerializer()
+    phage = LitePhageSerializer2()
+
+    class Meta:
+        model = PhageDNAPrep
+        fields = ('id', 'storage', 'experiments', 'phage', 'added', 'sequencingrunpoolitem')
+
 class SeqRunExperimentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experiment
@@ -65,31 +85,45 @@ class SeqRunExperimentalResultDetailSerializer(serializers.ModelSerializer):
         fields = ('date', 'experiment', 'id', 'run_by', 'result',)
 
 
-class SequencingRunSerializer(serializers.ModelSerializer):
+class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
+    # dna_conc = SeqRunExperimentalResultDetailSerializer(many=True)
+    # pool = SequencingRunPoolSerializer(allow_null=True)
+    dna_prep = PhageDNAPrepSerializer()
+
+    class Meta:
+        model = SequencingRunPoolItem
+        fields = ('id', 'pool', 'dna_prep')
+
+
+class SequencingRunPoolSerializer(serializers.ModelSerializer):
+    sequencingrunpoolitem_set = SequencingRunPoolItemSerializer(many=True)
+
+    class Meta:
+        model = SequencingRunPool
+        fields = ('run', 'id', 'pool', 'sequencingrunpoolitem_set')
+        read_only = ('run', )
+
+
+class SequencingRunSerializerDetail(serializers.ModelSerializer):
     # TODO
     methods = SeqRunExperimentSerializer(read_only=True)
+    owner = AccountSerializerLight(read_only=True)
+    sequencingrunpool_set = SequencingRunPoolSerializer(many=True)
+
+    class Meta:
+        model = SequencingRun
+        fields = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_library',
+                  'run_prep_spreadsheet', 'id', 'name', 'owner', 'finalized',
+                  'sequencingrunpool_set')
+
+
+class SequencingRunSerializerList(serializers.ModelSerializer):
+    # TODO
     owner = AccountSerializerLight(read_only=True)
 
     class Meta:
         model = SequencingRun
-        fields = ('methods', 'bioanalyzer_qc', 'date', 'galaxy_history', 'run_prep_spreadsheet', 'id', 'name', 'owner')
-
-
-class SequencingRunPoolSerializer(serializers.ModelSerializer):
-    run = SequencingRunSerializer()
-
-    class Meta:
-        model = SequencingRunPool
-        fields = ('run', 'id', 'pool',)
-
-
-class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
-    # dna_conc = SeqRunExperimentalResultDetailSerializer(many=True)
-    pool = SequencingRunPoolSerializer()
-
-    class Meta:
-        model = SequencingRunPoolItem
-        fields = ('id', 'pool',)
+        fields = ('date', 'id', 'name', 'owner', 'finalized')
 
 
 class AssemblySerializer(serializers.ModelSerializer):
@@ -119,13 +153,6 @@ class ExperimentalResultDetailSerializer(serializers.ModelSerializer):
         model = ExperimentalResult
         fields = ('date', 'experiment', 'id', 'run_by', 'result',)
 
-
-class PhageDNAPrepSerializer(serializers.ModelSerializer):
-    storage = LiteStorageSerializer()
-
-    class Meta:
-        model = PhageDNAPrep
-        fields = ('id', 'storage', 'experiments', 'phage')
 
 
 class EnvironmentalSampleSerializer(serializers.ModelSerializer):
@@ -207,13 +234,6 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
         return super(EnvironmentalSampleCollectionSerializer, self).to_internal_value(data)
 
 
-class LitePhageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Phage
-        fields = ('id', 'primary_name')
-
-
 class LysateSerializer(serializers.ModelSerializer):
     env_sample_collection = EnvironmentalSampleCollectionSerializer()
     host = BacteriaSerializer()
@@ -235,7 +255,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
         model = Phage
         fields = (
             'historical_names', 'primary_name', 'id', 'phagednaprep_set',
-            'host', 'owner', 'source', 'assembly', 'lysate'
+            'host', 'owner', 'source', 'assembly', 'lysate', 'status'
         )
 
     def update(self, instance, validated_data):
@@ -301,7 +321,7 @@ class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
 
     class Meta:
         model = PhageDNAPrep
-        fields = ('frontend_label', 'morphology', 'experiments', 'storage', 'id', 'assembly_set', 'phage_set')
+        fields = ('frontend_label', 'morphology', 'experiments', 'storage', 'id', 'assembly_set', 'phage_set', 'added')
 
     def get_frontend_label(self, obj):
         return 'phagednaprep'
@@ -313,7 +333,7 @@ class BasicPhageDNAPrepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lysate
-        fields = ('frontend_label', 'id', 'phage_set')
+        fields = ('frontend_label', 'id', 'phage_set', 'added')
 
     def get_frontend_label(self, obj):
         return 'phagednaprep'
