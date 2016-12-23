@@ -8,6 +8,8 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 # Set current working directory to /app
 WORKDIR /app/
 
+# GeoDjango
+RUN apt-get install binutils libproj-dev gdal-bin python-gdal
 # Fix permissions on folder while still root, and collect static files for use
 # if need be.
 RUN chown -R django /app && \
