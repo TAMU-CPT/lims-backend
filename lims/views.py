@@ -14,6 +14,7 @@ from lims.serializers import StorageSerializer, \
     SequencingRunPoolItemSerializer, \
     EnvironmentalSampleSerializer, TypesEnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer, \
     EnvironmentalSampleCollectionSerializer, RoomStorageSerializer, \
+    SimpleEnvironmentalSampleCollectionSerializer, \
     ContainerLabelStorageSerializer, BoxStorageSerializer
 from lims.models import Storage, Assembly, \
     ExperimentalResult, SequencingRun, Experiment, Phage, \
@@ -273,6 +274,11 @@ class EnvironmentalSampleCollectionViewSet(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter,)
     filter_class = EnvironmentalSampleCollectionFilter
     ordering_fields = ('__all__')
+
+
+class SimpleEnvironmentalSampleCollectionViewSet(viewsets.ModelViewSet):
+    queryset = EnvironmentalSampleCollection.objects.all()
+    serializer_class = SimpleEnvironmentalSampleCollectionSerializer
 
 
 class LysateViewSet(viewsets.ModelViewSet):

@@ -216,6 +216,7 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
     id = serializers.UUIDField(read_only=False)
     true_collection = serializers.SerializerMethodField(read_only=True)
     env_sample = EnvironmentalSampleSerializer(many=True)
+    storage = LiteStorageSerializer()
 
     class Meta:
         model = EnvironmentalSampleCollection
@@ -223,7 +224,10 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
 
     def get_true_collection(self, obj):
         esr = obj.environmentalsamplerelation_set.first()
-        return esr.true_collection
+        try:
+            return esr.true_collection
+        except:
+            return
 
     def update(self, instance, validated_data):
         for sample in validated_data['env_sample']:
@@ -245,6 +249,14 @@ class EnvironmentalSampleCollectionSerializer(NestableSerializer):
 
         return super(EnvironmentalSampleCollectionSerializer, self).to_internal_value(data)
 
+
+class SimpleEnvironmentalSampleCollectionSerializer(NestableSerializer):
+    id = serializers.UUIDField(read_only=False)
+    storage = LiteStorageSerializer()
+
+    class Meta:
+        model = EnvironmentalSampleCollection
+        fields = ('id', 'storage')
 
 class LysateSerializer(serializers.ModelSerializer):
     env_sample_collection = EnvironmentalSampleCollectionSerializer()

@@ -19,6 +19,7 @@ router = routers.DefaultRouter()
 
 router.register(r'assemblys', views.AssemblyViewSet)
 router.register(r'bacterias', views.BacteriaViewSet)
+router.register(r'environmentalsamplecollection/simple', views.SimpleEnvironmentalSampleCollectionViewSet)
 router.register(r'environmentalsamplecollection', views.EnvironmentalSampleCollectionViewSet)
 router.register(r'environmentalsamples/types', views.TypesEnvironmentalSampleViewSet)
 router.register(r'environmentalsamples', views.EnvironmentalSampleViewSet)
