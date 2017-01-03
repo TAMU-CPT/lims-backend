@@ -228,8 +228,9 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
         serializer.save(
             location="SRID=4326;POINT (%s %s)" % (loc['lng'], loc['lat']),
             collected_by=self.request.user.account,
-            sample_type=self.request.data.get('sampletype', 'Unknown'),
+            sample_type=self.request.data.get('sample_type', 'Unknown'),
         )
+        print self.request.data
 
 
 class EnvironmentalSampleCollectionFilter(django_filters.FilterSet):
