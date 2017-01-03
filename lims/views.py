@@ -297,11 +297,11 @@ class BacteriaFilter(django_filters.FilterSet):
         fields = ['id', 'genus', 'species', 'strain']
 
     def get_full(self, queryset, name, value):
-        return queryset.filter(
-            Q(genus__icontains=value) |
-            Q(species__icontains=value) |
-            Q(strain__icontains=value)
-        )
+        ids = []
+        for q in queryset:
+            if value in q.full:
+                ids.append(q.id)
+        return queryset.filter(pk__in=ids)
 
 
 class BacteriaViewSet(viewsets.ModelViewSet):
