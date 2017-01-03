@@ -12,7 +12,7 @@ from lims.serializers import StorageSerializer, \
     ExperimentSerializer, PhageSerializerList, PhageSerializerDetail, \
     PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
     SequencingRunPoolItemSerializer, \
-    EnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer, \
+    EnvironmentalSampleSerializer, TypesEnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer, \
     EnvironmentalSampleCollectionSerializer, RoomStorageSerializer, \
     ContainerLabelStorageSerializer, BoxStorageSerializer
 from lims.models import Storage, Assembly, \
@@ -231,6 +231,20 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
             sample_type=self.request.data.get('sample_type', 'Unknown'),
         )
         print self.request.data
+
+class TypesEnvironmentalSampleFilter(django_filters.FilterSet):
+    sample_type = django_filters.CharFilter(name="sample_type", lookup_expr="icontains")
+
+    class Meta:
+        model = EnvironmentalSample
+        fields = ['id', 'sample_type']
+
+class TypesEnvironmentalSampleViewSet(viewsets.ModelViewSet):
+    queryset = EnvironmentalSample.objects.values('sample_type').distinct()
+    serializer_class = TypesEnvironmentalSampleSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = TypesEnvironmentalSampleFilter
+    paginate_by = None
 
 
 class EnvironmentalSampleCollectionFilter(django_filters.FilterSet):

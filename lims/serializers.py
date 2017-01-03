@@ -171,6 +171,13 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
         return obj.location.coords
 
 
+class TypesEnvironmentalSampleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EnvironmentalSample
+        fields = ('id', 'sample_type')
+
+
 class BacteriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bacteria
@@ -389,7 +396,6 @@ class StorageSerializer(serializers.ModelSerializer):
             return
 
     def to_internal_value(self, data):
-        print('asdf')
         if isinstance(data, dict):
             if 'id' in dict:
                 raise Exception("Please double check me!")
