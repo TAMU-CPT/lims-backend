@@ -242,7 +242,6 @@ class TypesEnvironmentalSampleFilter(django_filters.FilterSet):
 class TypesEnvironmentalSampleViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSample.objects.values('sample_type').distinct()
     serializer_class = TypesEnvironmentalSampleSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
     filter_class = TypesEnvironmentalSampleFilter
     paginate_by = None
 
