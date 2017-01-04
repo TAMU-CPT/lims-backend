@@ -152,6 +152,14 @@ class ExperimentViewSet(viewsets.ModelViewSet):
     filter_fields = ('full_name', 'id', 'short_name', 'category')
 
 
+class PhageFilter(django_filters.FilterSet):
+    primary_name = django_filters.CharFilter(name="primary_name", lookup_expr="exact", exclude=True)
+
+    class Meta:
+        model = Phage
+        fields = ['id', 'primary_name']
+
+
 class PhageViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
@@ -169,6 +177,7 @@ class PhageViewSet(viewsets.ModelViewSet):
             return PhageSerializerList
         return PhageSerializerDetail
 
+    filter_class = PhageFilter
     paginate_by = None
 
 
