@@ -407,11 +407,13 @@ class StorageSerializer(serializers.ModelSerializer):
         else:
             return
 
-    # def to_internal_value(self, data):
-        # if isinstance(data, dict):
-            # if 'id' in data:
-                # raise Exception("Please double check me!")
+    def to_internal_value(self, data):
+        if isinstance(data, dict):
+            if 'id' in data:
+                raise Exception("Please double check me!")
 
+            # I don't think you're supposed to create objects here.
+            # This results in two objects being created
             # storage, _ = Storage.objects.get_or_create(
                 # room=data['room'],
                 # type=data['type'],
@@ -420,9 +422,15 @@ class StorageSerializer(serializers.ModelSerializer):
                 # box=data['box'],
                 # sample_label=data['sample_label']
             # )
-            # return model_to_dict(storage)
+            # return model_to_dict(storage) # if you really wanted to create one, it expects a dictionary
+            return {'room': data['room'],
+                    'type': data['type'],
+                    'container_label': data['container_label'],
+                    'shelf': data['shelf'],
+                    'box': data['box'],
+                    'sample_label': data['sample_label']}
 
-        # raise Exception("Please double check me!")
+        raise Exception("Please double check me!")
 
 
 class RoomStorageSerializer(serializers.ModelSerializer):
