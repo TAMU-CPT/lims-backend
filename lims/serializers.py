@@ -6,7 +6,7 @@ from lims.models import Storage, Assembly, \
 from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueValidator
 from account.serializers import AccountSerializerLight
-
+from django.forms.models import model_to_dict
 
 class NestableSerializer(serializers.ModelSerializer):
     """
@@ -407,22 +407,22 @@ class StorageSerializer(serializers.ModelSerializer):
         else:
             return
 
-    def to_internal_value(self, data):
-        if isinstance(data, dict):
-            if 'id' in dict:
-                raise Exception("Please double check me!")
+    # def to_internal_value(self, data):
+        # if isinstance(data, dict):
+            # if 'id' in data:
+                # raise Exception("Please double check me!")
 
-            storage, _ = Storage.objects.get_or_create(
-                room=data['room'],
-                type=data['type'],
-                container_label=data['container_label'],
-                shelf=data['shelf'],
-                box=data['box'],
-                sample_label=data['sample_label'],
-            )
-            return storage
+            # storage, _ = Storage.objects.get_or_create(
+                # room=data['room'],
+                # type=data['type'],
+                # container_label=data['container_label'],
+                # shelf=data['shelf'],
+                # box=data['box'],
+                # sample_label=data['sample_label']
+            # )
+            # return model_to_dict(storage)
 
-        raise Exception("Please double check me!")
+        # raise Exception("Please double check me!")
 
 
 class RoomStorageSerializer(serializers.ModelSerializer):
