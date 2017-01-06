@@ -12,4 +12,5 @@ before_install:
 
 install:
     - pip install -r requirements.txt
-    - bash .travis.sh
+
+script: bash .travis.sh
