@@ -7,7 +7,6 @@ import time
 
 class UserTestCase(LiveServerTestCase):
 
-    # called only once before all tests
     def setUp(self):
         user = User.objects.create_user('foo', password='bar')
         user.save()
@@ -38,6 +37,5 @@ class UserTestCase(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@aria-label='Register a New Environmental Sample']").click()
         time.sleep(2)
 
-    # called once after all tests are finished
     def tearDown(self):
         self.driver.close()
