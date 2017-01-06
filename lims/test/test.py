@@ -15,7 +15,11 @@ class UserTestCase(LiveServerTestCase):
         cls.driver = webdriver.Chrome()
         super(UserTestCase, cls).setUpClass()
 
-    def test_login(self):
+    def test_A_then_B(self):
+        self.login()
+        self.env_sample_create()
+
+    def login(self):
         driver = self.driver
         driver.get("http://localhost:10000/#/login")
         login_button = driver.find_element_by_xpath("//md-card-content/button")
@@ -26,7 +30,11 @@ class UserTestCase(LiveServerTestCase):
         login_button.click()
         time.sleep(2)
 
-    # def test_
+    def env_sample_create(self):
+        driver = self.driver
+        driver.get("http://localhost:10000/#/environmentalsamples")
+        driver.find_element_by_xpath("//button[@aria-label='Register a New Environmental Sample']").click()
+        time.sleep(2)
 
     @classmethod  # called once after all tests are finished
     def tearDownClass(cls):
