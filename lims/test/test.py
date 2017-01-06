@@ -12,6 +12,7 @@ class UserTestCase(LiveServerTestCase):
         user = User.objects.create_user('foo', password='bar')
         user.save()
         cls.driver = webdriver.Chrome()
+        super(UserTestCase, cls).setUpClass()
 
     def setUp(self): # called before every test
         print "Test starting"
@@ -34,3 +35,4 @@ class UserTestCase(LiveServerTestCase):
     def tearDownClass(cls):
         print "class ending"
         cls.driver.close()
+        super(UserTestCase, cls).tearDownClass()
