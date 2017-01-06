@@ -1,13 +1,13 @@
 from django.test import LiveServerTestCase
 from django.contrib.auth.models import User
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 # from selenium.webdriver.common.keys import Keys
 import time
+from subprocess import call
 
-
+# print '****'
+# call(["lsof", "-t", "-i:8081"])
+# print '****'
 class UserTestCase(LiveServerTestCase):
 
     @classmethod  # called only once before all tests
@@ -18,19 +18,9 @@ class UserTestCase(LiveServerTestCase):
         cls.driver = webdriver.Chrome()
 
     def test_A_then_B(self):
-        driver = self.driver
-        driver.get("http://localhost:10000/#/login")
-        login_button = driver.find_element_by_xpath("//md-card-content/button")
-        username = driver.find_element_by_name('name')
-        password = driver.find_element_by_name('password')
-        username.send_keys("foo")  # set up above
-        password.send_keys("bar")  # set up above
-        WebDriverWait(driver, 10).until(EC.invisibility_of_element_located((By.ID,'asdf')))
-        login_button.click()
-        driver.save_screenshot('media/after_login.png')
-        time.sleep(2)
-        # self.login()
-        # self.env_sample_create()
+        print self.live_server_url
+        self.login()
+        self.env_sample_create()
 
     def login(self):
         driver = self.driver
@@ -55,5 +45,6 @@ class UserTestCase(LiveServerTestCase):
 
     @classmethod  # called once after all tests are finished
     def tearDownClass(cls):
-        cls.driver.close()
+        cls.driver.quit()
         super(UserTestCase, cls).tearDownClass()
+        print 'done'
