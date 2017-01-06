@@ -9,7 +9,7 @@ class UserTestCase(LiveServerTestCase):
 
     @classmethod  # called only once before all tests
     def setUpClass(cls):
-        print "class starting"
+        print "Tests starting"
         user = User.objects.create_user('foo', password='bar')
         user.save()
         cls.driver = webdriver.Chrome()
@@ -19,15 +19,17 @@ class UserTestCase(LiveServerTestCase):
         driver = self.driver
         driver.get("http://localhost:10000/#/login")
         login_button = driver.find_element_by_xpath("//md-card-content/button")
-        username = driver.find_element_by_xpath("//input[@name='name']")
-        password = driver.find_element_by_xpath("//input[@name='password']")
+        username = driver.find_element_by_name('name')
+        password = driver.find_element_by_name('password')
         username.send_keys("foo")  # set up above
         password.send_keys("bar")  # set up above
         login_button.click()
         time.sleep(2)
 
+    # def test_
+
     @classmethod  # called once after all tests are finished
     def tearDownClass(cls):
-        print "class ending"
+        print "Tests ending"
         cls.driver.close()
         super(UserTestCase, cls).tearDownClass()
