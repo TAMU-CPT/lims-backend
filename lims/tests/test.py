@@ -9,7 +9,6 @@ class UserTestCase(LiveServerTestCase):
 
     @classmethod  # called only once before all tests
     def setUpClass(cls):
-        print "Tests starting"
         user = User.objects.create_user('foo', password='bar')
         user.save()
         cls.driver = webdriver.Chrome()
@@ -28,13 +27,10 @@ class UserTestCase(LiveServerTestCase):
         username.send_keys("foo")  # set up above
         password.send_keys("bar")  # set up above
         time.sleep(2)
-        print User.objects.all()
         login_button.click()
-        print User.objects.all()
         time.sleep(2)
 
     def env_sample_create(self):
-        print User.objects.all()
         driver = self.driver
         driver.get("http://localhost:10000/#/environmentalsamples")
         time.sleep(2)
@@ -43,6 +39,5 @@ class UserTestCase(LiveServerTestCase):
 
     @classmethod  # called once after all tests are finished
     def tearDownClass(cls):
-        print "Tests ending"
         cls.driver.close()
         super(UserTestCase, cls).tearDownClass()
