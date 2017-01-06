@@ -16,12 +16,11 @@ before_script:
     - "export DISPLAY=:99.0"
     - "sh -e /etc/init.d/xvfb start"
     - sleep 3 # give xvfb some time to start
-    - git clone https://github.com/tamu-cpt/lims-frontend frontend
-    - cd frontend && make &
 
 install:
-    - pip install -r requirements.txt selenium
-
+    - pip install -r requirements.txt selenium flake8
+    - git clone https://github.com/tamu-cpt/lims-frontend frontend
+    - cd frontend && make &
     - POSTGRES=$(docker run -d -P mdillon/postgis)
     - RANDOM_PORT=$(docker inspect $POSTGRES | jq '.[0].NetworkSettings.Ports."5432/tcp"[0].HostPort' -r)
     - echo "Postgres $POSTGRES running on $RANDOM_PORT"
