@@ -28,5 +28,5 @@ install:
     - sleep 30
 
 script:
-    - flake8 --statistics || true
+    - flake8 --statistics --exit-zero --exclude=frontend
     - DJANGO_SETTINGS_MODULE=base.travis python manage.py test
