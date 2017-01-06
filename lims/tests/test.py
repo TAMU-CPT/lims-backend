@@ -25,14 +25,16 @@ class UserTestCase(LiveServerTestCase):
         password = driver.find_element_by_name('password')
         username.send_keys("foo")  # set up above
         password.send_keys("bar")  # set up above
-        time.sleep(2)
+        time.sleep(0.2)
         login_button.click()
+        driver.save_screenshot('media/after_login.png')
         time.sleep(2)
 
     def env_sample_create(self):
         driver = self.driver
         driver.get("http://localhost:10000/#/environmentalsamples")
-        time.sleep(2)
+        time.sleep(1)
+        driver.save_screenshot('media/env_samples.png')
         driver.find_element_by_xpath("//button[@aria-label='Register a New Environmental Sample']").click()
         time.sleep(2)
 
