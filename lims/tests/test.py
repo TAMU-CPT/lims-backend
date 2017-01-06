@@ -41,5 +41,5 @@ class UserTestCase(LiveServerTestCase):
 
     @classmethod  # called once after all tests are finished
     def tearDownClass(cls):
-        super(UserTestCase, cls).tearDownClass()
         cls.driver.close()
+        super(UserTestCase, cls).tearDownClass()
