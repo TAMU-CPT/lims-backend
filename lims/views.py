@@ -312,6 +312,7 @@ class BacteriaFilter(django_filters.FilterSet):
         fields = ['id', 'genus', 'species', 'strain']
 
     def get_full(self, queryset, name, value):
+        """ see commit 6d997e0 """
         ids = []
         for q in queryset:
             if value in q.full:
