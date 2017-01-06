@@ -6,4 +6,3 @@ RANDOM_PORT=$(docker inspect $POSTGRES | \
 echo "Postgres $POSTGRES running on $RANDOM_PORT"
 sed -i "s/5432/$RANDOM_PORT/g" base/travis.py
 
-python manage.py test

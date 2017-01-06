@@ -8,9 +8,12 @@ services:
 
 before_install:
     - docker pull mdillon/postgis
-    - sudo apt-get install -y jq
+    - sudo apt-get install -y jq chromium-chromedriver
 
 install:
     - pip install -r requirements.txt
+    - bash .travis.sh
 
-script: bash .travis.sh
+script:
+    - flake8 --statistics || true
+    - python manage.py test
