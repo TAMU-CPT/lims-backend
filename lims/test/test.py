@@ -1,14 +1,20 @@
-from django.test import TestCase
+from django.test import LiveServerTestCase
 from django.contrib.auth.models import User
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 
-class UserTestCase(TestCase):
-    def setUp(self):
+class UserTestCase(LiveServerTestCase):
+
+    @classmethod # called only once before all tests
+    def setUpClass(cls):
+        print "class starting"
         user = User.objects.create_user('foo', password='bar')
         user.save()
-        self.driver = webdriver.Chrome()
+        cls.driver = webdriver.Chrome()
+
+    def setUp(self): # called before every test
+        print "Test starting"
 
     def test_login(self):
         driver = self.driver
@@ -19,4 +25,12 @@ class UserTestCase(TestCase):
         username.send_keys("foo") # set up above
         password.send_keys("bar") # set up above
         login_button.click()
-        time.sleep(5)
+        time.sleep(2)
+
+    def tearDown(self): # called after every test
+        print "test ending"
+
+    @classmethod # called once after all tests are finished
+    def tearDownClass(cls):
+        print "class ending"
+        cls.driver.close()
