@@ -1,8 +1,10 @@
-sudo: true
+sudo: required
+
 language: python
-python:
-- '2.7'
-- '3.5'
+python: 2.7
+
+services:
+  - docker
 
 before_install:
     - docker pull mdillon/postgis
@@ -10,3 +12,4 @@ before_install:
 install:
     - pip install -r requirements.txt
     - make pg_launch
+    - docker ps
