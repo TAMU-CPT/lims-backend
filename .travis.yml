@@ -10,22 +10,21 @@ before_install:
     - docker pull mdillon/postgis
     - sudo apt-get install -y jq chromium-chromedriver libgdal-dev gdal-bin
     - sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+    - sudo service postgres stop
+
+install:
+    - pip install -r requirements.txt selenium flake8
+    - git clone https://github.com/tamu-cpt/lims-frontend frontend
+    - sed -i 's/8000/8081/g' frontend/js/const.js
+    - cd frontend && make &
+    - make pg_launch
+    - sleep 30
 
 before_script:
     # https://docs.travis-ci.com/user/gui-and-headless-browsers/
     - "export DISPLAY=:99.0"
     - "sh -e /etc/init.d/xvfb start"
     - sleep 3 # give xvfb some time to start
-
-install:
-    - pip install -r requirements.txt selenium flake8
-    - git clone https://github.com/tamu-cpt/lims-frontend frontend
-    - cd frontend && make &
-    - POSTGRES=$(docker run -d -P mdillon/postgis)
-    - RANDOM_PORT=$(docker inspect $POSTGRES | jq '.[0].NetworkSettings.Ports."5432/tcp"[0].HostPort' -r)
-    - echo "Postgres $POSTGRES running on $RANDOM_PORT"
-    - sed -i "s/5432/$RANDOM_PORT/g" base/travis.py
-    - sleep 30
 
 script:
     - flake8 --statistics --exit-zero --exclude=frontend
