@@ -72,11 +72,10 @@ class Storage(models.Model):
 
 class EnvironmentalSample(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    description = models.TextField(blank=True)
-    collection = models.DateTimeField()
-    location = gis_models.PointField()
-    sample_type = models.CharField(max_length=32)
-
+    description = models.TextField(blank=True, null=True)
+    collection = models.DateTimeField(blank=True, null=True)
+    location = gis_models.PointField(blank=True, null=True)
+    sample_type = models.CharField(max_length=32, blank=True, null=True)
     collected_by = models.ForeignKey(Account, blank=True, null=True)
 
     def __unicode__(self):
