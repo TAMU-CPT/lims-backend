@@ -51,7 +51,7 @@ class UserTestCase(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@aria-label='Create']").click()
         time.sleep(2)
         driver.find_element_by_partial_link_text("LIMS").click()
-        driver.find_element_by_xpath("//a[@aria-label='Environmental Samples']").click()  # lets you see that the object is in the table. need to assert this somehow
+        driver.find_element_by_xpath("//a[@aria-label='Environmental Samples']").click()
         time.sleep(2)
         envsample = EnvironmentalSample.objects.get(sample_type="sewage")
         self.assertEqual(envsample.description, "waste facility in Bryan")
