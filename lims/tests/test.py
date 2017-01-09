@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from selenium import webdriver
 # from selenium.webdriver.common.keys import Keys
 import time
+from lims.models import EnvironmentalSample
 
 
 class UserTestCase(LiveServerTestCase):
@@ -15,7 +16,7 @@ class UserTestCase(LiveServerTestCase):
         cls.driver = webdriver.Chrome()
 
     def test_A_then_B(self):
-        print self.live_server_url
+        # print self.live_server_url
         self.login()
         self.env_sample_create()
 
@@ -50,13 +51,12 @@ class UserTestCase(LiveServerTestCase):
         driver.find_element_by_xpath("//button[@aria-label='Create']").click()
         time.sleep(2)
         driver.find_element_by_partial_link_text("LIMS").click()
-        driver.find_element_by_xpath("//a[@aria-label='Environmental Samples']").click()  # lets you see that the object is in the table. need to assert this somehow
+        driver.find_element_by_xpath("//a[@aria-label='Environmental Samples']").click()
         time.sleep(2)
-        print(driver.page_source)
-        time.sleep(2)
+        envsample = EnvironmentalSample.objects.get(sample_type="sewage")
+        self.assertEqual(envsample.description, "waste facility in Bryan")
 
     @classmethod  # called once after all tests are finished
     def tearDownClass(cls):
         cls.driver.quit()
         super(UserTestCase, cls).tearDownClass()
-        print 'done'
