@@ -10,13 +10,16 @@ before_install:
     - docker pull mdillon/postgis
     - sudo apt-get install -y jq chromium-chromedriver libgdal-dev gdal-bin
     - sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
-    - sudo service postgres stop
 
 install:
     - pip install -r requirements.txt selenium flake8
     - git clone https://github.com/tamu-cpt/lims-frontend frontend
+      # Set backend port used during test cases
     - sed -i 's/8000/8081/g' frontend/js/const.js
     - cd frontend && make &
+      # Set postgres port
+    - sed -i 's/5432:5432/9999:5432/g' Makefile
+    - sed -i 's/5432/9999/g' base/travis.py
     - make pg_launch
     - sleep 30
 
