@@ -1,4 +1,7 @@
-import ast, _ast, argparse
+import ast
+import _ast
+import argparse
+
 
 def write_files(app_name, ug=False):
     models = {}
@@ -9,7 +12,7 @@ def write_files(app_name, ug=False):
         for i in m.body:
             if type(i) == _ast.ClassDef:
                 models[i.name] = {}
-                print i.name
+                print(i.name)
                 for x in i.body:
                     if type(x) == _ast.Assign:
                         var_name = x.targets[0].id
@@ -22,7 +25,6 @@ def write_files(app_name, ug=False):
 
                         models[i.name][var_name] = func_name
                 models[i.name]['id'] = "Intrinsic"
-
 
     serializer_names = [model+'Serializer' for model in models]
 
@@ -88,7 +90,6 @@ def write_files(app_name, ug=False):
         for model in models:
             viewset_class(model)
 
-
     # admin.py
     with open('%s/admin.py' % app_name, 'w') as admin_file:
         def admin_class(models):
@@ -98,7 +99,7 @@ def write_files(app_name, ug=False):
 
                 z = ["'%s'" % x for x in models[model] if models[model][x] != 'ManyToManyField']
                 if len(z) > 0:
-                    a += "    " + "list_display = (" + ', '.join(z)  + ',)\n'
+                    a += "    " + "list_display = (" + ', '.join(z) + ',)\n'
                 admin_file.write('\n')
                 admin_file.write(a)
 
@@ -107,7 +108,7 @@ def write_files(app_name, ug=False):
         admin_class(models)
         admin_file.write('\n')
         for model in models:
-            admin_file.write("admin.site.register(%(0)s, %(0)sAdmin)\n" % {'0':model})
+            admin_file.write("admin.site.register(%(0)s, %(0)sAdmin)\n" % {'0': model})
 
     # urls.py
     with open('%s/urls.py' % app_name, 'w') as url_file:
@@ -124,7 +125,7 @@ def write_files(app_name, ug=False):
             plural = 's'
             if model.endswith('s'):
                 plural = 'es'
-            url_file.write("router.register(r'%(0)s', views.%(1)sViewSet)\n" % {'0':model.lower() + plural, '1':model})
+            url_file.write("router.register(r'%(0)s', views.%(1)sViewSet)\n" % {'0': model.lower() + plural, '1': model})
 
         url_file.write('\n')
 
@@ -135,6 +136,7 @@ def write_files(app_name, ug=False):
         ])
 
         url_file.write(u)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Populate serializers, views, urls, and admin based on models.py')

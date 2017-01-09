@@ -47,7 +47,7 @@ class UserTestCase(LiveServerTestCase):
         driver.find_element_by_name("shelf").send_keys("1")
         driver.find_element_by_name("box_label").send_keys("464 env samples")
         driver.find_element_by_name("tube").send_keys("env sample 1")
-        time.sleep(1)
+        time.sleep(3)
         driver.find_element_by_xpath("//button[@aria-label='Create']").click()
         time.sleep(2)
         driver.find_element_by_partial_link_text("LIMS").click()

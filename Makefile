@@ -3,6 +3,9 @@
 help:
 	@egrep '^[a-zA-Z_.-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+test: ## Run tests
+	python manage.py test
+
 dj_fixtures:  ## Load fixtures for base set of apps
 	python manage.py migrate
 	python manage.py loaddata fixtures/00_auth.json
