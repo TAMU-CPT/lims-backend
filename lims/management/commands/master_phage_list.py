@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User  # noqa
+from directory.models import Organisation
 from lims.models import Phage, Lysate, Bacteria
 # EnvironmentalSampleCollection \
 # PhageDNAPrep, SequencingRun, SequencingRunPool, Publication  # noqa
@@ -23,33 +24,51 @@ class Command(BaseCommand):
                 if i == 0 or i == 1 or not row[1]:
                     continue
 
+                # morphology names to integers
+                morphologies = {
+                    "": 0,
+                    "podo": 1,
+                    "myo": 2,
+                    "sipho": 3
+                }
+
                 # lysate, created = Lysate.objects.get_or_create(
                 # )
 
 
-                # create bacteria objects for each entry in host range
-                hosts = []
-                host_range_strains = [x.strip() for x in row[6].split(',')]
-                if len(host_range_strains):
-                    for h in host_range_strains:
-                        bacteria, created = Bacteria.objects.get_or_create(
-                            genus=row[5].split()[0],
-                            species=row[5].split()[1],
-                            strain=h
-                        )
-                        hosts.append(bacteria)
-                else:  # if no strains, just create one bacteria with genus/spcies only
-                    bacteria, created = Bacteria.objects.get_or_create(
-                        genus=row[5].split()[0],
-                        species=row[5].split()[1]
-                    )
-                    hosts.append(bacteria)
+                # create Bacteria objects for each entry in host range
+                # hosts = []
+                # host_range_strains = [x.strip() for x in row[6].split(',')]
+                # if len(host_range_strains):
+                    # for h in host_range_strains:
+                        # bacteria, created = Bacteria.objects.get_or_create(
+                            # genus=row[5].split()[0],
+                            # species=row[5].split()[1],
+                            # strain=h
+                        # )
+                        # hosts.append(bacteria)
+                # else:  # if no strains, just create one bacteria with genus/spcies only
+                    # bacteria, created = Bacteria.objects.get_or_create(
+                        # genus=row[5].split()[0],
+                        # species=row[5].split()[1]
+                    # )
+                    # hosts.append(bacteria)
+
+                # Organisation
+                if row[7].strip():
+                    print 'creating'
+                    organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
+                else:
+                    organisation = ""
 
                 # phage, created = Phage.objects.get_or_create(
                     # id=int(row[3]),
-                    # primary_name=row[1]
+                    # primary_name=row[1].strip(),
                     # historical_names=json.dumps([x.strip() for x in row[2].split(';')]),
-                    # lysate="",
+                    # lysate=lysate,
+                    # owner=organisation,
+                    # morphology=morphologies[row[33]],
                 # )
                 # phage.save()
-                # phage.host.add(hosts) # manytomany fields have to be added after save
+                # if len(hosts):
+                    # phage.host.add(hosts)  # manytomany fields have to be added after save
