@@ -16,7 +16,7 @@ class Command(BaseCommand):
         with open(options['account_file'], 'rU') as csvfile:
             csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
             for i, row in enumerate(csvreader):
-                if row[1] == 'Eleni' or i == 0 or i == 1 or i == 2 or not row[1]:
+                if i == 0 or i == 1 or i == 2 or not row[1]:
                     continue
 
                 if row[5]:
@@ -29,12 +29,10 @@ class Command(BaseCommand):
                         username=row[6].replace(' ', '')
                     )
 
-                account, created = Account.objects.get_or_create(
-                    user=user,
-                    netid=row[4],
-                    name=row[6],
-                    nickname=row[7],
-                    initials=row[8],
-                    phone_number=row[9],
-                    orcid=row[11],
-                )
+                user.account.netid=row[4]
+                user.account.name = row[6]
+                user.account.nickname=row[7]
+                user.account.initials=row[8]
+                user.account.phone_number=row[9]
+                user.account.orcid=row[11]
+                user.account.save()
