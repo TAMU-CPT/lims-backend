@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User  # noqa
+from account.models import Account
 from directory.models import Organisation
-from lims.models import Phage, Lysate, Bacteria
-# EnvironmentalSampleCollection \
+from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample, EnvironmentalSampleCollection
 # PhageDNAPrep, SequencingRun, SequencingRunPool, Publication  # noqa
 from django.db import transaction
+import datetime
 import json
 import csv
 
@@ -32,9 +33,34 @@ class Command(BaseCommand):
                     "sipho": 3
                 }
 
-                # lysate, created = Lysate.objects.get_or_create(
-                # )
+                account = ""
+                if row[11]:
+                    account = Account.objects.get(name=row[11])
 
+                envsample = ""
+                if row[11] or row[13] or row[14] or row[15]:  # only create if something is filled out
+                    location = None
+                    collection_date = None
+                    if row[13].strip():
+                        locs = [x.strip() for x in row[13].split(',')]
+                        location="SRID=4326;POINT (%s %s)" % (locs[1],locs[0])
+                    if row[14].strip():
+                        collection_date=datetime.datetime.strptime(row[14].strip(), '%Y-%M-%d')
+                    envsample, created = EnvironmentalSample.objects.get_or_create(
+                        collection=collection_date,
+                        location=location,
+                        sample_type=row[15].strip().lower(),
+                        collected_by=account
+                    )
+
+                envsamplecollection = ""
+                if envsample:
+                    print envsample.default_collection
+                # lysate, created = Lysate.objects.get_or_create(
+                    # oldid=row[12].strip(),
+                    # owner=account,
+                    # env_sample_collection=envsamplecollection
+                # )
 
                 # create Bacteria objects for each entry in host range
                 # hosts = []
@@ -55,12 +81,11 @@ class Command(BaseCommand):
                     # hosts.append(bacteria)
 
                 # Organisation
-                if row[7].strip():
-                    print 'creating'
-                    organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
-                else:
-                    organisation = ""
+                # organisation = ""
+                # if row[7].strip():
+                    # organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
 
+                # Phage
                 # phage, created = Phage.objects.get_or_create(
                     # id=int(row[3]),
                     # primary_name=row[1].strip(),
@@ -68,6 +93,8 @@ class Command(BaseCommand):
                     # lysate=lysate,
                     # owner=organisation,
                     # morphology=morphologies[row[33]],
+                    # ncbi_id=row[53].strip(),
+                    # refseq_id=row[54].strip()
                 # )
                 # phage.save()
                 # if len(hosts):
