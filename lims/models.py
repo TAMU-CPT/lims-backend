@@ -173,11 +173,12 @@ class Phage(models.Model):
     historical_names = models.TextField(blank=True, null=True)  # JSON encoded list of old names
     lysate = models.OneToOneField(Lysate, blank=True, null=True)
     host = models.ManyToManyField(Bacteria, blank=True)
-    owner = models.ForeignKey(Account, blank=True, null=True)
-    source = models.ForeignKey(Organisation, blank=True, null=True)
+    # owner = models.ForeignKey(Account, blank=True, null=True)
+    owner = models.ForeignKey(Organisation, blank=True, null=True)
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY, default=0)
     image = models.URLField(blank=True)
     ncbi_id = models.CharField(max_length=32, null=True, blank=True)
+    refseq_id = models.CharField(max_length=32, null=True, blank=True)
     # notes = models.TextField(blank=True)
 
     def status(self):
