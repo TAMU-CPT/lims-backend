@@ -1,8 +1,10 @@
 from django.core.management.base import BaseCommand
 from account.models import Account
 from directory.models import Organisation
-from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample
-# PhageDNAPrep, SequencingRun, SequencingRunPool, Publication  # noqa
+from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample, \
+    PhageDNAPrep, Experiment, ExperimentalResult, SequencingRun, \
+    SequencingRunPool, SequencingRunPoolItem, Assembly
+# PhageDNAPrep, Publication  # noqa
 from django.db import transaction
 from django.db.models import signals
 from lims.models import create_default_phage_for_lysate
@@ -26,12 +28,17 @@ class Command(BaseCommand):
                 if i == 0 or i == 1 or not row[1]:
                     continue
 
-                # morphology names to integers
+                # morphology names/qualifiers to integers
                 morphologies = {
                     "": 0,
                     "podo": 1,
                     "myo": 2,
                     "sipho": 3
+                }
+                morphology_qualifiers = {
+                    "": 0,
+                    "prolate": 1,
+                    "isometric": 2
                 }
 
                 # Account
@@ -102,6 +109,11 @@ class Command(BaseCommand):
                     organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
 
                 # Phage
+
+                needs_resequencing = False
+                if row[21] == 'TRUE':
+                    needs_resequencing = True
+
                 phage, created = Phage.objects.get_or_create(
                     id=int(row[3]),
                     primary_name=row[1].strip(),
@@ -109,9 +121,65 @@ class Command(BaseCommand):
                     lysate=lysate,
                     owner=organisation,
                     morphology=morphologies[row[33]],
+                    morphology_qualifier=morphology_qualifiers[row[34]],
                     ncbi_id=row[53].strip(),
-                    refseq_id=row[54].strip()
+                    refseq_id=row[54].strip(),
+                    needs_resequencing=needs_resequencing,
+                    end_info=row[35].strip()
+                    # can_be_annotated=
                 )
                 if len(hosts):
                     phage.host.add(*hosts)  # manytomany fields have to be added after save
                     phage.save()
+
+                # PhageDNAPrep
+                exp_result_pfge = None
+                if row[18].strip():
+                    pfge_experiment = Experiment.objects.get(name='PFGE')
+                    exp_result_pfge = ExperimentalResult.objects.create(
+                        experiment=pfge_experiment,
+                        result=row[18].strip()
+                    )
+                phagednaprep = PhageDNAPrep.objects.create(
+                    pfge=exp_result_pfge,
+                    phage=phage
+                )
+
+                seq_experiment = None
+                if row[20].strip():
+                    if row[20].strip().startswith('MiSeq'):
+                        expname = row[20].strip()[:12]
+                    else:
+                        expname = row[20].strip()
+                    seq_experiment, created = Experiment.get_or_create(
+                        short_name=expname,
+                        full_name=expname,
+                        methods=row[20]
+                    )
+                seq_run_date = None
+                if row[19].strip():
+                    if '/' in row[19]:
+                        seq_run_date = datetime.datetime.strptime(row[19].strip(), '%Y/%m')
+                    else:
+                        seq_run_date = datetime.datetime.strptime(row[19].strip(), '%Y')
+                sequencingrun, created = SequencingRun.objects.get_or_create(
+                    name=row[19].strip(),
+                    date=seq_run_date,
+                    method=seq_experiment
+                )
+                sequencingrunpool, created = SequencingRunPool.objects.get_or_create(
+                    pool=row[24].strip(),
+                    run=sequencingrun
+                )
+                sequencingrunpoolitem = SequencingRunPoolItem.objects.create(
+                    pool=sequencingrunpool,
+                    dna_prep=phagednaprep
+                )
+
+                # Assembly
+                assembly = Assembly.objects.create(
+                    sequence_id=row[27],
+                    sequencing_run_pool_item=sequencingrunpoolitem,
+                    contig_length=row[28],
+                    contig_name=row[25]
+                )
