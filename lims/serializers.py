@@ -168,7 +168,9 @@ class EnvironmentalSampleSerializer(serializers.ModelSerializer):
         # print obj.location.json
         # print obj.location.geojson
         # print obj.location.coords
-        return obj.location.coords
+        if obj is not None and obj.location is not None:
+            return obj.location.coords
+        return None
 
 
 class TypesEnvironmentalSampleSerializer(serializers.ModelSerializer):
@@ -205,7 +207,7 @@ class BacteriaSerializer(serializers.ModelSerializer):
 
 class PhageSerializerList(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    owner = AccountSerializerLight(read_only=True)
+    # owner = AccountSerializerLight(read_only=True)
 
     class Meta:
         model = Phage
@@ -279,7 +281,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
         model = Phage
         fields = (
             'historical_names', 'primary_name', 'id', 'phagednaprep_set',
-            'host', 'owner', 'source', 'assembly', 'lysate', 'status'
+            'host', 'owner', 'assembly', 'lysate', 'status'
         )
 
     def update(self, instance, validated_data):
@@ -295,7 +297,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
         # for env_sample in validated_data['env_sample_collection']['env_sample']:
             # print env_sample
 
-        for prop in ('historical_names', 'primary_name', 'host', 'source', 'assembly'):
+        for prop in ('historical_names', 'primary_name', 'host', 'assembly'):
             x = validated_data.get(prop, getattr(instance, prop))
             print('Setattr %s %s = %s' % (instance, prop, x))
             setattr(instance, prop, x)
