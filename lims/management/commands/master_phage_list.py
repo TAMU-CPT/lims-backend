@@ -18,7 +18,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('master_phage_list', type=str)
 
-    # @transaction.atomic
+    @transaction.atomic
     def handle(self, *args, **options):
 
         with open(options['master_phage_list'], 'rU') as csvfile:
