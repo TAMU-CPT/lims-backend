@@ -35,10 +35,12 @@ class Command(BaseCommand):
                     "sipho": 3
                 }
 
+                # Account
                 account = None
                 if row[11]:
                     account = Account.objects.get(name=row[11])
 
+                # EnvironmentalSample
                 envsample = None
                 if row[11] or row[13] or row[14] or row[15]:  # only create if something is filled out
                     location = None
@@ -48,7 +50,6 @@ class Command(BaseCommand):
                         location="SRID=4326;POINT (%s %s)" % (locs[1],locs[0])
                     if row[14].strip():
                         collection_date=datetime.datetime.strptime(row[14].strip(), '%Y-%m-%d')
-                        print collection_date
                     envsample, created = EnvironmentalSample.objects.get_or_create(
                         collection=collection_date,
                         location=location,
@@ -56,11 +57,19 @@ class Command(BaseCommand):
                         collected_by=account
                     )
 
+                # EnvironmentalSampleCollection
                 envsamplecollection = None
                 if envsample:
                     envsamplecollection = envsample.default_collection
 
-                # signals.post_save.disconnect(dispatch_uid='models.create_default_phage_for_lysate')
+                # disconnect autocreate of phage
+                signals.post_save.disconnect(
+                    create_default_phage_for_lysate,
+                    sender=Lysate, weak=False,
+                    dispatch_uid='models.create_default_phage_for_lysate'
+                )
+
+                # Lysate
                 lysate = None
                 if row[12].strip() or envsamplecollection is not None or account is not None:
                     lysate = Lysate.objects.create(
@@ -95,7 +104,7 @@ class Command(BaseCommand):
 
                 # Phage
                 phage, created = Phage.objects.get_or_create(
-                    # id=int(row[3]),
+                    id=int(row[3]),
                     primary_name=row[1].strip(),
                     historical_names=json.dumps([x.strip() for x in row[2].split(';')]),
                     lysate=lysate,
@@ -104,6 +113,6 @@ class Command(BaseCommand):
                     ncbi_id=row[53].strip(),
                     refseq_id=row[54].strip()
                 )
-                # if len(hosts):
-                    # phage.host.add(hosts)  # manytomany fields have to be added after save
-                    # phage.save()
+                if len(hosts):
+                    phage.host.add(*hosts)  # manytomany fields have to be added after save
+                    phage.save()
