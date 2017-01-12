@@ -138,7 +138,8 @@ class Lysate(models.Model):
     oldid = models.CharField(max_length=64, blank=True)
     isolation = models.DateTimeField(auto_now_add=True, null=True)
     storage = models.OneToOneField(Storage, blank=True, null=True)
-    host = models.ForeignKey(Bacteria, blank=True)
+    host = models.ForeignKey(Bacteria, blank=True, null=True)
+    owner = models.ForeignKey(Account, blank=True, null=True)
     env_sample_collection = models.ForeignKey(EnvironmentalSampleCollection, blank=True, null=True)
 
 
@@ -362,8 +363,8 @@ signals.post_save.connect(
     dispatch_uid='models.create_default_envsamplecollection'
 )
 
-signals.post_save.connect(
-    create_default_phage_for_lysate,
-    sender=Lysate, weak=False,
-    dispatch_uid='models.create_default_phage_for_lysate'
-)
+# signals.post_save.connect(
+    # create_default_phage_for_lysate,
+    # sender=Lysate, weak=False,
+    # dispatch_uid='models.create_default_phage_for_lysate'
+# )
