@@ -1,8 +1,7 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User  # noqa
 from account.models import Account
 from directory.models import Organisation
-from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample, EnvironmentalSampleCollection
+from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample
 # PhageDNAPrep, SequencingRun, SequencingRunPool, Publication  # noqa
 from django.db import transaction
 from django.db.models import signals
@@ -18,7 +17,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('master_phage_list', type=str)
 
-    @transaction.atomic
+    @transaction.atomic  # noqa
     def handle(self, *args, **options):
 
         with open(options['master_phage_list'], 'rU') as csvfile:
@@ -47,9 +46,9 @@ class Command(BaseCommand):
                     collection_date = None
                     if row[13].strip():
                         locs = [x.strip() for x in row[13].split(',')]
-                        location="SRID=4326;POINT (%s %s)" % (locs[1],locs[0])
+                        location = "SRID=4326;POINT (%s %s)" % (locs[1], locs[0])
                     if row[14].strip():
-                        collection_date=datetime.datetime.strptime(row[14].strip(), '%Y-%m-%d')
+                        collection_date = datetime.datetime.strptime(row[14].strip(), '%Y-%m-%d')
                     envsample, created = EnvironmentalSample.objects.get_or_create(
                         collection=collection_date,
                         location=location,
