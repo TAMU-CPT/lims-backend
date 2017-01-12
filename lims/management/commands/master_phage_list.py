@@ -5,6 +5,8 @@ from directory.models import Organisation
 from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample, EnvironmentalSampleCollection
 # PhageDNAPrep, SequencingRun, SequencingRunPool, Publication  # noqa
 from django.db import transaction
+from django.db.models import signals
+from lims.models import create_default_phage_for_lysate
 import datetime
 import json
 import csv
@@ -16,7 +18,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('master_phage_list', type=str)
 
-    @transaction.atomic
+    # @transaction.atomic
     def handle(self, *args, **options):
 
         with open(options['master_phage_list'], 'rU') as csvfile:
@@ -33,11 +35,11 @@ class Command(BaseCommand):
                     "sipho": 3
                 }
 
-                account = ""
+                account = None
                 if row[11]:
                     account = Account.objects.get(name=row[11])
 
-                envsample = ""
+                envsample = None
                 if row[11] or row[13] or row[14] or row[15]:  # only create if something is filled out
                     location = None
                     collection_date = None
@@ -45,7 +47,8 @@ class Command(BaseCommand):
                         locs = [x.strip() for x in row[13].split(',')]
                         location="SRID=4326;POINT (%s %s)" % (locs[1],locs[0])
                     if row[14].strip():
-                        collection_date=datetime.datetime.strptime(row[14].strip(), '%Y-%M-%d')
+                        collection_date=datetime.datetime.strptime(row[14].strip(), '%Y-%m-%d')
+                        print collection_date
                     envsample, created = EnvironmentalSample.objects.get_or_create(
                         collection=collection_date,
                         location=location,
@@ -53,49 +56,54 @@ class Command(BaseCommand):
                         collected_by=account
                     )
 
-                envsamplecollection = ""
+                envsamplecollection = None
                 if envsample:
-                    print envsample.default_collection
-                # lysate, created = Lysate.objects.get_or_create(
-                    # oldid=row[12].strip(),
-                    # owner=account,
-                    # env_sample_collection=envsamplecollection
-                # )
+                    envsamplecollection = envsample.default_collection
+
+                # signals.post_save.disconnect(dispatch_uid='models.create_default_phage_for_lysate')
+                lysate = None
+                if row[12].strip() or envsamplecollection is not None or account is not None:
+                    lysate, created = Lysate.objects.get_or_create(
+                        oldid=row[12].strip(),
+                        owner=account,
+                        host=None,
+                        env_sample_collection=envsamplecollection
+                    )
 
                 # create Bacteria objects for each entry in host range
-                # hosts = []
-                # host_range_strains = [x.strip() for x in row[6].split(',')]
-                # if len(host_range_strains):
-                    # for h in host_range_strains:
-                        # bacteria, created = Bacteria.objects.get_or_create(
-                            # genus=row[5].split()[0],
-                            # species=row[5].split()[1],
-                            # strain=h
-                        # )
-                        # hosts.append(bacteria)
-                # else:  # if no strains, just create one bacteria with genus/spcies only
-                    # bacteria, created = Bacteria.objects.get_or_create(
-                        # genus=row[5].split()[0],
-                        # species=row[5].split()[1]
-                    # )
-                    # hosts.append(bacteria)
+                hosts = []
+                host_range_strains = [x.strip() for x in row[6].split(',')]
+                if len(host_range_strains):
+                    for h in host_range_strains:
+                        bacteria, created = Bacteria.objects.get_or_create(
+                            genus=row[5].split()[0],
+                            species=row[5].split()[1],
+                            strain=h
+                        )
+                        hosts.append(bacteria)
+                else:  # if no strains, just create one bacteria with genus/spcies only
+                    bacteria, created = Bacteria.objects.get_or_create(
+                        genus=row[5].split()[0],
+                        species=row[5].split()[1]
+                    )
+                    hosts.append(bacteria)
 
                 # Organisation
-                # organisation = ""
-                # if row[7].strip():
-                    # organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
+                organisation = ""
+                if row[7].strip():
+                    organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
 
                 # Phage
-                # phage, created = Phage.objects.get_or_create(
-                    # id=int(row[3]),
-                    # primary_name=row[1].strip(),
-                    # historical_names=json.dumps([x.strip() for x in row[2].split(';')]),
-                    # lysate=lysate,
-                    # owner=organisation,
-                    # morphology=morphologies[row[33]],
-                    # ncbi_id=row[53].strip(),
-                    # refseq_id=row[54].strip()
-                # )
-                # phage.save()
+                phage, created = Phage.objects.get_or_create(
+                    id=int(row[3]),
+                    primary_name=row[1].strip(),
+                    historical_names=json.dumps([x.strip() for x in row[2].split(';')]),
+                    lysate=lysate,
+                    owner=organisation,
+                    morphology=morphologies[row[33]],
+                    ncbi_id=row[53].strip(),
+                    refseq_id=row[54].strip()
+                )
                 # if len(hosts):
                     # phage.host.add(hosts)  # manytomany fields have to be added after save
+                    # phage.save()
