@@ -363,8 +363,8 @@ signals.post_save.connect(
     dispatch_uid='models.create_default_envsamplecollection'
 )
 
-# signals.post_save.connect(
-    # create_default_phage_for_lysate,
-    # sender=Lysate, weak=False,
-    # dispatch_uid='models.create_default_phage_for_lysate'
-# )
+signals.post_save.connect(
+    create_default_phage_for_lysate,
+    sender=Lysate, weak=False,
+    dispatch_uid='models.create_default_phage_for_lysate'
+)
