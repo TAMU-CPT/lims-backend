@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 # signals.post_save.disconnect(dispatch_uid='models.create_default_phage_for_lysate')
                 lysate = None
                 if row[12].strip() or envsamplecollection is not None or account is not None:
-                    lysate, created = Lysate.objects.get_or_create(
+                    lysate = Lysate.objects.create(
                         oldid=row[12].strip(),
                         owner=account,
                         host=None,
@@ -95,7 +95,7 @@ class Command(BaseCommand):
 
                 # Phage
                 phage, created = Phage.objects.get_or_create(
-                    id=int(row[3]),
+                    # id=int(row[3]),
                     primary_name=row[1].strip(),
                     historical_names=json.dumps([x.strip() for x in row[2].split(';')]),
                     lysate=lysate,
