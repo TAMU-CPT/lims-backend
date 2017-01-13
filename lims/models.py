@@ -195,6 +195,10 @@ class Phage(models.Model):
     refseq_id = models.CharField(max_length=32, null=True, blank=True)
     can_be_annotated = models.BooleanField(default=False)
     needs_resequencing = models.BooleanField(default=False)
+    end_info = models.TextField(blank=True, null=True)
+    closure = models.ForeignKey(ExperimentalResult, blank=True, null=True)
+    end_determination = models.ForeignKey(ExperimentalResult, blank=True, null=True, related_name="end_determ_result")
+    head_size = models.FloatField(blank=True, null=True)
     # notes = models.TextField(blank=True)
 
     def status(self):
@@ -328,7 +332,7 @@ class Assembly(models.Model):
     notes = models.TextField(blank=True)
     contig_length = models.IntegerField(blank=True, null=True)
     contig_name = models.CharField(max_length=128, blank=True, null=True)
-    # complete = models.BooleanField(default=False)
+    complete = models.NullBooleanField(default=None)
 
     class Meta:
         verbose_name_plural = "assemblies"
@@ -350,7 +354,7 @@ class AnnotationRecord(models.Model):
 class Publication(models.Model):
     phages = models.ManyToManyField(Phage)
     genomea_id = models.CharField(max_length=32)
-    doi = models.CharField(max_length=32)
+    doi = models.CharField(max_length=64, blank=True, null=True)
     status = models.IntegerField(choices=PUBLICATION_STATUS)
 
 
