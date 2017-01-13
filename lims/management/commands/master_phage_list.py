@@ -3,7 +3,8 @@ from account.models import Account
 from directory.models import Organisation
 from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample, \
     PhageDNAPrep, Experiment, ExperimentalResult, SequencingRun, \
-    SequencingRunPool, SequencingRunPoolItem, Assembly
+    SequencingRunPool, SequencingRunPoolItem, Assembly, Publication, \
+    AnnotationRecord
 # PhageDNAPrep, Publication  # noqa
 from django.db import transaction
 from django.db.models import signals
@@ -42,9 +43,9 @@ class Command(BaseCommand):
                 }
 
                 # publication qualifiers to integers
-                pub_qualifers = {
+                pub_qualifiers = {
                     "": 0,
-                    "manuscript in preparation" 2,
+                    "manuscript in preparation": 2,
                     "in press": 3
                 }
 
@@ -129,14 +130,14 @@ class Command(BaseCommand):
                 closure_exp_result = None
                 if row[36]:
                     closure_exp = Experiment.objects.get(short_name='Closure')
-                    closure_exp_result = ExperimentResult.objects.create(
+                    closure_exp_result = ExperimentalResult.objects.create(
                         experiment=closure_exp,
                         result=row[36]
                     )
                 end_exp_result = None
                 if row[39]:
                     end_exp = Experiment.objects.get(short_name='End determination')
-                    end_exp_result = ExperimentResult.objects.create(
+                    end_exp_result = ExperimentalResult.objects.create(
                         experiment=end_exp,
                         result=row[39]
                     )
@@ -236,7 +237,7 @@ class Command(BaseCommand):
                 annotator = None
                 if row[45]:
                     annotator = Account.objects.get(name=row[45])
-                annotation = AnnotationRecord.objects.create(
+                AnnotationRecord.objects.create(
                     assembly=assembly,
                     notes=annotation_notes,
                     annotator=annotator,
