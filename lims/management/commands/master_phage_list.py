@@ -96,21 +96,34 @@ class Command(BaseCommand):
 
                 # create Bacteria objects for each entry in host range
                 hosts = []
-                host_range_strains = [x.strip() for x in row[6].split(',')]
-                if len(host_range_strains):
-                    for h in host_range_strains:
+                host_range = [x.strip() for x in row[6].split(',')]
+                if len(host_range):
+                    for h in host_range:
+                        if row[5].startswith('Caul'):
+                            bacteria, created = Bacteria.objects.get_or_create(
+                                genus=row[5].split()[0],
+                                species=row[5].split()[1],
+                                strain=h
+                            )
+                            hosts.append(bacteria)
+                        else:
+                            bacteria, created = Bacteria.objects.get_or_create(
+                                genus=row[6].split()[0],
+                                species=row[6].split()[1],
+                                strain=h
+                            )
+                            hosts.append(bacteria)
+                else:  # if no strains, just create one bacteria with genus/spcies or just genus only
+                    if len(row[5].split()) > 1:
                         bacteria, created = Bacteria.objects.get_or_create(
                             genus=row[5].split()[0],
-                            species=row[5].split()[1],
-                            strain=h
+                            species=row[5].split()[1]
                         )
                         hosts.append(bacteria)
-                else:  # if no strains, just create one bacteria with genus/spcies only
-                    bacteria, created = Bacteria.objects.get_or_create(
-                        genus=row[5].split()[0],
-                        species=row[5].split()[1]
-                    )
-                    hosts.append(bacteria)
+                    else:
+                        bacteria, created = Bacteria.objects.get_or_create(
+                            genus=row[5]
+                        hosts.append(bacteria)
 
                 # Organisation
                 organisation = ""
