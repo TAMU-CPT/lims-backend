@@ -41,6 +41,13 @@ class Command(BaseCommand):
                     "isometric": 2
                 }
 
+                # publication qualifiers to integers
+                pub_qualifers = {
+                    "": 0,
+                    "manuscript in preparation" 2,
+                    "in press": 3
+                }
+
                 # Account
                 account = None
                 if row[11]:
@@ -109,10 +116,30 @@ class Command(BaseCommand):
                     organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
 
                 # Phage
-
+                can_be_annotated = False
+                if row[43] == 'TRUE':
+                    can_be_annotated = True
                 needs_resequencing = False
                 if row[21] == 'TRUE':
                     needs_resequencing = True
+                head_size = None
+                if row[32].strip():
+                    head_size = float(row[32].strip())
+
+                closure_exp_result = None
+                if row[36]:
+                    closure_exp = Experiment.objects.get(short_name='Closure')
+                    closure_exp_result = ExperimentResult.objects.create(
+                        experiment=closure_exp,
+                        result=row[36]
+                    )
+                end_exp_result = None
+                if row[39]:
+                    end_exp = Experiment.objects.get(short_name='End determination')
+                    end_exp_result = ExperimentResult.objects.create(
+                        experiment=end_exp,
+                        result=row[39]
+                    )
 
                 phage, created = Phage.objects.get_or_create(
                     id=int(row[3]),
@@ -125,8 +152,11 @@ class Command(BaseCommand):
                     ncbi_id=row[53].strip(),
                     refseq_id=row[54].strip(),
                     needs_resequencing=needs_resequencing,
-                    end_info=row[35].strip()
-                    # can_be_annotated=
+                    end_info=row[35].strip(),
+                    head_size=head_size,
+                    can_be_annotated=can_be_annotated,
+                    closure=closure_exp_result,
+                    end_determination=end_exp_result
                 )
                 if len(hosts):
                     phage.host.add(*hosts)  # manytomany fields have to be added after save
@@ -135,7 +165,7 @@ class Command(BaseCommand):
                 # PhageDNAPrep
                 exp_result_pfge = None
                 if row[18].strip():
-                    pfge_experiment = Experiment.objects.get(name='PFGE')
+                    pfge_experiment = Experiment.objects.get(short_name='PFGE')
                     exp_result_pfge = ExperimentalResult.objects.create(
                         experiment=pfge_experiment,
                         result=row[18].strip()
@@ -145,6 +175,7 @@ class Command(BaseCommand):
                     phage=phage
                 )
 
+                # Sequencing
                 seq_experiment = None
                 if row[20].strip():
                     if row[20].strip().startswith('MiSeq'):
@@ -177,9 +208,37 @@ class Command(BaseCommand):
                 )
 
                 # Assembly
+                if row[30] == 'TRUE':
+                    complete = True
+                elif row[30] == 'FALSE':
+                    complete = False
+                else:
+                    complete = None
                 assembly = Assembly.objects.create(
                     sequence_id=row[27],
                     sequencing_run_pool_item=sequencingrunpoolitem,
                     contig_length=row[28],
-                    contig_name=row[25]
+                    contig_name=row[25],
+                    complete=complete
+                )
+
+                # Publication
+                publication, created = Publication.objects.get_or_create(
+                    doi=row[50].strip(),
+                    status=pub_qualifiers[row[49]]
+                )
+                publication.phages.add(phage)  # manytomany fields have to be added after save
+                publication.save()
+
+                # AnnotationRecord
+                annotation_notes = row[47]+'\n'+row[48]
+                annotation_year = datetime.datetime.strptime(row[46].strip(), '%Y')
+                annotator = None
+                if row[45]:
+                    annotator = Account.objects.get(name=row[45])
+                annotation = AnnotationRecord.objects.create(
+                    assembly=assembly,
+                    notes=annotation_notes,
+                    annotator=annotator,
+                    date=annotation_year
                 )
