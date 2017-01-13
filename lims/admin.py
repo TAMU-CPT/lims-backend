@@ -3,7 +3,7 @@ from .models import Storage, Assembly, \
     ExperimentalResult, SequencingRun, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection, \
-    EnvironmentalSampleRelation, Publication
+    EnvironmentalSampleRelation, Publication, AnnotationRecord
 
 
 class StorageAdmin(admin.ModelAdmin):
@@ -66,6 +66,10 @@ class PublicationAdmin(admin.ModelAdmin):
     queryset = Publication.objects.all()
     list_display = ('id', 'doi', 'status', 'genomea_id')
 
+class AnnotationRecordAdmin(admin.ModelAdmin):
+    queryset = Publication.objects.all()
+    list_display = ('id', 'assembly', 'chado_id', 'apollo_id', 'notes', 'annotator', 'date')
+
 admin.site.register(Assembly, AssemblyAdmin)
 admin.site.register(ExperimentalResult, ExperimentalResultAdmin)
 admin.site.register(SequencingRun, SequencingRunAdmin)
@@ -81,3 +85,4 @@ admin.site.register(Bacteria, BacteriaAdmin)
 admin.site.register(EnvironmentalSampleCollection, EnvironmentalSampleCollectionAdmin)
 admin.site.register(EnvironmentalSampleRelation, EnvironmentalSampleRelationAdmin)
 admin.site.register(Publication, PublicationAdmin)
+admin.site.register(AnnotationRecord, AnnotationRecordAdmin)
