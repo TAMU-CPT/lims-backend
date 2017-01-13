@@ -255,7 +255,7 @@ class SequencingRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     galaxy_library = models.URLField(blank=True, help_text="Galaxy Library URL")
     name = models.TextField(blank=True, null=True)
-    date = models.DateField(auto_now_add=True, null=True)
+    date = models.DateField(blank=True, null=True)
     # Illumina, miseq, etc need to be in experiments
     method = models.ForeignKey(Experiment, null=True)
     bioanalyzer_qc = models.TextField(blank=True)
@@ -344,9 +344,9 @@ class Assembly(models.Model):
 class AnnotationRecord(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     assembly = models.ForeignKey(Assembly)
-    chado_id = models.IntegerField(blank=True)
-    apollo_id = models.IntegerField(blank=True)
-    notes = models.TextField(blank=True)
+    chado_id = models.IntegerField(blank=True, null=True)
+    apollo_id = models.IntegerField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
     annotator = models.ForeignKey(Account, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
 
