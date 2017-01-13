@@ -132,8 +132,8 @@ class EnvironmentalSampleRelation(models.Model):
 
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
-    species = models.CharField(max_length=64, blank=True)
-    strain = models.CharField(max_length=64, blank=True)
+    species = models.CharField(max_length=64, blank=True, null=True)
+    strain = models.CharField(max_length=64, blank=True, null=True)
 
     def __unicode__(self):
         if self.strain:
