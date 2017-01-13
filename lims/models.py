@@ -245,7 +245,7 @@ class PhageDNAPrep(models.Model):
     # tem_image = models.URLField()
     # gel_image = models.URLField()
     # Nanodrop, pico green, other?
-    pfge = models.ForeignKey(ExperimentalResult, blank=True)
+    pfge = models.ForeignKey(ExperimentalResult, blank=True, null=True)
     phage = models.ForeignKey(Phage, blank=True, null=True)
     storage = models.OneToOneField(Storage, blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True, null=True)
