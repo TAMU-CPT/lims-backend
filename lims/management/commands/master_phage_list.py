@@ -5,7 +5,6 @@ from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample, \
     PhageDNAPrep, Experiment, ExperimentalResult, SequencingRun, \
     SequencingRunPool, SequencingRunPoolItem, Assembly, Publication, \
     AnnotationRecord
-# PhageDNAPrep, Publication  # noqa
 from django.db import transaction
 from django.db.models import signals
 from lims.models import create_default_phage_for_lysate
@@ -45,8 +44,10 @@ class Command(BaseCommand):
                 # publication qualifiers to integers
                 pub_qualifiers = {
                     "": 0,
+                    "unpublished": 1,
                     "manuscript in preparation": 2,
-                    "in press": 3
+                    "in press": 3,
+                    "published": 4
                 }
 
                 # Account
@@ -176,14 +177,14 @@ class Command(BaseCommand):
                     phage=phage
                 )
 
-                # Sequencing
+                # # Sequencing
                 seq_experiment = None
                 if row[20].strip():
                     if row[20].strip().startswith('MiSeq'):
                         expname = row[20].strip()[:12]
                     else:
                         expname = row[20].strip()
-                    seq_experiment, created = Experiment.get_or_create(
+                    seq_experiment, created = Experiment.objects.get_or_create(
                         short_name=expname,
                         full_name=expname,
                         methods=row[20]
@@ -197,7 +198,8 @@ class Command(BaseCommand):
                 sequencingrun, created = SequencingRun.objects.get_or_create(
                     name=row[19].strip(),
                     date=seq_run_date,
-                    method=seq_experiment
+                    method=seq_experiment,
+                    finalized=True
                 )
                 sequencingrunpool, created = SequencingRunPool.objects.get_or_create(
                     pool=row[24].strip(),
