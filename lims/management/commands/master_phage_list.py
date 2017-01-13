@@ -123,6 +123,7 @@ class Command(BaseCommand):
                     else:
                         bacteria, created = Bacteria.objects.get_or_create(
                             genus=row[5]
+                        )
                         hosts.append(bacteria)
 
                 # Organisation
