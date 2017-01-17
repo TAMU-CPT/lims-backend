@@ -138,7 +138,9 @@ class Bacteria(models.Model):
     def __unicode__(self):
         if self.strain:
             return '{} {} {}'.format(self.genus, self.species, self.strain)
-        return '{} {}'.format(self.genus, self.species)
+        if self.species:
+            return '{} {}'.format(self.genus, self.species)
+        return '{}'.format(self.genus)
 
     @property
     def full(self):
