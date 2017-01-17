@@ -97,32 +97,50 @@ class Command(BaseCommand):
                 # create Bacteria objects for each entry in host range
                 hosts = []
                 host_range = [x.strip() for x in row[6].split(',')]
-                if len(host_range):
-                    for h in host_range:
-                        if row[5].startswith('Caul'):
+                bacteria=None
+                if len(host_range[0]):
+                    if row[5].startswith('Caul'):
+                        for h in host_range:
                             bacteria, created = Bacteria.objects.get_or_create(
-                                genus=row[5].split()[0],
-                                species=row[5].split()[1],
+                                genus=row[5].strip().split()[0],
+                                species=row[5].strip().split()[1],
                                 strain=h
                             )
                             hosts.append(bacteria)
-                        else:
+                    else:
+                        bacteria, created = Bacteria.objects.get_or_create(
+                            genus=row[5].strip().split()[0],
+                            species=row[5].strip().split()[1],
+                            strain=None
+                        )
+                        hosts.append(bacteria)
+                        for h in host_range:
                             bacteria, created = Bacteria.objects.get_or_create(
-                                genus=row[6].split()[0],
-                                species=row[6].split()[1],
-                                strain=h
+                                genus=h.split()[0],
+                                species=h.split()[1],
+                                strain=None
                             )
                             hosts.append(bacteria)
                 else:  # if no strains, just create one bacteria with genus/spcies or just genus only
-                    if len(row[5].split()) > 1:
+                    if len(row[5].split()) == 3:
                         bacteria, created = Bacteria.objects.get_or_create(
-                            genus=row[5].split()[0],
-                            species=row[5].split()[1]
+                            genus=row[5].strip().split()[0],
+                            species=row[5].strip().split()[1],
+                            strain=row[5].strip().split()[2]
                         )
                         hosts.append(bacteria)
-                    else:
+                    elif len(row[5].split()) == 2:
                         bacteria, created = Bacteria.objects.get_or_create(
-                            genus=row[5]
+                            genus=row[5].strip().split()[0],
+                            species=row[5].strip().split()[1],
+                            strain=None
+                        )
+                        hosts.append(bacteria)
+                    elif len(row[5].split()) == 1:
+                        bacteria, created = Bacteria.objects.get_or_create(
+                            genus=row[5].strip(),
+                            species=None,
+                            strain=None
                         )
                         hosts.append(bacteria)
 
