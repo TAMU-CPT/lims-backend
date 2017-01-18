@@ -210,7 +210,7 @@ class Command(BaseCommand):
                     phage=phage
                 )
 
-                # # Sequencing
+                # Sequencing
                 seq_experiment = None
                 if row[20].strip():
                     if row[20].strip().startswith('MiSeq'):
