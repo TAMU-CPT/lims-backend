@@ -203,6 +203,9 @@ class Phage(models.Model):
     head_size = models.FloatField(blank=True, null=True)
     # notes = models.TextField(blank=True)
 
+    def __unicode__(self):
+        return self.primary_name
+
     def status(self):
         value = {}
         dnapreps = self.phagednaprep_set.all()
