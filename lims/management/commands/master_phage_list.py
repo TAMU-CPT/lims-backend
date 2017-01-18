@@ -25,8 +25,9 @@ class Command(BaseCommand):
         with open(options['master_phage_list'], 'rU') as csvfile:
             csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
             for i, row in enumerate(csvreader):
-                if i == 0 or i == 1 or not row[1]:
+                if i == 0 or i == 1 or not row[1] or row[1] == 'Percy':
                     continue
+                print row[1]
 
                 # morphology names/qualifiers to integers
                 morphologies = {
@@ -145,7 +146,7 @@ class Command(BaseCommand):
                         hosts.append(bacteria)
 
                 # Organisation
-                organisation = ""
+                organisation = None
                 if row[7].strip():
                     organisation, created = Organisation.objects.get_or_create(name=row[7].strip())
 
@@ -161,14 +162,14 @@ class Command(BaseCommand):
                     head_size = float(row[32].strip())
 
                 closure_exp_result = None
-                if row[36]:
+                if row[36].strip():
                     closure_exp = Experiment.objects.get(short_name='Closure')
                     closure_exp_result = ExperimentalResult.objects.create(
                         experiment=closure_exp,
                         result=row[36]
                     )
                 end_exp_result = None
-                if row[39]:
+                if row[39].strip():
                     end_exp = Experiment.objects.get(short_name='End determination')
                     end_exp_result = ExperimentalResult.objects.create(
                         experiment=end_exp,
@@ -249,10 +250,13 @@ class Command(BaseCommand):
                     complete = False
                 else:
                     complete = None
+                contig_length = None
+                if row[28].strip():
+                    contig_length = row[28].strip()
                 assembly = Assembly.objects.create(
                     sequence_id=row[27],
                     sequencing_run_pool_item=sequencingrunpoolitem,
-                    contig_length=row[28],
+                    contig_length=contig_length,
                     contig_name=row[25],
                     complete=complete
                 )
@@ -267,9 +271,10 @@ class Command(BaseCommand):
 
                 # AnnotationRecord
                 annotation_notes = row[47]+'\n'+row[48]
-                annotation_year = datetime.datetime.strptime(row[46].strip(), '%Y')
+                if row[46].strip():
+                    annotation_year = datetime.datetime.strptime(row[46].strip(), '%Y')
                 annotator = None
-                if row[45]:
+                if row[45] and not row[45].endswith('?'):
                     annotator = Account.objects.get(name=row[45])
                 AnnotationRecord.objects.create(
                     assembly=assembly,
