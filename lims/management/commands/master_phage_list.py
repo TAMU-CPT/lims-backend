@@ -25,7 +25,7 @@ class Command(BaseCommand):
         with open(options['master_phage_list'], 'rU') as csvfile:
             csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
             for i, row in enumerate(csvreader):
-                if i == 0 or i == 1 or not row[1] or row[1] == 'Percy':
+                if i == 0 or i == 1 or not row[1] or row[1] == 'Percy':  # Percy has two seq runs
                     continue
                 print row[1]
 
