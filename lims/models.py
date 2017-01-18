@@ -271,7 +271,7 @@ class SequencingRun(models.Model):
 
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    pool = models.CharField(max_length=16)
+    pool = models.CharField(max_length=64)
     run = models.ForeignKey(SequencingRun)
 
     class Meta:
