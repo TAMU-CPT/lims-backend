@@ -3,7 +3,7 @@ from .models import Storage, Assembly, \
     ExperimentalResult, SequencingRun, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
     EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection, \
-    EnvironmentalSampleRelation
+    EnvironmentalSampleRelation, Publication, AnnotationRecord
 
 
 class StorageAdmin(admin.ModelAdmin):
@@ -32,7 +32,7 @@ class PhageAdmin(admin.ModelAdmin):
 
 class PhageDNAPrepAdmin(admin.ModelAdmin):
     queryset = PhageDNAPrep.objects.all()
-    list_display = ('id', 'storage', )
+    list_display = ('id', 'phage', 'storage', )
 
 class SequencingRunPoolAdmin(admin.ModelAdmin):
     queryset = SequencingRunPool.objects.all()
@@ -62,6 +62,14 @@ class EnvironmentalSampleRelationAdmin(admin.ModelAdmin):
     queryset = EnvironmentalSampleRelation.objects.all()
     list_display = ('id', 'es', 'esc', 'true_collection')
 
+class PublicationAdmin(admin.ModelAdmin):
+    queryset = Publication.objects.all()
+    list_display = ('id', 'doi', 'status', 'genomea_id')
+
+class AnnotationRecordAdmin(admin.ModelAdmin):
+    queryset = Publication.objects.all()
+    list_display = ('id', 'assembly', 'chado_id', 'apollo_id', 'notes', 'annotator', 'date')
+
 admin.site.register(Assembly, AssemblyAdmin)
 admin.site.register(ExperimentalResult, ExperimentalResultAdmin)
 admin.site.register(SequencingRun, SequencingRunAdmin)
@@ -76,3 +84,5 @@ admin.site.register(Lysate, LysateAdmin)
 admin.site.register(Bacteria, BacteriaAdmin)
 admin.site.register(EnvironmentalSampleCollection, EnvironmentalSampleCollectionAdmin)
 admin.site.register(EnvironmentalSampleRelation, EnvironmentalSampleRelationAdmin)
+admin.site.register(Publication, PublicationAdmin)
+admin.site.register(AnnotationRecord, AnnotationRecordAdmin)

@@ -25,6 +25,18 @@ STORAGE_TYPES = (
     (0, 'Fridge'),
     (1, 'Freezer')
 )
+PUBLICATION_STATUS = (
+    (0, 'Unknown'),
+    (1, 'Unpublished'),
+    (2, 'Manuscript in preparation'),
+    (3, 'In press'),
+    (4, 'Published')
+)
+MORPHOLOGY_QUALIFIER = (
+    (0, 'Unknown'),
+    (1, 'Prolate'),
+    (2, 'Isometric')
+)
 PHAGE_STATE_ENVSAMPLE = 1 << 0
 PHAGE_STATE_LYSATE = 1 << 1
 PHAGE_STATE_DNAPREP = 1 << 2
@@ -120,13 +132,15 @@ class EnvironmentalSampleRelation(models.Model):
 
 class Bacteria(models.Model):
     genus = models.CharField(max_length=64)
-    species = models.CharField(max_length=64, blank=True)
-    strain = models.CharField(max_length=64, blank=True)
+    species = models.CharField(max_length=64, blank=True, null=True)
+    strain = models.CharField(max_length=64, blank=True, null=True)
 
     def __unicode__(self):
         if self.strain:
             return '{} {} {}'.format(self.genus, self.species, self.strain)
-        return '{} {}'.format(self.genus, self.species)
+        if self.species:
+            return '{} {}'.format(self.genus, self.species)
+        return '{}'.format(self.genus)
 
     @property
     def full(self):
@@ -147,7 +161,7 @@ class Experiment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     short_name = models.CharField(max_length=32)
     full_name = models.TextField()
-    methods = models.TextField()
+    methods = models.TextField(blank=True, null=True)
     category = models.TextField(blank=True)
 
     def __unicode__(self):
@@ -158,8 +172,8 @@ class ExperimentalResult(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     experiment = models.ForeignKey(Experiment)
     result = models.TextField()
-    date = models.DateTimeField()
-    run_by = models.ForeignKey(Account)
+    date = models.DateTimeField(blank=True, null=True)
+    run_by = models.ForeignKey(Account, blank=True, null=True)
     # result_type = models.IntegerField(choices=EXP_RESULT_TYPES)
 
     def __unicode__(self):
@@ -177,10 +191,20 @@ class Phage(models.Model):
     # owner = models.ForeignKey(Account, blank=True, null=True)
     owner = models.ForeignKey(Organisation, blank=True, null=True)
     morphology = models.IntegerField(choices=PHAGE_MORPHOLOGY, default=0)
+    morphology_qualifier = models.IntegerField(choices=MORPHOLOGY_QUALIFIER, default=0)
     image = models.URLField(blank=True)
     ncbi_id = models.CharField(max_length=32, null=True, blank=True)
     refseq_id = models.CharField(max_length=32, null=True, blank=True)
+    can_be_annotated = models.BooleanField(default=False)
+    needs_resequencing = models.BooleanField(default=False)
+    end_info = models.TextField(blank=True, null=True)
+    closure = models.ForeignKey(ExperimentalResult, blank=True, null=True)
+    end_determination = models.ForeignKey(ExperimentalResult, blank=True, null=True, related_name="end_determ_result")
+    head_size = models.FloatField(blank=True, null=True)
     # notes = models.TextField(blank=True)
+
+    def __unicode__(self):
+        return self.primary_name
 
     def status(self):
         value = {}
@@ -226,7 +250,7 @@ class PhageDNAPrep(models.Model):
     # tem_image = models.URLField()
     # gel_image = models.URLField()
     # Nanodrop, pico green, other?
-    experiments = models.ManyToManyField(ExperimentalResult, blank=True)
+    pfge = models.ForeignKey(ExperimentalResult, blank=True, null=True)
     phage = models.ForeignKey(Phage, blank=True, null=True)
     storage = models.OneToOneField(Storage, blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True, null=True)
@@ -235,13 +259,13 @@ class PhageDNAPrep(models.Model):
 class SequencingRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     galaxy_library = models.URLField(blank=True, help_text="Galaxy Library URL")
-    name = models.TextField()
-    date = models.DateField(auto_now_add=True, null=True)
+    name = models.TextField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
     # Illumina, miseq, etc need to be in experiments
-    methods = models.ForeignKey(Experiment, null=True)
+    method = models.ForeignKey(Experiment, null=True)
     bioanalyzer_qc = models.TextField(blank=True)
     run_prep_spreadsheet = models.URLField(blank=True)
-    owner = models.ForeignKey(Account)
+    owner = models.ForeignKey(Account, blank=True, null=True)
     finalized = models.BooleanField(default=False, help_text="Once this is set, this model becomes read-only (except to people with access to django admin).")
 
     def __unicode__(self):
@@ -250,7 +274,7 @@ class SequencingRun(models.Model):
 
 class SequencingRunPool(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    pool = models.CharField(max_length=16)
+    pool = models.CharField(max_length=64)
     run = models.ForeignKey(SequencingRun)
 
     class Meta:
@@ -307,11 +331,13 @@ class Assembly(models.Model):
     This represents a single assembly run of a single genome's sequencing data
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    sequence_id = models.CharField(max_length=64, null=True)
+    sequence_id = models.CharField(max_length=64, blank=True, null=True)
     sequencing_run_pool_item = models.ForeignKey(SequencingRunPoolItem, blank=True, null=True)
-    galaxy_dataset = models.URLField()
+    galaxy_dataset = models.URLField(blank=True, null=True)
     notes = models.TextField(blank=True)
-    phage = models.ForeignKey(Phage, blank=True, null=True)
+    contig_length = models.IntegerField(blank=True, null=True)
+    contig_name = models.CharField(max_length=128, blank=True, null=True)
+    complete = models.NullBooleanField(default=None)
 
     class Meta:
         verbose_name_plural = "assemblies"
@@ -323,16 +349,18 @@ class Assembly(models.Model):
 class AnnotationRecord(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     assembly = models.ForeignKey(Assembly)
-    phage = models.ForeignKey(Phage)
-
-    chado_id = models.IntegerField(blank=True)
-    apollo_id = models.IntegerField(blank=True)
+    chado_id = models.IntegerField(blank=True, null=True)
+    apollo_id = models.IntegerField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    annotator = models.ForeignKey(Account, blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
 
 
 class Publication(models.Model):
     phages = models.ManyToManyField(Phage)
     genomea_id = models.CharField(max_length=32)
-    doi = models.CharField(max_length=32)
+    doi = models.CharField(max_length=64, blank=True, null=True)
+    status = models.IntegerField(choices=PUBLICATION_STATUS)
 
 
 def create_default_envsamplecollection(sender, instance, created, **kwargs):
