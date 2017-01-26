@@ -38,7 +38,6 @@ This project uses django apps in order to keep functionality small and separated
 - `bioproject`
 	- App for managing bioprojects which are essentially collections of samples.
 	- A bioproject generally corresponds to a single "project" such as a 464 class, or Rohit's analysis
-	- <Discussion></Discussion>
 - `directory`
 	- Views into the Users and Groups.
 	- We also add a model called "organisation". User:Acount::Group:Organization. We need this secondary model in order to add extra properties to the group model.
