@@ -1,4 +1,4 @@
-# CPT LIMS
+# CPT LIMS [![Docker Repository on Quay](https://quay.io/repository/tamu_cpt/lims-backend/status "Docker Repository on Quay")](https://quay.io/repository/tamu_cpt/lims-backend)
 
 Consists of:
 
