@@ -363,6 +363,19 @@ class Publication(models.Model):
     status = models.IntegerField(choices=PUBLICATION_STATUS)
 
 
+# http://stackoverflow.com/questions/3499791/how-do-i-prevent-fixtures-from-conflicting-with-django-post-save-signal-code
+from functools import wraps
+
+def disable_for_loaddata(signal_handler):
+    @wraps(signal_handler)
+    def wrapper(*args, **kwargs):
+        if kwargs['raw']:
+            print("Skipping signal for %s %s" % (args, kwargs))
+            return
+        signal_handler(*args, **kwargs)
+    return wrapper
+
+@disable_for_loaddata
 def create_default_envsamplecollection(sender, instance, created, **kwargs):
     """Create EnvironmentalSampleCollection for every new EnvironmentalSample."""
     if not created:
@@ -376,6 +389,7 @@ def create_default_envsamplecollection(sender, instance, created, **kwargs):
     )
 
 
+@disable_for_loaddata
 def create_default_phage_for_lysate(sender, instance, created, **kwargs):
     """Create default Phage for every new Lysate"""
     phage = Phage.objects.create(
@@ -383,7 +397,6 @@ def create_default_phage_for_lysate(sender, instance, created, **kwargs):
         lysate=instance,
     )
     phage.save()
-
 
 signals.post_save.connect(
     create_default_envsamplecollection,
