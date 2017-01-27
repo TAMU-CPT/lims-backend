@@ -339,14 +339,12 @@ class BasicLysateSerializer(serializers.ModelSerializer):
 
 
 class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
-    experiments = ExperimentalResultDetailSerializer(many=True, read_only=True)
-    assembly_set = AssemblySerializer(many=True, read_only=True)
     phage_set = PhageSerializerList(read_only=False, allow_null=True, many=True)
     frontend_label = serializers.SerializerMethodField()
 
     class Meta:
         model = PhageDNAPrep
-        fields = ('frontend_label', 'morphology', 'experiments', 'storage', 'id', 'assembly_set', 'phage_set', 'added')
+        fields = ('frontend_label', 'storage', 'id', 'phage_set', 'added')
 
     def get_frontend_label(self, obj):
         return 'phagednaprep'
