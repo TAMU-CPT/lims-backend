@@ -1,9 +1,7 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
-from account.models import Account
 from directory.models import Organisation
 from lims.models import Phage, Lysate, Bacteria, EnvironmentalSample, EnvironmentalSampleCollection, \
-    PhageDNAPrep, ExperimentalResult, SequencingRun, SequencingRunPool, \
+    PhageDNAPrep, ExperimentalResult, Experiment, SequencingRun, SequencingRunPool, \
     SequencingRunPoolItem, Publication, Assembly, AnnotationRecord
 
 
@@ -24,3 +22,8 @@ class Command(BaseCommand):
         Publication.objects.all().delete()
         Assembly.objects.all().delete()
         AnnotationRecord.objects.all().delete()
+        for x in Experiment.objects.all():
+            if x.short_name not in ('Closure', 'End determination', 'PFGE'):
+                x.delete()
+
+        ExperimentalResult.objects.all().delete()
