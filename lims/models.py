@@ -4,7 +4,6 @@ import uuid
 from django.db import models
 from directory.models import Organisation
 from account.models import Account
-from django.core.urlresolvers import reverse_lazy
 from django.contrib.gis.db import models as gis_models
 from django.db.models import signals
 
@@ -217,20 +216,21 @@ class Phage(models.Model):
             # value |= PHAGE_STATE_DNAPREP
             value['dnaprep'] = True
 
+        assemblies = []
         for prep in dnapreps:
             try:
                 if prep.sequencingrunpoolitem:
                     value['seq'] = True
+                    p = prep.sequencingrunpoolitem
+                    assemblies += p.assembly_set.all()
                     # value |= PHAGE_STATE_SEQUENCING
-                    break
             except SequencingRunPoolItem.DoesNotExist:
                 pass
 
-        assemblies = self.assembly_set.all()
         if len(assemblies) > 0:
             value['assembly'] = True
             # value |= PHAGE_STATE_ASSEMBLY
-        if any([a.annotationrecord for a in assemblies]):
+        if any([hasattr(a, 'annotationrecord') and a.annotationrecord for a in assemblies]):
             value['annot'] = True
             # value |= PHAGE_STATE_ANNOTATION
         if self.ncbi_id:
@@ -370,7 +370,6 @@ def disable_for_loaddata(signal_handler):
     @wraps(signal_handler)
     def wrapper(*args, **kwargs):
         if kwargs['raw']:
-            print("Skipping signal for %s %s" % (args, kwargs))
             return
         signal_handler(*args, **kwargs)
     return wrapper

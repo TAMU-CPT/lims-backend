@@ -63,7 +63,7 @@ class PhageDNAPrepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PhageDNAPrep
-        fields = ('id', 'storage', 'experiments', 'phage', 'added', 'sequencingrunpoolitem')
+        fields = ('id', 'storage', 'pfge', 'phage', 'added', 'sequencingrunpoolitem')
 
 class SeqRunExperimentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -273,7 +273,6 @@ class LysateSerializer(serializers.ModelSerializer):
 
 class PhageSerializerDetail(serializers.ModelSerializer):
     host = BacteriaSerializer(many=True)
-    assembly = AssemblySerializer(required=False, allow_null=True)
     phagednaprep_set = PhageDNAPrepSerializer(required=False, many=True)
     lysate = LysateSerializer(required=False, allow_null=True)
 
@@ -281,7 +280,7 @@ class PhageSerializerDetail(serializers.ModelSerializer):
         model = Phage
         fields = (
             'historical_names', 'primary_name', 'id', 'phagednaprep_set',
-            'host', 'owner', 'assembly', 'lysate', 'status'
+            'host', 'owner', 'lysate', 'status'
         )
 
     def update(self, instance, validated_data):
