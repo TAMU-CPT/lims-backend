@@ -240,7 +240,7 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
             collected_by=self.request.user.account,
             sample_type=self.request.data.get('sample_type', 'Unknown'),
         )
-        print self.request.data
+        print(self.request.data)
 
 class TypesEnvironmentalSampleFilter(django_filters.FilterSet):
     sample_type = django_filters.CharFilter(name="sample_type", lookup_expr="icontains")
