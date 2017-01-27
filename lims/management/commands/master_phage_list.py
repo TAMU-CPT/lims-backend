@@ -27,7 +27,7 @@ class Command(BaseCommand):
             for i, row in enumerate(csvreader):
                 if i == 0 or i == 1 or not row[1]:
                     continue
-                print row[1]
+                print(row[1])
 
                 # morphology names/qualifiers to integers
                 morphologies = {
