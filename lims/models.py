@@ -315,7 +315,7 @@ class SequencingRunPoolItem(models.Model):
     # Allow null to support "requested" samples for sequencing
     pool = models.ForeignKey(SequencingRunPool, null=True, blank=True)
     dna_conc = models.ForeignKey(ExperimentalResult, null=True, blank=True)
-    dna_prep = models.OneToOneField(PhageDNAPrep)
+    dna_prep = models.ForeignKey(PhageDNAPrep)
 
     def volumeInMix(self, desiredSize):
         if self.pool.poolSize() > 0:
