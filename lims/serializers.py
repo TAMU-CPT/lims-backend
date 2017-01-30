@@ -196,7 +196,8 @@ class BacteriaSerializer(serializers.ModelSerializer):
         if isinstance(data, dict):
             # find a bacteria with specified genus / species
             if 'id' in data:
-                return Bacteria.objects.get(id=data['id'])
+                # Changed this when bacteria/save wouldn't work. Not sure what this breaks, if anything.
+                return super(BacteriaSerializer, self).to_internal_value(data)
         else:
             parts = data.split()
             if len(parts) == 2:
