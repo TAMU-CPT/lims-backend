@@ -154,10 +154,21 @@ class ExperimentViewSet(viewsets.ModelViewSet):
 
 class PhageFilter(django_filters.FilterSet):
     primary_name = django_filters.CharFilter(name="primary_name", lookup_expr="exact", exclude=True)
+    host = django_filters.CharFilter(method="get_host")
 
     class Meta:
         model = Phage
         fields = ['id', 'primary_name']
+
+    def get_host(self, queryset, name, value):
+        ids = []
+        for q in queryset:
+            if q.host.filter(pk=value).count() > 0:
+                ids.append(q.id)
+            elif q.lysate and q.lysate.host and q.lysate.host.id == value:
+                ids.append(q.id)
+        return queryset.filter(pk__in=ids)
+
 
 
 class PhageViewSet(viewsets.ModelViewSet):
