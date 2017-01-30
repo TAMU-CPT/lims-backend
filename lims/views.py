@@ -242,12 +242,14 @@ class EnvironmentalSampleViewSet(viewsets.ModelViewSet):
         )
         print(self.request.data)
 
+
 class TypesEnvironmentalSampleFilter(django_filters.FilterSet):
     sample_type = django_filters.CharFilter(name="sample_type", lookup_expr="icontains")
 
     class Meta:
         model = EnvironmentalSample
         fields = ['id', 'sample_type']
+
 
 class TypesEnvironmentalSampleViewSet(viewsets.ModelViewSet):
     queryset = EnvironmentalSample.objects.values('sample_type').distinct()
@@ -314,8 +316,9 @@ class BacteriaFilter(django_filters.FilterSet):
     def get_full(self, queryset, name, value):
         """ see commit 6d997e0 """
         ids = []
+        value = value.lower()
         for q in queryset:
-            if value in q.full:
+            if value in q.full.lower():
                 ids.append(q.id)
         return queryset.filter(pk__in=ids)
 
