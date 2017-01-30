@@ -10,7 +10,7 @@ from lims.serializers import StorageSerializer, \
     SequencingRunSerializerDetail, \
     SequencingRunSerializerList, \
     ExperimentSerializer, PhageSerializerList, PhageSerializerDetail, \
-    PhageDNAPrepSerializer, SequencingRunPoolSerializer, \
+    PhageDNAPrepSerializer, PhageDNAPrepSerializerDetail, SequencingRunPoolSerializer, \
     SequencingRunPoolItemSerializer, \
     EnvironmentalSampleSerializer, TypesEnvironmentalSampleSerializer, LysateSerializer, BacteriaSerializer, \
     EnvironmentalSampleCollectionSerializer, RoomStorageSerializer, \
@@ -194,8 +194,11 @@ class PhageViewSet(viewsets.ModelViewSet):
 
 class PhageDNAPrepViewSet(viewsets.ModelViewSet):
     queryset = PhageDNAPrep.objects.all()
-    serializer_class = PhageDNAPrepSerializer
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return PhageDNAPrepSerializer
+        return PhageDNAPrepSerializerDetail
     def perform_create(self, serializer):
         try:
             serializer.save()
