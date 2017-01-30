@@ -57,6 +57,13 @@ class LitePhageSerializer2(serializers.ModelSerializer):
         model = Phage
         fields = ('id', 'primary_name', 'historical_names', 'image', 'status')
 
+class PhageDNAPrepSerializerLite(serializers.ModelSerializer):
+    storage = LiteStorageSerializer()
+
+    class Meta:
+        model = PhageDNAPrep
+        fields = ('id', 'storage', 'pfge', 'phage', 'added', 'sequencingrunpoolitem')
+
 class PhageDNAPrepSerializer(serializers.ModelSerializer):
     storage = LiteStorageSerializer()
     phage = LitePhageSerializer2()
@@ -273,7 +280,7 @@ class LysateSerializer(serializers.ModelSerializer):
 
 class PhageSerializerDetail(serializers.ModelSerializer):
     host = BacteriaSerializer(many=True)
-    phagednaprep_set = PhageDNAPrepSerializer(required=False, many=True)
+    phagednaprep_set = PhageDNAPrepSerializerLite(required=False, many=True)
     lysate = LysateSerializer(required=False, allow_null=True)
 
     class Meta:
