@@ -2,7 +2,8 @@ from rest_framework import serializers
 from lims.models import Storage, Assembly, \
     ExperimentalResult, SequencingRun, Experiment, Phage, \
     PhageDNAPrep, SequencingRunPool, SequencingRunPoolItem, \
-    EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection
+    EnvironmentalSample, Lysate, Bacteria, EnvironmentalSampleCollection, \
+    Publication
 from rest_framework.serializers import ValidationError
 from rest_framework.validators import UniqueValidator
 from account.serializers import AccountSerializerLight
@@ -57,20 +58,13 @@ class LitePhageSerializer2(serializers.ModelSerializer):
         model = Phage
         fields = ('id', 'primary_name', 'historical_names', 'image', 'status')
 
-class PhageDNAPrepSerializerLite(serializers.ModelSerializer):
-    storage = LiteStorageSerializer()
-
-    class Meta:
-        model = PhageDNAPrep
-        fields = ('id', 'storage', 'pfge', 'phage', 'added', 'sequencingrunpoolitem')
-
 class PhageDNAPrepSerializer(serializers.ModelSerializer):
     storage = LiteStorageSerializer()
     phage = LitePhageSerializer2()
 
     class Meta:
         model = PhageDNAPrep
-        fields = ('id', 'storage', 'pfge', 'phage', 'added', 'sequencingrunpoolitem')
+        fields = ('id', 'storage', 'pfge', 'phage', 'added', 'sequencingrunpoolitem_set')
 
 class SeqRunExperimentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -98,15 +92,24 @@ class SequencingRunSerializerLite(serializers.ModelSerializer):
         fields = ('id', 'name', 'date')
 
 
+class PhageDNAPrepSerializerLite(serializers.ModelSerializer):
+    storage = LiteStorageSerializer()
+
+    class Meta:
+        model = PhageDNAPrep
+        fields = ('id', 'storage', 'pfge', 'added')
+
+
 class SequencingRunPoolItemSerializer(serializers.ModelSerializer):
     # dna_conc = SeqRunExperimentalResultDetailSerializer(many=True)
     # pool = SequencingRunPoolSerializer(allow_null=True)
-    dna_prep = PhageDNAPrepSerializer()
+    dna_prep = PhageDNAPrepSerializerLite()
+    phage = LitePhageSerializer(read_only=True)
     run = serializers.SerializerMethodField()
 
     class Meta:
         model = SequencingRunPoolItem
-        fields = ('id', 'pool', 'dna_prep', 'run')
+        fields = ('id', 'pool', 'dna_prep', 'run', 'phage')
 
     def get_run(self, obj):
         return SequencingRunSerializerLite(obj.pool.run).data
@@ -149,6 +152,12 @@ class AssemblySerializer(serializers.ModelSerializer):
     class Meta:
         model = Assembly
         fields = ('notes', 'sequencing_run_pool_item', 'galaxy_dataset', 'id')
+
+
+class PublicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Publication
+        fields = ('phages', 'genomea_id', 'doi', 'status')
 
 
 class ExperimentSerializer(serializers.ModelSerializer):
@@ -198,9 +207,14 @@ class TypesEnvironmentalSampleSerializer(serializers.ModelSerializer):
 
 
 class BacteriaSerializer(serializers.ModelSerializer):
+    phages = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Bacteria
-        fields = ('strain', 'genus', 'species', 'id', 'full')
+        fields = ('strain', 'genus', 'species', 'id', 'full', 'phages')
+
+    def get_phages(self, obj):
+        return obj.phage_set.all().count() + obj.lysate_set.all().count()
 
     def to_internal_value(self, data):
         if isinstance(data, dict):
@@ -289,40 +303,6 @@ class LysateSerializer(serializers.ModelSerializer):
         fields = ('isolation', 'storage', 'id', 'oldid', 'host', 'env_sample_collection', 'phage')
 
 
-class PhageSerializerDetail(serializers.ModelSerializer):
-    host = BacteriaSerializer(many=True)
-    phagednaprep_set = PhageDNAPrepSerializerLite(required=False, many=True)
-    lysate = LysateSerializer(required=False, allow_null=True)
-
-    class Meta:
-        model = Phage
-        fields = (
-            'historical_names', 'primary_name', 'id', 'phagednaprep_set',
-            'host', 'owner', 'lysate', 'status'
-        )
-
-    def update(self, instance, validated_data):
-        host = validated_data['host']
-        host_lims_new = []
-        for h in host:
-            h_obj, created = Bacteria.objects.get_or_create(**h)
-            h['id'] = h_obj.id
-            host_lims_new.append(h_obj)
-        validated_data['host'] = host_lims_new
-
-        # env_sample_collection_new = []
-        # for env_sample in validated_data['env_sample_collection']['env_sample']:
-            # print env_sample
-
-        for prop in ('historical_names', 'primary_name', 'host', 'assembly'):
-            x = validated_data.get(prop, getattr(instance, prop))
-            print('Setattr %s %s = %s' % (instance, prop, x))
-            setattr(instance, prop, x)
-
-        instance.save()
-        return validated_data
-
-
 class LysateSerializerDetail(serializers.ModelSerializer):
     phage = PhageSerializerList(read_only=False, allow_null=True)
     frontend_label = serializers.SerializerMethodField()
@@ -358,11 +338,12 @@ class BasicLysateSerializer(serializers.ModelSerializer):
 
 class PhageDNAPrepSerializerDetail(serializers.ModelSerializer):
     frontend_label = serializers.SerializerMethodField()
-    sequencingrunpoolitem = SequencingRunPoolItemSerializer()
+    sequencingrunpoolitem_set = SequencingRunPoolItemSerializer(read_only=False, allow_null=True, many=True)
+    phage = PhageSerializerList(read_only=False, allow_null=True)
 
     class Meta:
         model = PhageDNAPrep
-        fields = ('frontend_label', 'storage', 'id', 'added', 'sequencingrunpoolitem')
+        fields = ('frontend_label', 'storage', 'id', 'added', 'sequencingrunpoolitem_set', 'phage')
 
     def get_frontend_label(self, obj):
         return 'phagednaprep'
@@ -466,3 +447,71 @@ class BoxStorageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Storage
         fields = ('box',)
+
+
+class PhageSpecificSequencingRunPoolSerializerLite(serializers.ModelSerializer):
+    class Meta:
+        model = SequencingRunPool
+        fields = ('id', 'pool')
+
+class PhageSpecificSRPIDetailCustomKillMeNow(serializers.ModelSerializer):
+    # dna_conc = SeqRunExperimentalResultDetailSerializer(many=True)
+    # pool = SequencingRunPoolSerializer(allow_null=True)
+    run = serializers.SerializerMethodField()
+    pool = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SequencingRunPoolItem
+        fields = ('id', 'pool', 'run')
+
+    def get_pool(self, obj):
+        return PhageSpecificSequencingRunPoolSerializerLite(obj.pool).data
+
+    def get_run(self, obj):
+        return SequencingRunSerializerLite(obj.pool.run).data
+
+
+class PhagePhageDNAPrepSerializerDetailCustomUgh(serializers.ModelSerializer):
+    sequencingrunpoolitem_set = PhageSpecificSRPIDetailCustomKillMeNow(read_only=False, allow_null=True, many=True)
+
+    class Meta:
+        model = PhageDNAPrep
+        fields = ('storage', 'id', 'added', 'sequencingrunpoolitem_set')
+
+class PhageSerializerDetail(serializers.ModelSerializer):
+    host = BacteriaSerializer(many=True)
+    phagednaprep_set = PhagePhageDNAPrepSerializerDetailCustomUgh(required=False, many=True)
+    lysate = LysateSerializer(required=False, allow_null=True)
+    publication_set = PublicationSerializer(many=True)
+
+    class Meta:
+        model = Phage
+        fields = (
+            'historical_names', 'primary_name', 'id', 'phagednaprep_set',
+            'host', 'owner', 'lysate', 'status', 'morphology',
+            'morphology_qualifier', 'image', 'ncbi_id', 'refseq_id',
+            'can_be_annotated', 'needs_resequencing', 'end_info', 'closure',
+            'end_determination', 'head_size', 'publication_set'
+        )
+
+    def update(self, instance, validated_data):
+        host = validated_data['host']
+        host_lims_new = []
+        for h in host:
+            h_obj, created = Bacteria.objects.get_or_create(**h)
+            h['id'] = h_obj.id
+            host_lims_new.append(h_obj)
+        validated_data['host'] = host_lims_new
+
+        # env_sample_collection_new = []
+        # for env_sample in validated_data['env_sample_collection']['env_sample']:
+            # print env_sample
+
+        for prop in ('historical_names', 'primary_name', 'host', 'assembly'):
+            x = validated_data.get(prop, getattr(instance, prop))
+            print('Setattr %s %s = %s' % (instance, prop, x))
+            setattr(instance, prop, x)
+
+        instance.save()
+        return validated_data
+

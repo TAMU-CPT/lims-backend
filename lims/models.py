@@ -206,6 +206,7 @@ class Phage(models.Model):
         return self.primary_name
 
     def status(self):
+        # TODO: Cache the hell out of this.
         value = {}
         dnapreps = self.phagednaprep_set.all()
         if self.lysate:
@@ -218,14 +219,9 @@ class Phage(models.Model):
 
         assemblies = []
         for prep in dnapreps:
-            try:
-                if prep.sequencingrunpoolitem:
-                    value['seq'] = True
-                    p = prep.sequencingrunpoolitem
-                    assemblies += p.assembly_set.all()
-                    # value |= PHAGE_STATE_SEQUENCING
-            except SequencingRunPoolItem.DoesNotExist:
-                pass
+            for srpi in prep.sequencingrunpoolitem_set.all():
+                value['seq'] = True
+                assemblies += srpi.assembly_set.all()
 
         if len(assemblies) > 0:
             value['assembly'] = True
